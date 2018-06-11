@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>慢病患者统计</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../common.css"/>
+		<style>
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+			.pie-show {
+				width: 100%;
+				height: 265px;
+			}
+			
+			.line-show {
+				width: 100%;
+				height: 300px;
+			}
+			
+			.chart-top {
+				margin-bottom: 80px;
+			}
+			
+			.chart-show .layui-col-md4 {
+				box-sizing: border-box;
+				padding: 0 15px;
+			}
+			
+			.chart-show .layui-col-md6 {
+				box-sizing: border-box;
+				padding: 0 35px;
+			}
+			
+			.layui-form-item .layui-input-inline {
+				width: 175px;
+			}
+			
+			select.lay-ignore {
+				width: 160px;
+				height: 38px;
+				line-height: 1.3;
+				line-height: 38px\9;
+				border-width: 1px;
+				border-style: solid;
+				background-color: #fff;
+				border-radius: 2px;
+				padding-right: 30px;
+				cursor: pointer;
+				border-color: #eeeeee;
+			}
+			
+			select.lay-ignore option {
+				line-height: 36px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="layui-fluid iframe-top" id="patientcount">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query_form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<a href="javascript:;" class="datelink">~</a>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<!--<div class="layui-input-inline" style="width:210px">
+							        <input type="text" class="layui-input" id="daterange" placeholder="yyyy-MM-dd - yyyy-MM-dd">
+							    </div>-->
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">公司名称：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="EntCompanyId" class="lay-ignore " v-model="selectedCompany" id="selectconpany" lay-ignore @change="changeStores">
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.company" v-bind:value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">药店名称：</label>
+								<div class="layui-input-inline">
+									<select name="EntStoreId" class="lay-ignore" v-model="selectedDrug" id="selectdrug" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.stores" v-bind:value="option.key">{{ option.value }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">性别：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="Gender" class="lay-ignore" v-model="selectedSex" id="selectsex" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.sex" v-bind:value="option.value">{{ option.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">疾病：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="DiseaseType" class="lay-ignore" v-model="selectedDisease" id="selectdisease" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.disease" v-bind:value="option.value">{{ option.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1">
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="chart-show">
+				<div class="layui-row chart-top">
+					<div class="layui-col-md8">
+						<div class="line-show" id="line-show-face"></div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="pie-show" id="pie-show-disease"></div>
+					</div>
+				</div>
+				<div class="layui-row chart-bottom">
+
+					<div class=" layui-col-md6">
+
+						<div class="pie-show" id="pie-show-age"></div>
+
+					</div>
+					<div class="layui-col-md6">
+
+						<div class="pie-show" id="pie-show-sex"></div>
+
+					</div>
+				</div>
+			</div>
+
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script type="text/javascript" src="../../plugins/jquery-2.1.0.js"></script>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script type="text/javascript" src="../../plugins/echarts.js"></script>
+		<script>
+			// 基础数据
+			var basedata = {
+				company: [
+				],
+				sex: [
+				],
+				disease: [
+				],
+				stores: [
+				]
+
+			}
+
+			var vm = new Vue({
+				el: "#patientcount",
+				data: {
+					baseData: basedata,
+					selectedSex: '',
+					selectedDisease: '',
+					selectedCompany: '',
+					selectedDrug: '',
+					dataSource: {},
+					dataSourceAge: [],
+					dataSourceDisease: [],
+					dataSourceSex: [],
+					dataLine: {},
+					dataCount:''
+				},
+				created() {
+
+					var that = this;
+					//默认初始时间
+					var dateOne = new Date($.ajax({async: false}).getResponseHeader("Date"));
+					var dateTwo = new Date($.ajax({async: false}).getResponseHeader("Date"));
+					var year=dateOne.getFullYear();
+			        var month=dateOne.getMonth()+1;
+			        var timeDay = dateOne.getDate(); 
+			        var startdate2 = year + '-' + month + '-' +timeDay+' '+'00'+':'+'00'+':'+'00';
+			        var day = new Date(year,month,0);
+		         //   var enddate = year + '-' + month + '-' + day.getDate()+' '+23+':'+59+':'+59; 
+					var timeTo = year + '-' + month + '-' + timeDay;
+			        //三十天前日期
+			        dateTwo.setTime(dateOne.getTime()-1000*60*60*24*29); 
+			        
+			        var yearstart=dateTwo.getFullYear();
+			        var monthstart=dateTwo.getMonth()+1;
+					var timeDaystart = dateTwo.getDate();
+					var thirtyDay = yearstart + '-' + monthstart + '-' +timeDaystart+' '+'00'+':'+'00'+':'+'00';
+					//初始化搜索项数据
+					$.get(window.baseUrl + '/Api/Common/Enums?names=GenderEnum%2CDiseaseTypeEnum&includeEnt=true', {},
+						function(data, status) {
+							if(status === "success") {
+								if(data.success == true) {
+									var result = data.data;
+									vm.baseData.company = result.entCompany;
+									vm.baseData.sex = result.enums.genderEnum;
+									vm.baseData.disease = result.enums.diseaseTypeEnum;
+
+								} else {
+
+									layer.alert(data.message, {icon: 2});
+								}
+							} else {
+								layer.alert(data.message, {icon: 2});
+							}
+						}
+					);
+
+					//初始化表数据
+					getData('/api/sys/healthmanagement/ArchiveStatisticProfile?token='+cookie.get('usertoken'), {CreateTimeFrom:thirtyDay,CreateTimeTo:startdate2});
+
+					function getData(url, data) {
+						$.get(window.baseUrl + url,data,
+							function(data, status) {
+								if(status === "success") {
+									vm.dataSourceAge = [];
+									vm.dataSourceDisease = [];
+									vm.dataSourceSex = [];
+									
+									if(data.success == true) {
+										var result = data.data;
+										vm.timefrom=result.timeFrom;
+										vm.timeto=result.timeTo;
+										var linex = [];
+										var linedata = [];
+										var linedataTip = [];
+										vm.dataCount=result.days;
+											//遍历圆饼数据
+										ajaxEach(result.genderCountStatistic, vm.dataSourceSex);
+										ajaxEach(result.diseaseTypeCountStaistic, vm.dataSourceDisease);
+										ajaxEach(result.ageCountStatistic, vm.dataSourceAge);
+
+										function ajaxEach(data, name) {
+											$.each(data, function(i, v) {
+												var ss = {
+													name: '',
+													value: ''
+												}
+												ss.name = v.typeDesc;
+												ss.value = v.count;
+												name.push(ss);
+											});
+										}
+										$.each(result.createArchiveDateCountStatistic, function(i, v) {
+											var ss = {
+												coord: [v.date.slice(5, 10), v.count]
+											}
+											linex.push(v.date.slice(5, 10));
+											linedata.push(v.count);
+											linedataTip.push(ss);
+										});
+										vm.dataLine = {
+											linex,
+											linedata,
+											linedataTip
+										}
+										//渲染图表
+										var myChartLineFace = echarts.init(document.getElementById('line-show-face'));
+										that.lineShow(myChartLineFace, vm.dataCount, that.dataLine);
+										that.pieShow('disease', "建档用户疾病概况", that.dataSourceDisease);
+										that.pieShow('age', "建档用户年龄概况", that.dataSourceAge);
+										that.pieShow('sex', "建档用户性别概况", that.dataSourceSex);
+									} else {
+									//	layer.alert(data.message, {icon: 2});
+									}
+								} else {
+								//	layer.alert(data.message, {icon: 2});
+								}
+							}).always(function(data){
+							       if(data.code==1001){
+							       	layer.msg('登录验证失效，即将转到登录页面！');
+							       	  setTimeout(function(){
+							       	  	
+							       	  	parent.tologins();
+							       	  	
+							       	  },1000)
+							       	
+							       }
+							    	
+							    });
+					}
+   
+                    
+					layui.use(['jquery', 'layer', 'table', 'laydate'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate;
+						//日期 1
+						var startDate = laydate.render({
+							elem: '#date1',
+						//	value:vm.timefrom,
+						    value:thirtyDay,
+							max: timeTo,
+							type:'datetime',
+							done: function(value, dates) {
+								endDate.config.min = {
+									year: dates.year,
+									month: dates.month - 1, //关键  
+									date: dates.date,
+									
+								};
+							}
+						});
+						//日期 2
+						var endDate = laydate.render({
+							elem: '#date2',
+						//	value:vm.timeto,
+						    value:startdate2,
+							type:'datetime',
+							done: function(value, dates) {
+								startDate.config.max = {
+									year: dates.year,
+									month: dates.month - 1, //关键  
+									date: dates.date,
+								};
+							}
+						});
+	                    //回车搜索事件
+	                    document.onkeyup=function(evt){
+	                    	var evt=event||window.event;
+	                    	var code=evt.charCode||evt.keyCode;
+	                    	if(code==13){
+	                    		active.search()
+	                    	}
+	                    }
+						var $ = layui.$,
+							// 触发函数
+							active = {
+								// 选中删除
+								deleteData: function() {
+
+								},
+								// 刷新table
+								refresh: function() {
+									//执行重载
+									table.reload('tableReload', {
+										page: {
+											curr: 1 //重新从第 1 页开始
+										},
+										where: {
+											key: {
+												//id: demoReload.val()
+											}
+										}
+									});
+								},
+								// 查询
+								search: function() {
+									var demoReload = $('#demoReload');
+									var data=unserialize($("#query_form").serialize().replace(/\+/g," ").replace(/%3A/g,":"));
+									//搜索重载数据
+									getData('/api/sys/healthmanagement/ArchiveStatisticProfile?token='+cookie.get('usertoken'), data);
+
+								},
+							};
+						// 按钮搜索
+						$('#patientcount .layui-btn').on('click', function() {
+							var type = $(this).data('type');
+							active[type] ? active[type].call(this) : '';
+						});
+					})
+				},
+				methods: {
+					changeStores: function(evt) {
+						var evt = evt || window.event;
+
+						$.each(vm.baseData.company, function(i, v) {
+							if(v.id == evt.target.value) {
+								vm.baseData.stores = v.stores;
+							}else if(evt.target.value==''){
+								vm.baseData.stores=[];
+							}
+						})
+
+					},
+					pieShow: function(id, title, data) { //饼状图表
+
+						var id = echarts.init(document.getElementById('pie-show-' + id));
+						id.setOption({
+							backgroundColor: '#efefef',
+							title: {
+								text: title,
+								//  subtext: '纯属虚构',
+								x: 'left'
+							},
+							tooltip: {
+								trigger: 'item',
+								formatter: "{a} <br/>{b} : {c} ({d}%)"
+							},
+							legend: {
+								//侧边标签
+								//      orient: 'vertical',
+								//      left: 'left',
+								//      data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+							},
+							series: [{
+								name: title,
+								type: 'pie',
+								radius: '70%',
+								center: ['50%', '50%'],
+								data: data,
+								label: {
+									normal: {
+										formatter: "{b} : {c} ({d}%)",
+										backgroundColor: '#eee',
+										//       borderColor: '#aaa',
+										//       borderWidth: 1,
+										//       borderRadius: 4,
+									}
+								},
+								itemStyle: {
+									normal: {
+										color: function(params) {
+
+											if(data[0].name.includes("登录")) {
+												var colorList = ['#99CC99', '#9999CC', '#CC9966']
+											} else if(data[0].name.includes("高血压")||data[0].name.includes("无")||data[0].name.includes("哮喘")) {
+												var colorList = ['#CCCC00', '#009900', '#CC9966', 'green']
+											} else if(data[0].name.includes("岁")) {
+												var colorList = ['#6699FF', '#663333', '#4F77AF', '#993366', '#999933', '#CC6699']
+											} else {
+												var colorList = ['darkorange', 'violet', '#009900']
+											}
+											return colorList[params.dataIndex]
+										}
+									},
+									emphasis: {
+										shadowBlur: 10,
+										shadowOffsetX: 0,
+										shadowColor: 'rgba(0, 0, 0, 0.5)'
+									}
+								}
+							}]
+						})
+					},
+					lineShow: function(id, title, data) { //折线图表
+						id.setOption({
+							title: {
+								text: '近'+title+'天建档人数'
+							},
+							tooltip: {
+								trigger: 'axis'
+							},
+							legend: {},
+							grid: {
+								left: '3%',
+								right: '5%',
+								bottom: '3%',
+								containLabel: true
+							},
+							toolbox: {
+								feature: {
+									saveAsImage: {}
+								}
+							},
+							xAxis: {
+								type: 'category',
+								boundaryGap: false,
+								data: data.linex
+							},
+							yAxis: {
+								type: 'value',
+								axisLabel: {
+									formatter: '{value} 人'
+								},
+								minInterval: 1 
+							},
+							series: [{
+								name: '建档人数',
+								type: 'line',
+								stack: '总量',
+								data: data.linedata,
+								markPoint: {
+									symbol: 'pin',
+									symbolSize:36,
+									data: data.linedataTip
+								}
+							}]
+						});
+					}
+
+				},
+				mounted() {
+					var that = this;
+
+				},
+
+			})
+		</script>
+
+	</body>
+
+</html>

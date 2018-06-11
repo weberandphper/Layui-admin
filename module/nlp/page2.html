@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>语音记录</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				
+				width: 100px !important;
+			}
+			#showaudio{
+				width:100%;height:100%;padding:20px;box-sizing:border-box;
+			}
+			#showaudio textarea{
+				resize:none;width:100%;height:100%;border:0;
+			}
+			.layui-table-main .layui-table-cell{height:40px}
+			 .faceshow{display: inline-block;width:100%;height:100%;}
+		      .faceshow img{height:100%;}
+		.inforshow{width:100%;height:40px;display: flex;}
+		.inforshow a{display: inline-block;height:40px;display: flex;}
+		.inforshow a:nth-of-type(1){width:40px;margin-right:15px;}	
+		.inforshow a:nth-of-type(1) img{width:100%;height:100%;vertical-align: middle;border-radius: 50%;}
+		.inforshow a:nth-of-type(2){flex-direction: column;}
+		.inforshow a:nth-of-type(2) span{font-size: 12px;display: block;line-height: 18px;display: flex;}
+		.inforshow a:nth-of-type(2) span:nth-of-type(1){font-weight:800}
+    
+    
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="voicerecord">
+			
+			
+			<div class="layui-form-query" style="position: relative;">
+				<form class="layui-form" id="query_form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							
+						<div class="layui-inline">
+								<label class="layui-form-mid">当前文件夹目录：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="funcType" class="layui-select" v-model="selected" id="select">
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.drugstore" v-bind:value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+					
+					        <div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+					
+					</div>
+				</form>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+	    <script type="text/javascript">
+	    
+	    	// 基础数据
+			var basedata = {
+				company: [
+					{
+						id: 1,
+						name: "公司1"
+					},
+					{
+						id: 2,
+						name: "公司2"
+					},
+					{
+						id: 3,
+						name: "公司3"
+					}
+				],
+				drugstore: [
+					{
+						id: 1,
+						name: "文件夹1"
+					},
+					{
+						id: 2,
+						name: "文件夹2"
+					},
+					{
+						id: 3,
+						name: "文件夹3"
+					}
+				],
+				voicetype: [
+					{
+						id: 0,
+						name: "全部"
+					},
+					{
+						id: 1,
+						name: "特定语义"
+					},
+					{
+						id: 2,
+						name: "通用技能"
+					},
+					{
+						id: 3,
+						name: "慢病咨询"
+					}
+				],
+				labeltype: [
+					{
+						id: 0,
+						name: "全部"
+					},
+					{
+						id: 1,
+						name: "语音识别错误"
+					},
+					{
+						id: 2,
+						name: "回答内容错误"
+					},
+					{
+						id: 3,
+						name: "其他"
+					}
+				]
+			}
+	    
+			var vm = new Vue({
+				el: "#voicerecord",
+				data: {
+					baseData: basedata,
+					selected: '0',
+					audioflg:true,
+				},
+				created() {
+					layui.use(['jquery', 'layer', 'table', 'laydate','form'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							form = layui.form,
+							laydate = layui.laydate;
+
+						//日期 1
+						laydate.render({
+							elem: '#date1'
+							,type:'datetime'
+						});
+
+						//日期 2
+						laydate.render({
+							elem: '#date2'
+							,type:'datetime'
+						});
+
+						table.render({
+							elem: '#layui-table',
+					//		url: '/demo/table/user',
+							page: true,
+							limit: 15,
+							height: 'full-150',
+							limits: [10, 15, 20, 25, 30],
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							request: {
+								
+							},
+							cols: [
+								[ 
+									{
+										field: 'testDate',
+										title: '试题年份',
+										unresize:true,
+										templet: '#idTpl',
+								//		edit: true
+									},  {
+										field: 'testOr',
+										title: '是否真题',
+										templet: '#orTpl',
+										unresize:true,
+									}, 
+									{
+										field: 'testType',
+										title: '题目类型',
+										unresize:true,
+									}, 
+									{
+										field: 'sceneNum',
+										title: '情景序号',
+										unresize:true,
+									}, 
+									{
+										field: 'title',
+										title: '题目',
+										unresize:true,
+									}, 
+									{
+										field: 'answerA',
+										title: '选项A',
+										unresize:true,
+									}, 
+									{
+										field: 'answerB',
+										title: '选项B',
+										unresize:true,
+									}, 
+									{
+										field: 'answerC',
+										title: '选项C',
+										unresize:true,
+									}, 
+									{
+										field: 'answerD',
+										title: '选项D',
+										unresize:true,
+									}, 
+									{
+										field: 'answerE',
+										title: '选项E',
+										unresize:true,
+									}, 
+									{
+										field: 'answer',
+										title: '答案',
+										unresize:true,
+									} 
+									, {
+										fixed: 'right',
+										title: '操作',
+										width:'10%',
+										unresize:true,
+										align: 'center',
+										toolbar: '#barAction',
+									} 
+								]
+							],
+							data:[
+							{
+							      "testDate":"2012"
+							      ,"testOr":"1"
+							      ,"testType":"最佳选择题"
+							      ,"sceneNum": "001"
+							      ,"title": "这是标题"
+							      ,"answerA": "这是答案a"
+							      ,"answerB": "这是答案b"
+							      ,"answerC": "这是答案c"
+							      ,"answerD": "这是答案d"
+							      ,"answerE": "这是答案e"
+							      ,"answer": "D"
+							      ,"remarks": ""
+							},{
+							      "testDate":"2013"
+							      ,"testOr": "0"
+							      ,"testType": "最佳选择题"
+							      ,"sceneNum": "002"
+							      ,"title": "这是标题"
+							      ,"answerA": "这是答案a2"
+							      ,"answerB": "这是答案b2"
+							      ,"answerC": "这是答案c2"
+							      ,"answerD": "这是答案d2"
+							      ,"answerE": "这是答案e2"
+							      ,"answer": "A"
+							      ,"remarks": ""
+							}],
+							done: function(res, curr, count) {}
+						});
+
+
+
+
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							
+							if (layEvent === 'answercontent') {
+								var str = '<div id="showaudio"><textarea>'+data.answer+'</textarea></div>';
+								layer.open({
+									id: 9,
+						    		type: 1,
+						    		title: '回答内容',
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','600px'],
+						    		offset: '100px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			
+						    		},
+						    		success: function (layero,index) {
+						    			// 获取内容
+						    			//form.render();
+						    		},
+						    	})
+							} else if(layEvent === 'marker') {
+								var str='<div id="showaudio"><textarea>'+data.distinguish+'</textarea></div>';
+								layer.open({
+						    		type: 1,
+						    		title: '提示信息',
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','600px'],
+						    		offset: '100px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			
+						    		},
+						    		success: function (layero,index) {
+						    			// 获取内容
+						    			//form.render();
+						    		},
+						    	})
+								
+							} 
+						});
+						
+						
+                       //回复信息展示
+                        var layop=function(title,value){
+                        	
+                        	layer.open({
+						    		type: 1,
+						    		title: title,
+						    		content: value,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['500px','400px'],
+						    		offset: '100px',
+						    		move: false,
+						    		btn: ['确定', '取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			layer.close(index);
+						    		}
+						    	})
+                        }
+                       //标记类型选择
+                        var layop2=function(title,value){
+                        	
+                        	layer.open({
+						    		type: 1,
+						    		title: title,
+						    		content: value,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['400px','260px'],
+						    		offset: '100px',
+						    		move: false,
+						    		btn: ['确认'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			layer.close(index);
+						    		},
+						    		btn2: function(index, layero){
+									    //按钮【按钮二】的回调
+									    layer.close(index);
+									    //return false 开启该代码可禁止点击该按钮关闭
+									 },
+						    	})
+                        }
+
+						var $ = layui.$,
+							// 触发函数
+							active = {
+								// 选中删除
+								deleteData: function() {
+
+								},
+								// 刷新table
+								refresh: function() {
+									//执行重载
+									table.reload('tableReload', {
+										page: {
+											curr: 1 //重新从第 1 页开始
+										},
+										where: {
+											key: {
+												//id: demoReload.val()
+											}
+										}
+									});
+								},
+								// 查询
+								search: function() {
+									var demoReload = $('#demoReload');
+									//执行重载
+									table.reload('tableReload', {
+										page: {
+											//重新从第 1 页开始
+											curr: 1
+										},
+										where: {
+											key: {
+												id: demoReload.val()
+											}
+										}
+									});
+								},
+							};
+
+						// 按钮搜索
+						$('#tableActions .layui-btn').on('click', function() {
+							var type = $(this).data('type');
+							active[type] ? active[type].call(this) : '';
+						});
+						
+					})
+				},
+				mounted() {
+
+				}
+			})
+	    </script>
+			
+		<!-- 字段回调 -->
+		<!--<script type="text/html" id="idTpl">
+			
+			    <div class="inforshow">
+			    	<a href="javascript:;"><img src={{d.infor.img}} alt="info" /></a>
+			    	<a href="javascript:;">
+			    		<span>{{d.infor.name}}</span>
+			    		<span>{{d.infor.datetime}}</span>
+			    	</a>
+			    </div>
+			<a>anspray</a>
+		</script>-->
+		<!--//性别判断-->
+		<script type="text/html" id="orTpl">
+		  {{#  if(d.testOr === '1'){ }}
+		    <span style="color: #F581B1;">{{ d.testOr }}</span>
+		  {{#  } else { }}
+		    {{ d.testOr }}
+		  {{#  } }}
+        </script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="marker"><i class="layui-icon">&#xe642;</i>修改</a>
+		</script>
+		
+	</body>
+
+</html>

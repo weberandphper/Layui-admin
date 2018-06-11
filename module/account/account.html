@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>账号管理</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+			#editaccount,#resetpwd,#addaccount{
+				padding:0 8%;height: 100%;
+			    display: flex;
+			    flex-direction: column;
+			    justify-content: center;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="account">
+			<div class="layui-row">
+				<button class="layui-btn layui-btn-normal" data-type="addaccount">添加账号</button>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+		
+			// 基础数据
+			var vm = new Vue({
+				el: "#account",
+				data: {
+					baseDate: [],
+					formflag:false,
+				},
+				created() {
+					
+				},
+			})
+			
+			layui.use(['jquery', 'layer', 'table', 'form','ajaxmod','verifymod'], function() {
+			
+				var $ = layui.jquery,
+					table = layui.table,
+					laydate = layui.laydate,
+					form = layui.form,
+					ajaxmod = layui.ajaxmod,
+					verifymod = layui.verifymod;
+					
+				// 角色类型获取
+				ajaxmod.layuiGet("/api/sys/account/RoleList","",function (res) {
+					if (res.success) {
+						vm.baseData = res.data;
+					} else {
+						layer.msg(res.message, {icon: 2});
+					}
+				});
+
+				table.render({
+					elem: '#layui-table',
+					url: baseUrl+'/api/sys/account/GetList',
+					page: true,
+					limit: 16,
+					limits: [10, 15, 20, 25, 30],
+					height: 'full-80',
+					id: 'tableReload',
+					loading: true,
+					method: 'get',
+					where: {token: cookie.get('usertoken')},
+					request: {
+						
+					},
+					response: {
+					   statusCode: 200,
+					   msgName: 'message',
+					},
+					cols: [
+						[ 
+							{
+								field: 'userName',
+								title: '用户名',
+								width: '16%',
+							}, {
+								field: 'name',
+								title: '姓名',
+								width: '16%',
+								sort: true
+							}, {
+								field: 'roleName',
+								title: '角色',
+								width: '16%',
+							}, {
+								field: 'isValid',
+								title: '状态',
+								width: '16%',
+								toolbar: '#roleState'
+							}, {
+								field: 'lastLoginTime',
+								title: '最后登陆时间',
+								width: '16%',
+								sort: true
+							}, {
+								fixed: 'right',
+								title: '操作',
+								width: '20%',
+								align: 'center',
+								toolbar: '#barAction'
+							} 
+						]
+					],
+					done: function(res, curr, count) {}
+				});
+
+				// 操作事件
+				table.on('tool(layui-action)', function(obj) {
+					var data = obj.data; 
+					//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+					var layEvent = obj.event; 
+					//获得当前行 tr 的DOM对象
+					var tr = obj.tr; 
+					
+					if(layEvent === 'edit') {
+						
+						vm.formflag=false;
+						
+						var checkboxstr = "";
+						$.each(vm.baseData, function(i, v) {
+							if (v.id == data.roleId) {
+								checkboxstr = checkboxstr+'<input type="radio" name="RoleId" lay-skin="primary" title='+v.name+' value='+v.id+' checked>';
+							} else {
+								checkboxstr = checkboxstr+'<input type="radio" name="RoleId" lay-skin="primary"  title='+v.name+' value='+v.id+'>';
+							}
+						})
+						
+						var str = `<form class="layui-form" action="" id="editaccount">
+										<input type="hidden" name="Id" value=`+data.id+`>
+										<div class="layui-form-item"><label class="layui-form-label">用户名：</label>
+											<div class="layui-input-block">
+												<p style="display:block;width:100%;line-height:38px">`+data.userName+`</p>
+											</div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">姓名：</label>
+											<div class="layui-input-block"><input type="text" name="Name" lay-verify="username" autocomplete="off" placeholder="请输入姓名" class="layui-input" value=`+data.name+`><span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">角色：</label>
+											<div class="layui-input-block">`+checkboxstr+`<span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item">
+									     <div class="layui-input-block">
+									      <button type="button" class="layui-btn" lay-submit="" lay-filter="formedit" id="formedit" style="display:none">立即提交</button>
+									     </div>
+									    </div>
+									</form>`;
+						
+						layer.open({
+				    		type: 1,
+				    		title: "账号编辑",
+				    		content: str,
+				    		skin: 'demo-class',
+				    		shade: 0.3,
+				    		shadeClose: true,
+				    		area: ['660px','350px'],
+				    		offset: '200px',
+				    		move: false,
+				    		btn: ['确认','取消'],
+				    		// 确认
+				    		yes: function (index,layero) {
+				    			
+				    			$("#editaccount #formedit").click();
+				    			if(vm.formflag){
+				    				var data = $("#editaccount").serialize();	
+						    		ajaxmod.layuiPost("/api/sys/account/UpdateAccount",data, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+						    		return false;
+				    			}
+				    			
+				    		},
+				    		// 取消
+				    		btn2: function (index,layero) {
+				    			
+				    		},
+				    		success: function (layero,index) {
+				    			// 获取内容
+				    			form.render();
+				    		},
+				    	})
+						
+					} else if (layEvent === 'changestate') {
+						var str = data.isValid ? "确定要禁用该账户么 ?" : "确定要启用该账户么"
+						layer.confirm(str, function(index) {
+							ajaxmod.layuiPost("/api/sys/account/ChangeAccountState",{Id: data.id,IsValid: !data.isValid}, function (res) {
+								if(res.success){
+									$(".layui-laypage-btn").click();
+									layer.msg('操作成功', {icon: 1});
+				                }else{
+				                	layer.msg(res.message, {icon: 2});
+				                }
+							})
+						})
+			    		
+			    		
+					} else if (layEvent === 'resetpassword') {
+						
+						vm.formflag=false;
+						
+						var str = `<form class="layui-form" action="" id="resetpwd">
+										<div class="layui-form-item"><label class="layui-form-label">用户名：</label>
+											<div class="layui-input-block">
+												<input  type="hidden" name="Id" value=`+data.id+`>
+												<p style="display:block;width:100%;line-height:38px">`+data.userName+`</p>
+											</div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">设置密码：</label>
+											<div class="layui-input-block"><input type="text" id="repass" name="Password" lay-verify="pass" autocomplete="off" placeholder="请输入密码" class="layui-input" id='pass'><span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">确认密码：</label>
+											<div class="layui-input-block "><input type="text" name="Password" lay-verify="contactsresetpass" autocomplete="off" placeholder="请输入确认密码" class="layui-input" id='resetpass'><span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item">
+									     <div class="layui-input-block">
+									      <button type="button" class="layui-btn" lay-submit="" lay-filter="formsub" id="formreset" style="display:none">立即提交</button>
+									     </div>
+									    </div>
+									</form>`;
+						
+						layer.open({
+				    		type: 1,
+				    		title: "重置密码",
+				    		content: str,
+				    		skin: 'demo-class',
+				    		shade: 0.3,
+				    		shadeClose: true,
+				    		area: ['660px','350px'],
+				    		offset: '200px',
+				    		move: false,
+				    		btn: ['确认','取消'],
+				    		// 确认
+				    		yes: function (index,layero) {
+				    			$("#resetpwd #formreset").click();
+				    			if(vm.formflag){
+				    				var data = $("#resetpwd").serialize();	
+						    		ajaxmod.layuiPost("/api/sys/account/ResetAccountPwd",data, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+						    		return false;
+				    			}
+				    		},
+				    		// 取消
+				    		btn2: function (index,layero) {
+				    			
+				    		},
+				    		success: function (layero,index) {
+				    			// 获取内容
+				    			form.render();
+				    		},
+				    	})
+						
+					} else if (layEvent === 'delete') {
+						layer.confirm('确定删除姓名为'+ obj.data.name + '的用户么?', function(index) {
+							layui.use(['jquery'], function() {
+								var datas = $.param({Id: data.id});
+					    		ajaxmod.layuiPost("/api/sys/account/DeleteAccount",datas, function (res) {
+									if(res.success){
+										layer.closeAll();
+										$(".layui-laypage-btn").click();
+										layer.msg('操作成功', {icon: 1});
+					                }else{
+					                	layer.msg(res.message, {icon: 2});
+					                }
+								})
+					    		return false;
+							})
+						});
+					} 
+				});
+
+
+              	form.on('submit(formsub)', function(data){
+              		
+				 vm.formflag=true;
+				
+				})
+			    form.on('submit(formreset)', function(data){
+              		
+				 vm.formflag=true;
+				
+				})
+                form.on('submit(formedit)', function(data){
+              		
+				 vm.formflag=true;
+				
+				})
+
+				// 触发函数
+				var active = {
+					// 添加账号
+					addaccount: function(data) {
+						var checkboxstr = "";
+						vm.formflag=false;
+						$.each(vm.baseData, function(i, v) {
+							checkboxstr = checkboxstr+'<input type="radio" name="RoleId" lay-skin="primary" title='+v.name+' value='+v.id+'>';
+						})
+						var str = `<form class="layui-form" id="addaccount">
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">用户名：</label>
+											<div class="layui-input-block"><input type="text" name="UserName" lay-verify="username" autocomplete="off" placeholder="请输入用户名" class="layui-input"><span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">设置密码：</label>
+											<div class="layui-input-block"><input id="pass" type="text" name="Password" lay-verify="pass" autocomplete="off" placeholder="请输入密码" class="layui-input"><span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">确认密码：</label>
+											<div class="layui-input-block"><input type="text" name="Password" lay-verify="contactsaddpass" autocomplete="off" placeholder="请确认密码" class="layui-input"><span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">姓名：</label>
+											<div class="layui-input-block"><input type="text" name="Name" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input"><span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item positiondiv"><label class="layui-form-label">角色：</label>
+											<div class="layui-input-block">`+checkboxstr+`<span class="must-input positionspan"></span></div>
+										</div>
+										<div class="layui-form-item">
+									     <div class="layui-input-block">
+									      <button type="button" class="layui-btn" lay-submit="" lay-filter="formsub" id="formsub" style="display:none">立即提交</button>
+									     </div>
+									    </div>
+									</form>`;
+						
+						layer.open({
+				    		type: 1,
+				    		title: "添加账号",
+				    		content: str,
+				    		skin: 'demo-class',
+				    		shade: 0.3,
+				    		shadeClose: true,
+				    		area: ['800px','530px'],
+				    		offset: '150px',
+				    		move: false,
+				    		btn: ['确认','取消'],
+				    		// 确认
+				    		yes: function (index,layero) {
+				    			
+				    			$("#addaccount #formsub").click();
+								var data = $("#addaccount").serialize();	
+								
+								if(vm.formflag){
+									ajaxmod.layuiPost("/api/sys/account/AddAccount",data, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+									return false;
+								}
+				    		},
+				    		// 取消
+				    		btn2: function (index,layero) {
+				    			
+				    		},
+				    		success: function (layero,index) {
+				    			// 获取内容
+				    			form.render();
+				    		},
+				    	})
+	
+					},
+					// 查询
+					search: function() {
+						var demoReload = $('#demoReload');
+						//执行重载
+						table.reload('tableReload', {
+							page: {
+								//重新从第 1 页开始
+								curr: 1
+							},
+							where: {
+								key: {
+									id: demoReload.val()
+								}
+							}
+						});
+					},
+				};
+
+				// 字段校验
+				//form.verify(verifymod);
+				
+				 //自定义验证规则
+				  form.verify({
+				    username: function(value) {
+					if(value.length < 4 || value.length>20) {
+							return '用户名为4-20个字符,';
+						}
+					},
+					pass: [/(.+){6,20}$/, '密码必须6到20位'],
+					content: function(value) {
+					//	layedit.sync(editIndex);
+					},
+					address: function(value) {
+						if(value == '') {
+							return '';
+						}
+					},
+					contactsaddpass: function(value) {
+			
+					    	if(value!=$("#addaccount input[id='pass']").val()){
+					    		return '密码不一致';
+					    	}
+			
+					},
+					contactsresetpass: function(value) {
+			
+					    	if(value!=$("#resetpwd input[id='repass']").val()){
+					    		return '密码不一致';
+					    	}
+			
+					}
+				  });
+				
+				// 按钮搜索
+				$('#account .layui-btn').on('click', function() {
+					var type = $(this).data('type');
+					active[type] ? active[type].call(this) : '';
+				});
+				
+			})
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+				<i class="layui-icon">&#xe642;</i>
+			</a>
+			{{#  if(d.userName == cookie.get('username')){ }}
+				{{#  if(d.isValid == true){ }}
+					<a class="layui-btn layui-btn-normal layui-btn-xs layui-btn-disabled">
+						<i class="layui-icon">&#xe623;</i>
+					</a>
+				{{#  } else { }}
+					<a class="layui-btn layui-btn-normal layui-btn-xs layui-btn-disabled" lay-event="changestate">
+						<i class="layui-icon">&#xe651;</i>
+					</a>
+				{{#  } }}
+			{{#  } else { }}
+				{{#  if(d.isValid == true){ }}
+					<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="changestate">
+						<i class="layui-icon">&#xe623;</i>
+					</a>
+				{{#  } else { }}
+					<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="changestate">
+						<i class="layui-icon">&#xe651;</i>
+					</a>
+				{{#  } }}
+			{{#  } }} 
+			<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="resetpassword">
+				<i class="layui-icon">&#xe639;</i>
+			</a>
+			{{#  if(d.userName == cookie.get('username')){ }}
+				<a class="layui-btn layui-btn-normal layui-btn-xs layui-btn-disabled">
+					<i class="layui-icon">&#xe640;</i>
+				</a>
+			{{#  } else { }}
+				<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="delete">
+					<i class="layui-icon">&#xe640;</i>
+				</a>
+			{{#  } }} 
+		</script>
+		<script type="text/html" id="roleState">
+			{{#  if(d.isValid){ }}
+				启用
+			{{#  } else { }}
+				停用
+			{{#  } }} 
+		</script>
+	</body>
+</html>

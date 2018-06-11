@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>账号设置</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<style>
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			#answerandquestion {
+			     padding: 0 !important; 
+			     position: relative;
+			     top: -18px;
+			     min-height: 950px;
+			     overflow-x: hidden;
+			}
+			
+			/** layui-v2.2.5 MIT License By https://www.layui.com */
+html #layuicss-skinlayimcss{position:absolute;display:none;width:1989px}body .layui-layim,body .layui-layim-chat{border:1px solid #D9D9D9;border-color:rgba(0,0,0,.05);background-color:#F6F6F6;background-repeat:no-repeat;color:#333;font-family:\5FAE\8F6F\96C5\9ED1}body .layui-layim-chat{background-size:cover}body .layui-layim .layui-layer-title{height:110px;border-bottom:none;background:0 0}.layui-layim-main{position:relative;top:-98px;left:0}body .layui-layim .layui-layer-content,body .layui-layim-chat .layui-layer-content{overflow:visible}.layui-layim cite,.layui-layim em,.layui-layim-chat cite,.layui-layim-chat em{font-style:normal}.layui-layim-status{position:relative;top:2px;line-height:19px;cursor:pointer}.layim-status-online{color:#3FDD86}.layim-status-hide{color:#DD691D}.layui-layim-list li{position:relative;padding:5px 15px 5px 60px;height:42px;font-size:0;cursor:pointer}.layui-layim-list li:hover{background-color:#F2F2F2;background-color:rgba(0,0,0,.05)}.layui-layim-list li.layim-null{padding:0;height:20px;color:#999;text-align:center;font-size:14px;line-height:20px;cursor:default}.layui-layim-list li.layim-null:hover{background:0 0}.layui-layim-list li *{display:inline-block;vertical-align:top;font-size:14px}.layui-layim-list li span{margin-top:4px;max-width:155px}.layui-layim-list li img{position:absolute;top:8px;left:15px;width:36px;height:36px;border-radius:100%}.layui-layim-list li p{display:block;padding-right:30px;color:#999;font-size:12px;line-height:18px}
+.layui-layim-list li .layim-msg-status{position:absolute;right:10px;bottom:7px;display:none;padding:0 5px;height:16px;border-radius:16px;background-color:#F74C31;color:#fff;text-align:center;font-size:10px;line-height:16px}
+body .layui-layim-chat{background-color:#fff}body .layui-layim-chat-list{width:760px}body .layui-layim-chat .layui-layer-title{height:80px;border-bottom:none;background-color:#F8F8F8;background-color:rgba(245,245,245,.7)}body .layui-layim-chat .layui-layer-content{background:0 0}.layim-chat-list li *,.layui-layim-min .layui-layer-content *{display:inline-block;vertical-align:top;font-size:14px}.layim-chat-list{position:absolute;top:-80px;z-index:1000;display:none;overflow:hidden;width:200px;height:100%;background-color:#D9D9D9;font-size:0}.layim-chat-list:hover{overflow-y:auto}.layim-chat-list li,.layui-layim-min .layui-layer-content{position:relative;margin:5px;padding:5px 30px 5px 5px;border-radius:3px;line-height:40px;cursor:pointer}.layim-chat-list li img,.layui-layim-min .layui-layer-content img{width:40px;height:40px;border-radius:100%}.layui-layim-photos{cursor:crosshair}.layim-chat-list li{white-space:nowrap}.layim-chat-list li span,.layui-layim-min .layui-layer-content span{overflow:hidden;padding-left:10px;width:100px;text-overflow:ellipsis;white-space:nowrap;font-size:16px}.layim-chat-list li span cite{padding-left:10px;color:#999}.layim-chat-list li:hover{background-color:#E2E2E2}.layim-chat-list li.layim-this{background-color:#F3F3F3}.layim-chat-list li .layui-icon{position:absolute;top:7px;right:5px;display:none;color:#555;font-size:22px}.layim-chat-list li .layui-icon:hover{color:#c00}
+.layim-chat-list li:hover .layui-icon{display:inline-block}.layim-chat-system{margin:10px 0;text-align:center}.layim-chat-system span{display:inline-block;padding:0 15px;border-radius:3px;background-color:#e2e2e2;font-size:14px;line-height:30px;cursor:default}.layim-chat{position:relative;display:none;background-color:#fff;background-color:rgba(255,255,255,.9)}.layim-chat-title{position:absolute;top:-80px;height:80px}.layim-chat-other{position:relative;top:15px;left:15px;padding-left:60px;cursor:default}.layim-chat-other img{position:absolute;top:0;left:0;width:50px;height:50px;border-radius:100%}.layim-chat-username{position:relative;top:5px;font-size:18px}.layim-chat-status{margin-top:6px;color:#999;font-size:14px}
+.layim-chat-main{overflow-x:hidden;overflow-y:auto;padding:15px 15px 5px;height:262px}.layim-chat-main ul li{position:relative;margin-bottom:10px;padding-left:60px;min-height:68px;font-size:0}.layim-chat-text,.layim-chat-user{display:inline-block;vertical-align:top;font-size:14px}.layim-chat-user{position:absolute;left:3px}.layim-chat-user img{width:40px;height:40px;border-radius:100%}
+.layim-chat-user cite{position:absolute;top:-2px;left:60px;width:500px;color:#999;text-align:left;white-space:nowrap;font-style:normal;font-size:12px;line-height:24px}.layim-chat-user cite i{padding-left:15px;font-style:normal}.layim-chat-text{position:relative;margin-top:25px;padding:8px 15px;max-width:462px\9;border-radius:3px;background-color:#e2e2e2;color:#333;line-height:22px;word-break:break-all}.layim-chat-text:after{position:absolute;top:13px;left:-10px;overflow:hidden;width:0;height:0;border-color:#e2e2e2 transparent transparent;border-style:solid dashed dashed;border-width:10px;content:''}.layim-chat-text a{color:#33DF83}.layim-chat-text img{max-width:100%;vertical-align:middle}.layim-chat-main ul .layim-chat-system{padding:0;min-height:0}.layim-chat-main ul .layim-chat-mine{padding-right:60px;padding-left:0;text-align:right}.layim-chat-mine .layim-chat-user{right:3px;left:auto}.layim-chat-mine .layim-chat-user cite{right:60px;left:auto;text-align:right}.layim-chat-mine .layim-chat-user cite i{padding-right:15px;padding-left:0}.layim-chat-mine .layim-chat-text{margin-left:0;background-color:#5FB878;color:#fff;text-align:left}.layim-chat-mine .layim-chat-text:after{right:-10px;left:auto;border-top-color:#5FB878}.layim-chat-mine .layim-chat-text a{color:#fff}.layim-chat-footer{border-top:1px solid #F1F1F1}
+.layim-tool-image input{position:absolute;top:0;left:0;width:100%;height:100%;font-size:0;opacity:.01;cursor:pointer;filter:Alpha(opacity=1)}body .layui-layim-face{margin:10px 0 0 -18px;border:none;background:0 0}body .layui-layim-face .layui-layer-content{padding:0;background-color:#fff;box-shadow:none;color:#666}.layui-layim-face .layui-layer-TipsG{display:none}.layui-layim-face ul{position:relative;padding:10px;width:372px;border:1px solid #D9D9D9;background-color:#fff;box-shadow:0 0 20px rgba(0,0,0,.2)}.layui-layim-face ul li{float:left;overflow:hidden;margin:-1px 0 0 -1px;padding:4px 2px;width:26px;height:22px;border:1px solid #e8e8e8;text-align:center;cursor:pointer}.layui-layim-face ul li:hover{position:relative;z-index:2;border:1px solid #eb7350;background:#fff9ec}.layim-chat-textarea{margin-left:10px}.layim-chat-textarea textarea{display:block;overflow:auto;padding:5px 0 0;width:100%;height:68px;border:none;background:0 0;line-height:20px;resize:none}.layim-chat-textarea textarea:focus{outline:0}.layim-chat-bottom{position:relative;height:46px}.layim-chat-send{position:absolute;top:3px;right:15px;height:32px;font-size:0;line-height:32px;cursor:pointer}.layim-chat-send span{display:inline-block;margin-left:5px;padding:0 20px;border-radius:3px;background-color:#5FB878;color:#fff;vertical-align:top;font-size:14px;line-height:32px}.layim-chat-send span:hover{background-color:#69BC80}.layim-chat-send span:active{background-color:#59B573}.layim-chat-send .layim-send-btn{border-radius:3px 0 0 3px}
+.layim-chat-send .layim-send-set{position:relative;margin-left:0;padding:0;width:30px;height:32px;border-left:1px solid #85C998;border-radius:0 3px 3px 0}.layim-send-set .layui-edge{position:absolute;top:14px;left:9px;border-width:6px;border-top-style:solid;border-top-color:#fff}body .layui-layim-min{border:1px solid #D9D9D9}.layui-layim-min .layui-layer-content{margin:0 5px;padding:5px 10px;white-space:nowrap}.layui-layim-close .layui-layer-content span{width:auto;max-width:120px}.layim-add-box{margin:15px;font-size:0}.layim-add-img img,.layim-add-remark p{margin-bottom:10px}.layim-add-img{margin-right:20px;width:100px;text-align:center}.layim-add-img img{width:100px;height:100px}.layim-add-remark{width:280px}.layim-add-remark .layui-select{margin-bottom:10px;width:100%}.layim-add-remark .layui-textarea{height:80px;min-height:80px;resize:none}.layui-layim-face img{vertical-align:bottom}
+			
+			#layui-layer2{
+				position: relative;box-shadow: 0 0 0  rgba(0,0,0,0);
+			}
+			
+			ul.more-content {
+				font-size: 0px;
+			}
+			
+			.chat-suggest{
+				position: relative;
+			}
+			
+			.aview-more {
+				display: block;
+				text-align: right;
+				position: absolute;
+				top: 3px;
+				right: 0;
+			}
+			
+			.chat-fsu,.aview-more {
+				line-height: 18px;
+				color: #369 !important;
+				font-size: 12px;
+			}
+			
+			.more-content li {
+			    min-height: 18px !important;
+			    margin: 0 !important;
+			    padding: 0 !important;
+			}
+			
+			.more-content li a {
+				display: block;
+				font-size: 12px;
+				color: #369 !important;
+				line-height: 18px !important;
+			}
+			
+			#chat-textarea {
+				border-bottom: 1px solid #F1F1F1;
+				margin-bottom: 16px;
+			}
+			
+			.layim-chat-textarea textarea {
+			    height: 150px;
+			    line-height: 20px;
+			}
+			
+			#textarea-area {
+				position: relative;
+				padding: 0;
+			}
+			
+			#textarea-area #sugguestions{
+				background: #fff;
+				position: absolute;
+				border: 1px solid #f3f3f3;
+				padding: 4px;
+			    right: 8px;
+			    left: 8px;
+			    width: auto;
+			    bottom: 188px;
+			    left: 0;
+			    max-width: 510px;
+			}
+			
+			.suggestion-area .suggestion {
+				transition: background-color 0.2s
+			}
+			
+			.suggestion-area .suggestion:hover {
+				background: #f3f3f3;
+			}
+			
+			.layim-chat-tool .layim-tool-log {
+			    position: absolute;
+			    right: 5px;
+			    font-size: 14px;
+			}
+
+			.layim-chat-tool span {
+			    position: relative;
+			    margin: 0 10px;
+			    display: inline-block;
+			    vertical-align: top;
+			    font-size: 24px;
+			    cursor: pointer;
+			}
+			
+			.layim-chat-tool {
+			    position: relative;
+			    padding: 0 8px;
+			    height: 38px;
+			    line-height: 38px;
+			    font-size: 0;
+			}
+
+			.layim-chat-tool span {
+			    position: relative;
+			    margin: 0 10px;
+			    display: inline-block;
+			    vertical-align: top;
+			    font-size: 24px;
+			    cursor: pointer;
+			}
+
+			.layui-icon {
+			    font-family: layui-icon!important;
+			    font-size: 16px;
+			    font-style: normal;
+			    -webkit-font-smoothing: antialiased;
+			    -moz-osx-font-smoothing: grayscale;
+			}
+		
+			.aspeak {
+				float: right;
+				margin-top: -50px;
+				margin-right: 22px;
+				cursor: pointer;
+				transition: color 0.3s;
+			}
+			
+			.aspeak:hover i{
+				color: silver !important;
+			}
+			
+			::-webkit-scrollbar{width:0px}
+			
+			
+			
+			
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="answerandquestion">
+			<!--对话-->
+			<div class="layui-layer layui-layer-page layui-box layui-layim-chat" id="layui-layer2" type="page" times="2" showtime="0" contype="string" style="z-index: 19891016; width: 100%; top: -1px; left: -1px; min-width: 500px; min-height: 420px; background-image: url(&quot;http://res.layui.com/layui/dist/css/modules/layim/skin/3.jpg&quot;); height: 100%;" area="600,520,213.5,659">
+				<div class="layui-layer-title">&#8203;</div>
+				<div id="layui-layim-chat" class="layui-layer-content" style="height: 20px;">
+					<ul class="layui-unselect layim-chat-list" style="height: 949px;">
+						<li class="layim-friend1008612 layim-chatlist-friend1008612 layim-this" layim-event="tabChat"><img src="../../resources/images/admin.jpg"><span>智能问答NLP</span><i class="layui-icon" layim-event="closeChat">ဇ</i></li>
+					</ul>
+					<div class="layim-chat-box">
+						<div class="layim-chat layim-chat-friend layui-show">
+							<div class="layui-unselect layim-chat-title">
+								<div class="layim-chat-other">
+									<img class="layim-friend1008612" src="../../resources/images/admin.jpg">
+									<span class="layim-chat-username" layim-event="">智能问答</span>
+									<p class="layim-chat-status">
+										<span style="color:#FF5722;">在线</span>
+									</p>
+								</div>
+							</div>
+							<span class="aspeak"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe645;</i>  </span>
+							<div class="layim-chat-main" style="height: 550px;">
+								<ul>
+									<li class="layim-chat-mine">
+										<div class="layim-chat-user">
+											<img src="../../resources/images/amika.jpg">
+											<cite><i>2018-02-01 13:57:41</i>anspray</cite>
+										</div>
+										<div class="layim-chat-text">这是测试</div>
+									</li>
+									<li>
+										<div class="layim-chat-user">
+											<img src="../../resources/images/admin.jpg">
+											<cite>Amika<i>2018-02-01 13:57:42</i></cite>
+										</div>
+										<div class="layim-chat-text">你好啊，我发现了本地测试</div>
+									</li>
+									<li class="layim-chat-mine">
+										<div class="layim-chat-user">
+											<img src="../../resources/images/amika.jpg">
+											<cite><i>2018-02-01 13:57:56</i>anspray</cite>
+										</div>
+										<div class="layim-chat-text">你好啊，我发现了本地测试</div>
+									</li>
+									<li>
+										<div class="layim-chat-user">
+											<img src="../../resources/images/admin.jpg">
+											<cite>Amika<i>2018-02-01 13:57:57</i></cite>
+										</div>
+										<div class="layim-chat-text">
+											<div class="chat-main">
+												你好啊，我发现了你好啊，我发现了本地测试你好啊，我发现了本地测试你好啊，我发现了本地测试...
+											</div>
+											<div class="chat-suggest adown">
+												<a href="" class="chat-fsu">高血压怎么办?</a>
+												<a href="javascript:;" class="aview-more"> 更多</a>
+												<ul class="more-content" style="display: none;">
+													<li><a href="javascript:;">高血压怎么办？</a></li>
+													<li><a href="javascript:;">上海天气？</a></li>
+													<li><a href="javascript:;">南京空气</a></li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="layim-chat-mine">
+										<div class="layim-chat-user">
+											<img src="../../resources/images/amika.jpg">
+											<cite><i>2018-02-01 13:58:02</i>anspray</cite>
+										</div>
+										
+										<div class="layim-chat-text">
+											<div class="chat-main">
+												123456fdsfdsfdsfdsfdsf
+											</div>
+											<div class="chat-suggest adown">
+												<a href="" class="chat-fsu">高血压怎么办?</a>
+												<a href="javascript:;" class="aview-more"> 更多</a>
+												<ul class="more-content" style="display: none;">
+													<li><a href="javascript:;">回复1</a></li>
+													<li><a href="javascript:;">回复2</a></li>
+													<li><a href="javascript:;">回复3</a></li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="layim-chat-user">
+											<img src="../../resources/images/admin.jpg">
+											<cite>Amika<i>2018-02-01 13:58:03</i></cite>
+										</div>
+										<div class="layim-chat-text">你慢慢说，别急……</div>
+									</li>
+								</ul>
+							</div>
+							<div class="layim-chat-footer" id="chat-textarea">
+								<div class="layim-chat-textarea" id="textarea-area">
+									<div id="sugguestions" class="suggestion-area" style="display: none;">
+										<ul>
+											<li class="suggestion" faqid="999999999" onclick="javascript:sendClick(0,999999999,'小米的客服呢','',null,3,null,false,true,false);">
+												<a>
+													<font color="red">小</font>
+													<font color="red">米</font>的客服呢
+												</a>
+											</li>
+											<li class="suggestion" faqid="999999999" onclick="javascript:sendClick(0,999999999,'小米售后管吗','',null,4,null,false,true,false);">
+												<a>
+													<font color="red">小</font>
+													<font color="red">米</font>售后管吗
+												</a>
+											</li>
+											<li class="suggestion" faqid="999999999" onclick="javascript:sendClick(0,999999999,'小米四包邮么','',null,5,null,false,true,false);">
+												<a>
+													<font color="red">小</font>
+													<font color="red">米</font>四包邮么
+												</a>
+											</li>
+											<li class="suggestion" faqid="999999999" onclick="javascript:sendClick(0,999999999,'小米耳机有卖吗','',null,6,null,false,true,false);">
+												<a>
+													<font color="red">小</font>
+													<font color="red">米</font>耳机有卖吗
+												</a>
+											</li>
+											<li class="suggestion" faqid="999999999" onclick="javascript:sendClick(0,999999999,'小米手机好吗','',null,2,null,false,true,false);">
+												<a>
+													<font color="red">小</font>
+													<font color="red">米</font>手机好吗
+												</a>
+											</li>
+											<li class="suggestion" faqid="999999999" onclick="javascript:sendClick(0,999999999,'小米还有货吗','',null,1,null,false,true,false);">
+												<a>
+													<font color="red">小</font>
+													<font color="red">米</font>还有货吗
+												</a>
+											</li>
+										</ul>
+									</div>
+									<div class="layui-unselect layim-chat-tool" data-json="%7B%22name%22%3A%22%E5%B0%8F%E9%97%B2%22%2C%22type%22%3A%22friend%22%2C%22avatar%22%3A%22%2F%2Ftva3.sinaimg.cn%2Fcrop.0.0.180.180.180%2F7f5f6861jw1e8qgp5bmzyj2050050aa8.jpg%22%2C%22id%22%3A1008612%7D"><span class="layui-icon layim-tool-face" title="选择表情" layim-event="face"></span><span class="layui-icon layim-tool-image" title="上传图片" layim-event="image"><input type="file" name="file"></span><span class="layui-icon layim-tool-image" title="发送文件" layim-event="image" data-type="file"><input type="file" name="file"></span><span class="layim-tool-log" layim-event="chatLog"><i class="layui-icon"></i>聊天记录</span></div>									
+									<textarea rows="15" name="desc" placeholder="聊天内容" class="layui-textarea" id="textarea"></textarea>
+								</div>
+							</div>
+							<div class="layim-chat-bottom">
+								<div class="layim-chat-send">
+									<button class="layim-send-btn layui-btn layui-btn-lg layui-btn-normal" layim-event="send">发送</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<span class="layui-layer-setwin">
+					<a class="layui-layer-min" href="javascript:;" style="display: none;">
+						<cite></cite>
+					</a>
+				</span>
+				<span class="layui-layer-resize">
+				</span>
+			</div>						
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+			
+			var vm = new Vue({
+				el: "#markuptool",
+				data: {
+					baseDate: "basedate"
+				},
+				created () {
+					
+				},
+				methods () {
+				
+				
+				},
+				mounted () {
+				
+					
+				}
+			})
+			
+			
+			layui.use(['jquery', 'layer', 'table', 'element','form'], function() {
+				
+				var $ = layui.jquery,
+					table = layui.table,
+					laydate = layui.laydate,
+					form = layui.form,
+					element = layui.element;
+					
+					//监听提交
+					form.on('submit(formDemo)', function(data){
+					    layer.msg(JSON.stringify(data.field));
+					    return false;
+					});
+					
+					$("#textarea").on("input",function () {
+						$("#sugguestions").css("display","block")
+					});
+					
+					$(".suggestion-area .suggestion").click(function () {
+						$("#textarea").val($(this).text());
+						$("#sugguestions").css("display","none")
+						
+					})
+			})
+		</script>
+		<!-- 字段回调 -->
+		<script type="text/html" id="idTpl">
+			<a>高血压患者的饮食宜忌: 蛋白质食品---牛肉、猪瘦肉、白肉鱼、蛋、牛奶、奶制品（鲜奶油、酵母乳、冰淇淋、乳酪）、大豆制品（豆腐、纳豆、黄豆粉、油豆腐）</a>
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<button class="layui-btn layui-btn-danger layui-btn-sm">
+	          <i class="layui-icon"></i>
+	        </button>
+		</script>
+		<script type="text/html" id="toLabel">
+			<span class="layui-badge">{{ d.wealth }}</span>
+		</script>
+	</body>
+

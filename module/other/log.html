@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>操作日志</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				
+				width: 100px !important;
+			}
+			
+		</style>
+	</head>
+	<body>
+	
+		<div class="layui-fluid iframe-top" id="log">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query-form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">操作对象：</label>
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="Target" autocomplete="off" placeholder="请输入操作对象">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">操作内容：</label>
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="Content" autocomplete="off" placeholder="请输入操作内容">
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">操作类型：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="Type" class="layui-select" v-model="selected">
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.actiontype" v-bind:value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">操作人：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="OperationUserId" class="layui-select" v-model="selected">
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.operator" v-bind:value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+		
+			// 基础数据
+			var basedata = {
+				actiontype: [
+					{
+						id: 0,
+						name: "全部"
+					},
+					{
+						id: 1,
+						name: "类型1"
+					},
+					{
+						id: 2,
+						name: "类型2"
+					},
+					{
+						id: 3,
+						name: "类型3"
+					},
+				],
+				operator: [
+					{
+						id: 0,
+						name: "全部"
+					},
+					{
+						id: 1,
+						name: "主账号"
+					},
+					{
+						id: 2,
+						name: "药剂师1"
+					},
+					{
+						id: 3,
+						name: "药剂师2"
+					},
+					{
+						id: 4,
+						name: "收银员1"
+					},
+					{
+						id: 5,
+						name: "收银员2"
+					},
+					{
+						id: 6,
+						name: "销售1"
+					},
+					{
+						id: 7,
+						name: "销售2"
+					}
+				]
+			}
+			
+			var vm = new Vue({
+				el: "#log",
+				data: {
+					baseData: basedata,
+					selected: '1',
+				},
+				created() {
+					layui.use(['jquery', 'layer', 'table', 'laydate'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate;
+
+						//日期 1
+						laydate.render({
+							elem: '#date1'
+						});
+
+						//日期 2
+						laydate.render({
+							elem: '#date2'
+						});
+
+						table.render({
+							elem: '#layui-table',
+							url: 'http://192.168.1.138:8001/api/sys/settings/OperationLogList',
+							page: true,
+							limit: 16,
+							limits: [10, 15, 20, 25, 30],
+							height: 'full-150',
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							request: {
+								
+							},
+							response: {
+							   statusCode: 200,
+							   msgName: 'message',
+							},
+							cols: [
+								[ 
+									{
+										field: 'id',
+										title: '日志编号',
+										width: '15%',
+										edit: true
+									}, {
+										field: 'createTime',
+										title: '时间',
+										width: '15%',
+										sort: true
+									}, {
+										field: 'type',
+										title: '操作类型',
+										width: '15%',
+									},{
+										field: 'target',
+										title: '操作对象',
+										width: '20%',
+										sort: true
+									}, {
+										field: 'content',
+										title: '操作内容',
+										width: '20%',
+										sort: true
+									}, {
+										field: 'operationUserName',
+										title: '操作人',
+										width: '15%',
+										sort: true
+									}
+								]
+							],
+							done: function(res, curr, count) {}
+						});
+
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							if(layEvent === 'detail') {
+								layer.alert('查看行：<br>' + JSON.stringify(data))
+							} else if(layEvent === 'del') {
+								layer.confirm('真的删除ID为' + obj.data.id + '行么?', function(index) {
+									layui.use(['jquery'], function() {
+										var $ = layui.jquery;
+										var ok = function() {
+											alert("okvcx")
+										}
+										$.layuiGet("/demo/table/user", {}, "");
+									})
+								});
+							} else if(layEvent === 'edit') {
+								vm.editForm = data;
+								console.log(data)
+								// 赋值
+								obj = data;
+								layer.open({
+									type: 2,
+									title: '提示框',
+									area: ['800px', '700px'],
+									skin: 'demo-class',
+									content: 'form.html',
+									//content: formstr,
+									//content: vm.message,
+									// 成功回掉
+									success: function(layero, index) {
+
+									},
+									// 确认回掉
+									yes: function(index, layero) {
+										//do something
+										layer.close(index); //如果设定了yes回调，需进行手工关闭
+									},
+									// 插回掉
+									cancel: function(index, layero) {
+										layer.close(index)
+										//if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+										//  layer.close(index)
+										//}
+										return false;
+									}
+								});
+							}
+						});
+
+						// 触发函数
+						active = {
+							// 选中删除
+							deleteData: function() {
+
+							},
+							// 刷新table
+							refresh: function() {
+								//执行重载
+								table.reload('tableReload', {
+									page: {
+										curr: 1 //重新从第 1 页开始
+									},
+									where: {
+										key: {
+											//id: demoReload.val()
+										}
+									}
+								});
+							},
+							// 查询
+							search: function() {
+								// 查询条件
+						        table.reload('tableReload', {
+							        page: {
+							            curr: 1 
+							        }
+							        ,where: unserialize($("#query-form").serialize())
+						        });
+							},
+						};
+
+						// 按钮搜索
+						$('#log .layui-btn').on('click', function() {
+							var type = $(this).data('type');
+							active[type] ? active[type].call(this) : '';
+						});
+					})
+				},
+				mounted() {
+
+				}
+			})
+		</script>
+		<!-- 字段回调 -->
+		<script type="text/html" id="idTpl">
+			<a>anspray</a>
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-sm" lay-event="detail"><i class="layui-icon">&#xe642;</i>编辑</a>
+			<!--{{# if(d.id%2 == 0){ }}
+			<a class="layui-btn layui-btn-sm" lay-event="check">审核</a>
+			{{# } }}-->
+		</script>
+		<script type="text/html" id="toLabel">
+			<span class="layui-badge">{{ d.wealth }}</span>
+		</script>
+	</body>
+
+</html>

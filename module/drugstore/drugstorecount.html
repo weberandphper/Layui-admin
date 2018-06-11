@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>药店销售统计</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+			.alert-success {
+			    color: #3c763d;
+			    background-color: #dff0d8;
+			    border-color: #d6e9c6;
+			}
+			.alert {
+			    padding: 15px;
+			    margin-bottom: -10px;
+			    border: 1px solid transparent;
+			    border-radius: 0px;
+			}
+			
+			#myAlert ul {
+				margin: 0;
+				padding: 0;
+			}
+			
+			#myAlert ul li {
+				display: inline-block;
+				width: 16.4%;
+			}
+			
+			#myAlert ul li span {
+				color: #DD4B39;
+				margin: 0 5px;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="drugstorelist">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query_form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<a href="javascript:;" class="datelink">~</a>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">公司名称：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="EntCompanyId" class="lay-ignore" lay-ignore @change="linkagesel(selected)" v-model="selected">
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.entCompany.items" :value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">药店名称：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="EntStoreId" class="lay-ignore" lay-ignore name="EntStoreId">
+										<option value="">--请选择--</option>
+										<option v-for="option in linkage" :value="option.key">{{ option.value }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="NameOrCode" autocomplete="off" placeholder="请输入药店编号或者药店名称">
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="layui-row">
+				<div id="myAlert" class="alert alert-success">
+					<ul>
+						<li>药店数量：<span>{{ saleCount.entStoreCount }}</span>个</li>
+						<li>机器人数量：<span>{{ saleCount.entRobotCount }}</span>台</li>
+						<li>销量总额：<span>{{ saleCount.saleAmount }}</span>元</li>
+						<li>实收总额：<span>{{ saleCount.actualReceiptAmount }}</span>元</li>
+						<li>退款总额：<span>{{ saleCount.refundAmount }}</span>元</li>
+						<li>手续费：<span>{{ saleCount.serviceChargeAmount }}</span>元</li>
+					</ul>
+				</div>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+			
+			// 基础数据
+			var basedata = {
+				"entCompany": {
+					"items": []
+				}
+			}
+			
+			var vm = new Vue({
+				el: "#drugstorelist",
+				data: {
+					baseData: basedata,
+					selected: '',
+					saleCount: {},
+					// 公司-药店联动
+					linkage: []
+				},
+				created() {
+					layui.use(['jquery', 'layer', 'table', 'laydate','form','ajaxmod'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate,
+							form = layui.form,
+							ajaxmod = layui.ajaxmod;
+							
+							
+						// 基础数据获取
+						ajaxmod.layuiPost("/api/sys/robot/RobotListStatic","",function (res) {
+							if (res.success) {
+								vm.baseData = res.data;
+							} else {
+								layer.msg(res.message, {icon: 2});
+							}
+						});	
+							
+						// 统计信息获取
+						ajaxmod.layuiGet("/api/sys/ent/EntStoreSaleStatistic","",function (res) {
+							if (res.success) {
+								vm.saleCount = res.data;
+							} else {
+								layer.msg(res.message, {icon: 2});
+							}
+						});
+						
+						//日期 1
+						laydate.render({
+							elem: '#date1',
+//							type: 'datetime'
+						});
+
+						//日期 2
+						laydate.render({
+							elem: '#date2',
+//							type: 'datetime'
+						});
+
+						table.render({
+							elem: '#layui-table',
+							url: baseUrl+'/api/sys/ent/EntStoreSaleList',
+							page: true,
+							limit: 16,
+							limits: [10, 15, 20, 25, 30],
+							height: 'full-140',
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							where: {token: cookie.get('usertoken')},
+							request: {
+								
+							},
+							response: {
+							   statusCode: 200,
+							   msgName: 'message',
+							},
+							cols: [
+								[ 
+									{
+										field: 'entStoreId',
+										title: '药店编号',
+										width: '12.5%',
+									}, 
+									{
+										field: 'entStoreName',
+										title: '药店名称',
+										width: '12.5%',
+									}, {
+										field: 'entCompanyName',
+										title: '公司名称',
+										width: '12.5%',
+									}, {
+										field: 'entRobotCount',
+										title: '机器人数量',
+										width: '12.5%',
+									}, {
+										field: 'saleAmount',
+										title: '销售金额',
+										width: '12.5%',
+									}, {
+										field: 'actualReceiptAmount',
+										title: '实收金额',
+										width: '12.5%',
+									}, {
+										field: 'refundAmount',
+										title: '退款金额',
+										width: '12.5%',
+									},
+									{
+										field: 'serviceChargeAmount',
+										title: '手续费',
+										width: '12.5%',
+									}
+								]
+							],
+							done: function(res, curr, count) {}
+						});
+
+
+                        //回车搜索事件
+                        document.onkeyup=function(evt){
+                        	var evt=event||window.event;
+                        	var code=evt.charCode||evt.keyCode;
+                        	if(code==13){
+                        		active.search()
+                        	}
+                        }
+                        
+                        
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							if(layEvent === 'edit') {
+								var str = '<form class="layui-form layui-row" action=""><div class="layui-row"><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">公司名称：</label><div class="layui-input-inline"><p style="display:block;width:100%;line-height:38px">上海XXXXXXX有限公司</p></div></div><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">门店零售ID编号：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入门店零售ID编号" class="layui-input" value="XXXXXXX"></div></div></div><br><div class="layui-row"><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">药店名称：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入药店名称" class="layui-input" value="XXXXXXX"></div></div><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">负责人姓名：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入负责人姓名" class="layui-input" value="XXXXXXX"></div></div></div><br><div class="layui-row"><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">药店地址：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入药店地址" class="layui-input" value="XXXXXXX"></div></div><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">负责人电话：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入负责人电话" class="layui-input" value="XXXXXXX"></div></div></div><br><div class="layui-row"><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">门店ID编号：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入门店ID编号" class="layui-input" value="XXXXXXX"></div></div><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">药店管理后台账号：</label><div class="layui-input-inline"><p style="display:block;width:100%;line-height:38px">XXXXXXXXXXXXX</p></div></div></div><br><div class="layui-row"><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">门店医保ID编号：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入门店医保ID编号" class="layui-input" value="XXXXXXX"></div></div><div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">药店管理后台密码：</label><div class="layui-input-inline"><input type="text" name="company" lay-verify="company" autocomplete="off" placeholder="请输入药店管理后台密码" class="layui-input" value="XXXXXXX"></div></div></div></form>';
+								active.addstore(data, str);
+							} else {
+								alert("出错了");
+							}
+						});
+
+						// 触发函数
+						var active = {
+							// 查询
+							search: function() {
+								//执行重载
+								table.reload('tableReload', {
+									page: {
+										//重新从第 1 页开始
+										curr: 1
+									},
+									where: unserialize(decodeURIComponent($("#query_form").serialize(),true))
+								});
+							},
+						};
+						
+						// 按钮事件
+						$('#drugstorelist .layui-btn').on('click', function(){
+					        var type = $(this).data('type');
+					        active[type] ? active[type].call(this) : '';
+					    });
+					    
+					    // 回车搜索
+						$('#drugstorelist input').on('keyup', function(e){
+							if (e.keyCode == 13) {
+								active.search();
+							}
+						});
+					})
+				},
+				methods: {
+					linkagesel (sel) {
+						for(var key of vm.baseData.entCompany.items) {
+							if (sel === key.id) {
+//								alert(key.stores)
+								vm.linkage = key.stores
+							}
+						}
+					}
+				},
+				mounted() {
+
+				}
+			})
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="toLabel">
+			<span class="layui-badge">{{ d.wealth }}</span>
+		</script>
+	</body>
+</html>

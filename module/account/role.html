@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>角色管理</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="role">
+			<div class="layui-row">
+				<button class="layui-btn layui-btn-normal" data-type="addrole">添加角色</button>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+		
+			var vm = new Vue({
+				el: "#role",
+				data: {
+					baseData: [],
+					selected: '1',
+					formflag:false
+				},
+				created() {
+					layui.use(['jquery', 'layer', 'table','ajaxmod','form','verifymod'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate,
+							form = layui.form,
+							ajaxmod = layui.ajaxmod,
+							verifymod = layui.verifymod;
+							
+						// 基础数据获取
+						ajaxmod.layuiGet("/api/sys/account/GetAllMenuList","",function (res) {
+							if (res.success) {
+								vm.baseData = res.data;
+							} else {
+								layer.msg(res.message, {icon: 2});
+							}
+						});	
+
+						table.render({
+							elem: '#layui-table',
+							url: baseUrl+'/api/sys/account/RoleList',
+							page: true,
+							limit: 16,
+							limits: [10, 15, 20, 25, 30],
+							height: 'full-80',
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							where: {token: cookie.get('usertoken')},
+							request: {
+								
+							},
+							response: {
+							   statusCode: 200,
+							   msgName: 'message',
+							},
+							cols: [
+								[ 
+									{
+										field: 'name',
+										title: '角色名称',
+										width: '70%',
+									}, {
+										fixed: 'right',
+										title: '操作',
+										width: '30%',
+										align: 'center',
+										toolbar: '#barAction'
+									} 
+								]
+							],
+							done: function(res, curr, count) {}
+						});
+
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							if(layEvent === 'edit') {
+								var checkstrarr = "";
+								vm.formflag=false;
+								$.each(vm.baseData, function(i, v) {
+									checkstrarr = $.inArray(v.id,data.menus) != -1 ? checkstrarr+'<tr><td><input type="checkbox" lay-skin="primary" name="Menus[]" title='+v.title+' value='+v.id+' checked>&nbsp;</td><td>' : checkstrarr+'<tr><td><input type="checkbox" lay-skin="primary" name="Menus[]" value='+v.id+' title='+v.title+'>&nbsp;</td><td>';
+									$.each(v.children, function(j, k) {
+										checkstrarr = $.inArray(k.id,data.menus) != -1 ? checkstrarr + '<input type="checkbox" lay-skin="primary" name="Menus[]" value='+k.id+' title='+k.title+' checked>' : checkstrarr + '<input type="checkbox" lay-skin="primary" name="Menus[]" value='+k.id+' title='+k.title+'>';
+									})
+									checkstrarr = checkstrarr + "</td></tr>";
+								})
+
+								var str = `<div class="layui-row">
+											    <div class="layui-col-md1">
+											    	.
+											    </div>
+											    <div class="layui-col-md10">
+												    <div class="layui-form" id="role-page">
+														<form class="layui-form" action="" id="updaterole" style="margin-top:15px">
+															<div class="layui-form-item">
+																<label class="layui-form-label">角色名称：</label>
+																<div class="layui-input-block positiondiv">
+																	<input type="hidden" name="Id" value=`+data.id+`>
+																	<input type="text" name="Name" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input" value=`+data.name+`>
+																	<span class="must-input positionspan"></span>
+																</div>
+															</div>
+															<div class="layui-form">
+																<div class="layui-form-item">
+																	<label class="layui-form-label">角色名称：</label>
+																	<div class="layui-input-block">
+																		<table class="layui-table">
+																			<colgroup>
+																				<col width="170">
+																				<col width="450">
+																				<col>
+																			</colgroup>
+																			<thead>
+																				<tr>
+																					<th>模块</th>
+																					<th></th>
+																				</tr>
+																			</thead>
+																			<tbody>`+checkstrarr+`</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+															<button class="layui-btn hide" lay-submit lay-filter="button-suball" id="ifrbutton">立即提交</button>
+														</form>
+													</div>
+											    </div>
+											    <div class="layui-col-md1">
+											    	.
+											    </div>
+										    </div>`;
+										    
+								layer.open({
+						    		type: 1,
+						    		title: "编辑权限",
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','700px'],
+						    		offset: '60px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+//						    			$("#ifrbutton").click();
+						    			var datas = $("#updaterole").serialize();
+							    		ajaxmod.layuiPost("/api/sys/account/UpdateRole",datas, function (res) {
+											if(res.success){
+												layer.closeAll();
+												$(".layui-laypage-btn").click();
+												layer.msg('操作成功', {icon: 1});
+							                }else{
+							                	layer.msg(res.message, {icon: 2});
+							                }
+										})
+							    		return false;
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			
+						    		},
+						    		success: function (layero,index) {
+						    			form.render();
+						    		},
+						    	})
+								
+							} else if(layEvent === 'delete') {
+								layer.confirm('确定删除该角色么?', function(index) {
+									var datas = $.param({Id: data.id});
+						    		ajaxmod.layuiPost("/api/sys/account/DeleteRole",datas, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+						    		return false;
+								});
+							}
+						});
+						
+						form.on('submit(button-suball)', function(data){
+						 	 vm.formflag=true;
+						})
+						
+						// 字段校验
+//						form.verify(verifymod);
+
+						// 触发函数
+						var active = {
+							addrole: function() {
+								var checkstrarr = "";
+								    vm.formflag=false;
+								$.each(vm.baseData, function(i, v) {
+									checkstrarr = checkstrarr+'<tr><td><input type="checkbox" lay-skin="primary" name="Menus[]" value='+v.id+' title='+v.title+'>&nbsp;</td><td>';
+									$.each(v.children, function(j, k) {
+										checkstrarr = checkstrarr + '<input type="checkbox" lay-skin="primary" name="Menus[]" value='+k.id+' title='+k.title+'>';
+									})
+									checkstrarr = checkstrarr + "</td></tr>";
+								})
+								
+								var str = `<div class="layui-row">
+											    <div class="layui-col-md1">
+											    	.
+											    </div>
+											    <div class="layui-col-md10">
+												    <div class="layui-form" id="role-page">
+														<form class="layui-form" id="addrole" style="margin-top:15px">
+															<div class="layui-form-item positiondiv">
+																<label class="layui-form-label">角色名称：</label>
+																<div class="layui-input-block">
+																	<input type="text" name="Name" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input">
+																	<span class="must-input positionspan"></span>
+																</div>
+															</div>
+															<div class="layui-form-item">
+																<label class="layui-form-label">角色名称：</label>
+																<div class="layui-input-block">
+																	<table class="layui-table">
+																		<colgroup>
+																			<col width="170">
+																			<col width="450">
+																			<col>
+																		</colgroup>
+																		<thead>
+																			<tr>
+																				<th>模块</th>
+																				<th>功能权限</th>
+																			</tr>
+																		</thead>
+																		<tbody>`+checkstrarr+`</tbody>
+																	</table>
+																</div>
+															</div>
+															<button class="layui-btn hide" lay-submit lay-filter="button-suball" id="ifrbutton">立即提交</button>														<button class="layui-btn hide" lay-submit lay-filter="button-suball" id="ifrbutton">立即提交</button>
+														</form>
+													</div>
+											    </div>
+											    <div class="layui-col-md1">
+											    	.
+											    </div>
+										    </div>`;
+								
+								
+								layer.open({
+						    		type: 1,
+						    		title: "添加角色",
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','700px'],
+						    		offset: '60px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			// $("#ifrbutton").click();
+						    			var data = $("#addrole").serialize();	
+						    			
+						    			ajaxmod.layuiPost("/api/sys/account/AddRole",data, function (res) {
+											if(res.success){
+												layer.closeAll();
+												$(".layui-laypage-btn").click();
+												layer.msg('操作成功', {icon: 1});
+							                }else{
+							                	layer.msg(res.message, {icon: 2});
+							                }
+										})
+			
+//						    			if(vm.formflag){
+//						    				ajaxmod.layuiPost("/api/sys/account/AddRole",data, function (res) {
+//												if(res.success){
+//													layer.closeAll();
+//													$(".layui-laypage-btn").click();
+//													layer.msg('操作成功', {icon: 1});
+//								                }else{
+//								                	layer.msg(res.message, {icon: 2});
+//								                }
+//											})
+//						    			}
+
+						    			return false;
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			vm.baseData.robotparts = $("#parts").serializeArray();
+						    		},
+						    		success: function (layero,index) {
+						    			form.render();
+						    		},
+						    	})
+							},
+						};
+
+						// 按钮搜索
+						$('#role .layui-btn').on('click', function() {
+							var type = $(this).data('type');
+							active[type] ? active[type].call(this) : '';
+						});
+						
+					})
+				},
+				mounted() {
+
+				}
+			})
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</a>
+		</script>
+	</body>
+</html>

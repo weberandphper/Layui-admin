@@ -1,0 +1,301 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8">
+		<title>公司列表</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="companylist">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query-form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<a href="javascript:;" class="datelink">~</a>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">公司名称：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="CompanyId" class="lay-ignore" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.entCompany" v-bind:value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">商务人员：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="BusinessUserId" class="lay-ignore" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.businessUser" v-bind:value="option.key">{{ option.value }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="NameOrCode" autocomplete="off" placeholder="请输入公司编号或者公司名称">
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="layui-row">
+				<button class="layui-btn layui-btn-normal" data-type="create">创建公司</button>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+
+			// 完成删除
+			function closeandrefresh () {
+				layui.use(['jquery', 'layer'], function () {
+					var $ = layui.jquery,
+						layer = layui.layer;
+						
+					layer.closeAll();
+					$(".layui-laypage-btn").click();
+					layer.msg('操作成功', {icon: 1});
+				})
+			}
+
+			// 基础数据
+			var basedata = {
+				"entCompany": [
+			     
+			    ],
+			    "businessUser": [
+			     
+			    ]
+			}
+			
+			var vm = new Vue({
+				el: "#companylist",
+				data: {
+					baseData: basedata,
+					selected: '1',
+				},
+				created() {
+					
+					layui.use(['jquery', 'layer', 'table', 'laydate','upload','form','ajaxmod'], function() {
+						
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate,
+							upload = layui.upload,
+							form = layui.form,
+							ajaxmod = layui.ajaxmod;
+	
+						var data = $.param({includeEnt: true});
+	
+						// 基础数据获取
+						ajaxmod.layuiGet("/Api/Common/Enums",data,function (res) {
+							if (res.success) {
+								vm.baseData = res.data;
+								
+								console.log(vm.baseData);
+							} else {
+								layer.msg(res.message, {icon: 2});
+							}
+						});	
+						
+						laydate.render({
+						    elem: '#date1',
+//						    type: 'datetime'
+						});
+						
+						laydate.render({
+						    elem: '#date2',
+//						    type: 'datetime'
+						});
+		
+						table.render({
+							elem: '#layui-table',
+							url: baseUrl+'/api/sys/ent/EntCompanyList',
+							page: true,
+							limit: 16,
+							limits: [10, 15, 20, 25, 30],
+							height: 'full-140',
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							where: {token: cookie.get('usertoken')},
+							request: {
+							},
+							response: {
+							   statusCode: 200,
+							   msgName: 'message',
+							},
+							cols: [
+								[ 
+									{
+										field: 'id',
+										title: '公司编号',
+										width: '15%',
+									}, 
+									{
+										field: 'createTime',
+										title: '添加时间',
+										width: '15%',
+									}, {
+										field: 'name',
+										title: '公司名称',
+										width: '15%',
+									}, {
+										field: 'entStoreCount',
+										title: '药店数量',
+										width: '15%',
+										templet: '#StoreCountTpl',
+									}, {
+										field: 'entRobotCount',
+										title: '机器人数量',
+										width: '15%',
+										templet: '#RobotCountTpl',
+									}, {
+										field: 'businessUserName',
+										title: '商务人员',
+										width: '15%',
+									}, {
+										fixed: 'right',
+										title: '操作',
+										width: '10%',
+										align: 'center',
+										toolbar: '#barAction'
+									} 
+								]
+							],
+							done: function(res, curr, count) {}
+						});
+						
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							// 修改
+							if(layEvent === 'detail') {
+								active.create(data);
+							} else {
+								alert("ok")
+							} 
+						});
+						
+						// 触发函数
+						var active = {
+							// 创建公司 | 编辑
+							create: function(data) {
+								var str = "form.html";
+								layer.open({
+									id: "companyaction",
+						    		type: 2,
+						    		title: data == undefined ? "创建公司" : "公司信息",
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','650px'],
+						    		offset: '50px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+                                    yes: function (index, layero) {
+						    			$("#companyaction").find("iframe").contents().find("#startupload").click();
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			
+						    		},
+						    		success: function (layero,index) {
+						    			if (data == undefined) {
+						    				data = {};
+						    				data.files = [];
+						    			} 
+						    			
+						    			data.businessUser = vm.baseData.businessUser;
+						    			layero.find("iframe")[0].contentWindow.vm.setdata(data)
+						    			form.render();
+						    		},
+						    	})
+							},
+							// 查询
+							search: function() {
+								// 查询条件
+						        table.reload('tableReload', {
+							        page: {
+							            curr: 1 
+							        }
+							        ,where: unserialize(decodeURIComponent($("#query-form").serialize(),true))
+						        });
+							},
+						};
+						
+						// 按钮事件
+						$('#companylist .layui-btn').on('click', function(){
+					        var type = $(this).data('type');
+					        active[type] ? active[type].call(this) : '';
+					    });
+					    
+						// 回车搜索
+					    $('#companylist input').on('keyup', function(e){
+					    	if (e.keyCode == 13) {
+								active.search();
+							}
+					    });
+					})
+				},
+				mounted() {
+					
+				}
+			})
+		</script>
+		<!-- 机器人数量回调 -->
+		<script type="text/html" id="RobotCountTpl">
+			<a href="javascript:;">{{d.entRobotCount}}&nbsp;&nbsp;台</a>
+		</script>
+		<!-- 药店数量回调 -->
+		<script type="text/html" id="StoreCountTpl">
+			<a href="javascript:;">{{d.entStoreCount}}&nbsp;&nbsp;个</a>
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon">&#xe642;</i>编辑</a>
+		</script>
+	</body>
+</html>

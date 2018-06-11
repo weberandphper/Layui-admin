@@ -1,0 +1,243 @@
+{
+	"data": [
+		{
+			"id": 1,
+			"title": "机器人管理",
+			"url": "",
+			"icon": "fa fa fa-android",
+			"children": [
+				{
+					"id": 13,
+					"title": "添加机器人",
+					"url": "module/robot/addrobot.html",
+					"icon": "fa fa-plus",
+					"children": []
+				}, {
+					"id": 14,
+					"title": "机器人库",
+					"url": "module/robot/robotstore.html",
+					"icon": "fa fa-bank",
+					"children": []
+				}, {
+					"id": 15,
+					"title": "维修记录",
+					"url": "module/robot/repairrecord.html",
+					"icon": "fa fa-list-alt",
+					"children": []
+				}
+			]
+		}, {
+			"id": 2,
+			"title": "药店管理",
+			"url": null,
+			"icon": "fa fa fa-institution",
+			"children": [
+				{
+					"id": 16,
+					"title": "公司列表",
+					"url": "module/drugstore/companylist.html",
+					"icon": "fa fa-hospital-o",
+					"children": []
+				}, {
+					"id": 17,
+					"title": "药店列表",
+					"url": "module/drugstore/drugstorelist.html",
+					"icon": "fa fa-medkit",
+					"children": []
+				}, {
+					"id": 18,
+					"title": "药店销售统计",
+					"url": "module/drugstore/drugstorecount.html",
+					"icon": "fa fa-bar-chart",
+					"children": []
+				}
+			]
+		}, {
+			"id": 3,
+			"title": "问药管理",
+			"url": null,
+			"icon": "fa fa fa-heartbeat",
+			"children": [
+				{
+					"id": 19,
+					"title": "问药记录",
+					"url": "module/query/queryrecord.html",
+					"icon": "fa fa-list-alt",
+					"children": []
+				}, {
+					"id": 20,
+					"title": "问药数据统计",
+					"url": "module/query/queryaccount.html",
+					"icon": "fa fa-line-chart",
+					"children": []
+				}
+			]
+		}, {
+			"id": 4,
+			"title": "药品查询",
+			"url": null,
+			"icon": "fa fa fa-search-plus",
+			"children": [
+				{
+					"id": 21,
+					"title": "搜索关键词排名",
+					"url": "module/drug/keyword.html",
+					"icon": "fa fa-key",
+					"children": []
+				}
+			]
+		}, {
+			"id": 5,
+			"title": "会员管理",
+			"url": null,
+			"icon": "fa fa fa-user",
+			"children": [
+				{
+					"id": 22,
+					"title": "会员列表",
+					"url": "module/member/memberlist.html",
+					"icon": "fa fa-list-alt",
+					"children": []
+				}
+			]
+		}, {
+			"id": 6,
+			"title": "健康管理",
+			"url": null,
+			"icon": "fa fa fa-stethoscope",
+			"children": [
+				{
+					"id": 23,
+					"title": "患者列表",
+					"url": "module/health/patient.html",
+					"icon": "fa fa-list-alt",
+					"children": []
+				}, {
+					"id": 24,
+					"title": "慢病患者统计",
+					"url": "module/health/patientcount.html",
+					"icon": "fa fa-area-chart",
+					"children": []
+				}
+			]
+		}, {
+			"id": 7,
+			"title": "语音交互",
+			"url": null,
+			"icon": "fa fa fa-volume-up",
+			"children": [
+				{
+					"id": 25,
+					"title": "语音记录",
+					"url": "module/voice/voicerecord.html",
+					"icon": "fa fa-volume-off",
+					"children": []
+				}, {
+					"id": 26,
+					"title": "特定语义管理",
+					"url": "module/voice/semantic.html",
+					"icon": "fa fa-tags",
+					"children": []
+				}, {
+					"id": 27,
+					"title": "语音交互数据统计",
+					"url": "module/voice/semanticcount.html",
+					"icon": "fa fa-area-chart",
+					"children": []
+				}
+			]
+		}, {
+			"id": 8,
+			"title": "人脸识别",
+			"url": null,
+			"icon": "fa fa fa-eye",
+			"children": [
+				{
+					"id": 28,
+					"title": "人脸数据库",
+					"url": "module/face/facedatabase.html",
+					"icon": "fa fa-female",
+					"children": []
+				}, {
+					"id": 29,
+					"title": "人脸识别数据统计",
+					"url": "module/face/facecount.html",
+					"icon": "fa fa-pie-chart",
+					"children": []
+				}
+			]
+		}, {
+			"id": 9,
+			"title": "数据统计",
+			"url": null,
+			"icon": "fa fa fa-bar-chart",
+			"children": [
+				{
+					"id": 30,
+					"title": "机器人使用统计",
+					"url": "module/count/robotusecount.html",
+					"icon": "fa fa-pie-chart",
+					"children": []
+				}
+			]
+		}, {
+			"id": 10,
+			"title": "财务管理",
+			"url": null,
+			"icon": "fa fa fa-money",
+			"children": [
+				{
+					"id": 31,
+					"title": "交易明细",
+					"url": "module/finance/tradedetail.html",
+					"icon": "fa fa-cny",
+					"children": []
+				}
+			]
+		}, {
+			"id": 11,
+			"title": "账号管理",
+			"url": null,
+			"icon": "fa fa fa-user-secret",
+			"children": [
+				{
+					"id": 32,
+					"title": "账号管理",
+					"url": "module/account/account.html",
+					"icon": "fa fa-user fa-fw",
+					"children": []
+				}, {
+					"id": 33,
+					"title": "角色管理",
+					"url": "module/account/role.html",
+					"icon": "fa fa-user-circle-o",
+					"children": []
+				}
+			]
+		}, {
+			"id": 12,
+			"title": "其他设置",
+			"url": null,
+			"icon": "fa fa fa-gear",
+			"children": [
+				{
+					"id": 34,
+					"title": "操作日志",
+					"url": "module/other/log.html",
+					"icon": "fa fa-list-alt",
+					"children": []
+				}, {
+					"id": 35,
+					"title": "修改密码",
+					"url": "module/other/resetpassword.html",
+					"icon": "fa fa-key fa-fw",
+					"children": []
+				}
+			]
+		}
+	],
+	"count": 0,
+	"success": true,
+	"message": "",
+	"code": 200
+}

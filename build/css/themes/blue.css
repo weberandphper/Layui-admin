@@ -1,0 +1,77 @@
+/** kit_admin-v1.0.4 MIT License By http://kit/zhengjinfan.cn */
+
+.kit-theme .layui-layout-admin .layui-logo {
+	color: #9BA7B7
+}
+
+.kit-theme .kit-layout-admin .layui-header {
+	background-color: #293955
+}
+
+.kit-theme .layui-layout-admin .layui-header .layui-nav {
+	color: #EEE
+}
+
+.kit-theme .layui-layout-left .layui-nav-item:hover {
+	background-color: #9BA7B7!important
+}
+
+.kit-theme .kit-side {
+	background-color: #293955!important
+}
+
+.kit-theme .kit-side .layui-side-scroll .layui-nav-tree {
+	background-color: #fff!important
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-item {
+	background-color: #293955
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-item a:hover {
+	background-color: #293955;
+	color: #EEE
+}
+
+.kit-theme .kit-side .layui-nav .layui-nav-item a {
+	color: #EEE!important
+}
+
+.kit-theme .kit-side .layui-nav .layui-nav-itemed .layui-nav-child {
+	background-color: #9BA7B7!important
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-child dd.layui-this,
+.kit-theme .kit-side .layui-nav-tree .layui-nav-child dd.layui-this a,
+.kit-theme .kit-side .layui-nav-tree .layui-this,
+.kit-theme .kit-side .layui-nav-tree .layui-this>a,
+.kit-theme .kit-side .layui-nav-tree .layui-this>a:hover {
+	background-color: #E6E7EC!important;
+	color: #293955!important
+}
+
+.kit-theme .kit-nav .layui-this {
+	background-color: #9BA7B7!important
+}
+
+.kit-theme .kit-side .layui-side-scroll .kit-side-fold {
+	color: #fff;
+	background-color: #9BA7B7
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-child dd.layui-this {
+	padding-left: 3px;
+	background-color: #9BA7B7!important
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-bar {
+	background-color: #9BA7B7!important
+}
+
+
+/*按钮颜色*/
+.kit-theme .layui-layer-btn .layui-layer-btn4 {
+    border-color: #00c0ef;
+    background-color: #00c0ef;
+    color: #fff;
+}

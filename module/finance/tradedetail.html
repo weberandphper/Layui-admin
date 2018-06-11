@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>交易明细</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				
+				width: 100px !important;
+			}
+
+			#dealcontentshow li{line-height: 34px;}
+			#dealcontentshow li a{margin-left:20px;}
+			#remarksshow .layui-form-label{padding-top:0;padding-left:0;padding-right:0;text-align: center;}
+		    #remarksshow .layui-input-block{margin-left:90px;margin-right:10px}
+			
+			.alert-success {
+			    color: #3c763d;
+			    background-color: #dff0d8;
+			    border-color: #d6e9c6;
+			}
+			.alert {
+			    padding: 15px;
+			    margin-bottom: -10px;
+			    border: 1px solid transparent;
+			    border-radius: 0px;
+			}
+			
+			#myAlert ul {
+				margin: 0;
+				padding: 0;
+			}
+			
+			#myAlert ul li {
+				display: inline-block;
+				width: 16.4%;
+			}
+			#myAlert ul li span{margin:0 5px;}
+			#tradeshowul{height:180px;width:100%;overflow-y: auto;}
+			#tradeshowul li a{margin:0;}
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="tradedetail">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query_form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<a href="javascript:;" class="datelink">~</a>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">公司名称：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="EntCompanyId" class="lay-ignore" v-model="selectedCompany" lay-ignore @change="changeStores">
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.entCompany" v-bind:value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">药店名称：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="EntStoreId" class="lay-ignore" v-model="selectedDrug" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in stores" v-bind:value="option.key">{{ option.value }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="Text" autocomplete="off" placeholder="请输入交易编号">
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">交易类型：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="TradeType" class="lay-ignore" v-model="selectedType" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.enums.tradeType" v-bind:value="option.value">{{ option.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">交易账户：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="PayChannel" class="lay-ignore" v-model="selectedAccount" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.enums.payChannel" v-bind:value="option.value">{{ option.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="exportExcel"><i class="layui-icon">&#xe601;</i>导出</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="layui-row" v-cloak>
+				<div id="myAlert" class="alert alert-success">
+					<ul>
+						<li>销售总额：<span>{{saleCount.saleAmount}}</span>元</li>
+						<li>实收总额：<span>{{saleCount.actualReceiptAmount}}</span>元</li>
+						<li>退款总额：<span>{{saleCount.refundAmount}}</span>元</li>
+						<li>手续费：<span>{{saleCount.chargeFee}}</span>元</li>
+					</ul>
+				</div>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script type="text/javascript" src="../../plugins/jquery-2.1.0.js"></script>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+		
+			// 基础数据
+			var basedata = {
+				
+				"enums":{
+					"payChannel":[],
+					"tradeType":[]
+				}
+				
+			}
+
+
+			var vm = new Vue({
+				el: "#tradedetail",
+				data: {
+					baseData: basedata,
+					dealcontent:'',
+					saleCount: {},
+					selectedCompany: '',
+					selectedDrug: '',
+					selectedType:'',
+					selectedAccount:'',
+					stores:[],
+					remarks:''
+				},
+				created() {
+					
+					var that=this;
+				   
+					 //初始化搜索项数据
+							$.get(window.baseUrl + "/Api/Common/Enums?names=TradeType%2CPayChannel&includeEnt=true", {},
+								function(data, status) {
+									if(status === "success") {
+										if(data.success == true) {
+											var result = data.data;
+											vm.baseData=result;
+										} else {
+											layer.alert(data.message, {icon: 2});
+										}
+									} else {
+										layer.alert(data.message, {icon: 2});
+									}
+								}
+							);
+							
+					layui.use(['jquery', 'layer', 'table', 'laydate','form','ajaxmod'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							layer=layui.layer,
+							laydate = layui.laydate,
+							form = layui.form,
+							ajaxmod = layui.ajaxmod;
+							
+							
+							// 统计信息获取
+							ajaxmod.layuiGet("/api/sys/finance/FinanceStatistic","",function (res) {
+								if (res.success) {
+									vm.saleCount = res.data;
+								} else {
+									layer.msg(res.message, {icon: 2});
+								}
+							});	
+		
+							//日期 1
+							laydate.render({
+								elem: '#date1'
+							});
+				
+							//日期 2
+							laydate.render({
+								elem: '#date2'
+							});
+				
+							table.render({
+								elem: '#layui-table',
+								url: baseUrl+'/api/sys/finance/FinanceList',
+								page: true,
+								limit: 16,
+								height: 'full-190',
+								limits: [10, 15, 20, 25, 30],
+								id: 'tableReload',
+								loading: true,
+								method: 'get',
+								where: {token: cookie.get('usertoken')},
+								request: {
+									
+								},
+								response: {
+								   statusCode: 200,
+								   msgName: 'message',
+								},
+								cols: [
+									[ 
+										{
+											field: 'id',
+											unresize:true,
+											title: '交易编号',
+											width: '10%',
+										}, {
+											field: 'createTime',
+											unresize:true,
+											title: '入账时间',
+											width: '10%',
+											sort: true
+										}, {
+											field: 'entCompanyName',
+											unresize:true,
+											title: '公司名称',
+											width: '10%',
+										}, {
+											field: 'entStoreName',
+											unresize:true,
+											title: '药店名称',
+											width: '10%',
+										}, {
+											field: 'tradeContent',
+											unresize:true,
+											title: '交易内容',
+											minWidth: 168,
+											templet: '#tradecontentTpl',
+										}, {
+											field: 'tradeAmount',
+											unresize:true,
+											title: '交易金额',
+											width: '10%',
+										}, {
+											field: 'tradeTypeDesc',
+											unresize:true,
+											title: '交易类型',
+										}, {
+											field: 'payChannelDesc',
+											unresize:true,
+											title: '交易账户',
+											width: '10%',
+										}, {
+											field: 'remark',
+											unresize:true,
+											title: '备注信息',
+											width: '12%'
+											
+										}, {
+											unresize:true,
+											title: '操作',
+											width: '8%',
+											toolbar: '#barAction'
+										} 
+									]
+								],
+								done: function(res, curr, count) {}
+							});
+							
+							// 操作事件
+							table.on('tool(layui-action)', function(obj) {
+								var data = obj.data; 
+								//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+								var layEvent = obj.event; 
+								//获得当前行 tr 的DOM对象
+								var tr = obj.tr; 
+								
+								if(layEvent === 'tradecontent') {
+								
+									layer.alert('查看行：<br>' + JSON.stringify(data))
+									
+								} else if(layEvent === 'remarks') {
+									
+									for (var Key in data) {
+									    if (data[Key] == null) {
+									        data [Key] = "";
+									    }
+									}
+									
+									vm.remarks = data.remark;
+									// 赋值
+									layer.open({
+										title: '财务备注',
+										area: ['600px', '340px'],
+										offset: '200px',
+										content: `<div id="remarksshow"><form class="layui-form layui-row" action="javascript::" id="tradedetailRemark"><div class="layui-form-item"><label class="layui-form-label">备注信息:</label>
+												<div class="layui-input-block"><input type="hidden" name="Id" value="`+data.id+`"><input type="hidden" name="TradeType" value="`+data.tradeType+`">
+												<textarea name="Remark" placeholder="请输入内容" class="layui-textarea" style="resize:none">`+ vm.remarks +`</textarea>
+												</div></div></form></div>`,
+										 btn: ['确定', '取消'],
+										// 成功回掉
+										success: function(layero, index) {
+			
+										},
+										// 确认回掉
+										yes: function(index, layero) {
+											var data = $("#tradedetailRemark").serialize();
+											
+											console.log(data);
+											
+											ajaxmod.layuiPost("/api/sys/finance/FinanceRemark",data, function (res) {
+												if(res.success){
+													layer.closeAll();
+													$(".layui-laypage-btn").click();
+													layer.msg('操作成功', {icon: 1});
+								                }else{
+								                	layer.msg(res.message, {icon: 2});
+								                }
+											})
+											return false;
+										},
+										btn2: function(index, layero){
+										    //按钮【按钮二】的回调
+										    layer.closeAll();
+										    //return false 开启该代码可禁止点击该按钮关闭
+										 },
+										// 插回掉
+										cancel: function(index, layero) {
+											layer.closeAll();
+											//if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+											//  layer.close(index)
+											//}
+											return false;
+										}
+									});
+									
+				
+									
+								} else if(layEvent === 'dealcontentshow') {   //展示人脸信息
+								  
+								var ss='';
+								ss +=`<div id="dealcontentshow"><ul>
+									<li>订单编号:<a href="javascript:;">`+data.orderId+`</a></li>
+									<li>机器人ID:<a href="javascript:;">`+data.robotCode+`</a></li>
+									<li>交易号|流水号:<a href="javascript:;">`+data.id+`</a></li>
+									<li>交易金额:<a href="javascript:;" style="margin-right:15px">`+data.amount+`</a>元</li>
+									<li><ul id="tradeshowul">`
+								$.each(data.drugs,function(i,v){
+									ss +=`<li><a href="javascript:;" style="margin-right:15px">`+v.name+`</a>
+									<a href="javascript:;" style="margin-right:15px">`+v.price+`&nbsp;&nbsp;元</a>
+									<a href="javascript:;">&times;`+v.count+`</a></li>`
+								})
+								ss +=`</ul></li></ul></div>`
+								layer.open({
+									id:'tradeshow',
+									title: '交易内容',
+									area: ['600px', '560px'],
+									content:ss,
+									// 成功回掉
+									success: function(layero, index) {
+
+									},
+									// 确认回掉
+									yes: function(index, layero) {
+										//do something
+										layer.closeAll(); //如果设定了yes回调，需进行手工关闭
+									},
+									// 插回掉
+									cancel: function(index, layero) {
+										layer.closeAll();
+										//if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+										//  layer.close(index)
+										//}
+										return false;
+									}
+								});
+							}
+							});
+							
+				
+							// 触发函数
+							var	active = {
+								// 查询
+								search: function() {
+									var demoReload = $('#demoReload');
+									var data=unserialize(decodeURIComponent($("#query_form").serialize(),true));
+									//执行重载
+									table.reload('tableReload', {
+										page: {
+											//重新从第 1 页开始
+											curr: 1
+										},
+										where: data
+									});
+								},
+								exportExcel:function(){
+									//导出excel表单
+									var data=unserialize($("#query_form").serialize());
+									var data2=$("#query_form").serialize();
+									window.open(baseUrl+"/api/sys/finance/FinanceExcelOutPut?token="+cookie.get('usertoken')+"&"+data2);
+									
+								}
+							};
+				
+							// 按钮搜索
+							$('#tradedetail .layui-btn').on('click', function() {
+								var type = $(this).data('type');
+								active[type] ? active[type].call(this) : '';
+							});
+							
+							// 回车搜索
+							$('#tradedetail input').on('keyup', function(e){
+								if (e.keyCode == 13) {
+									active.search();
+								}
+							});
+						})
+							
+						},
+						methods:{
+							changeStores: function(evt) {   //遍历选择公司下的药店
+								var evt = evt || window.event;
+								$.each(vm.baseData.entCompany, function(i, v) {
+									if(v.id == evt.target.value) {
+										vm.stores = v.stores;
+									}else if(evt.target.value==''){
+										vm.stores = [];
+									}
+		
+							    })
+
+					        },
+						},
+						mounted() {
+		
+						}
+					})
+			
+		</script>
+		<!-- 字段回调 -->
+		<script type="text/html" id="idTpl">
+			<a>anspray</a>
+			<div class="top"></div>
+		</script>
+		<!--交易内容-->
+		<script type="text/html" id="tradecontentTpl">
+			
+			 {{#  if(d.tradeContent!=""&&d.tradeContent!=null){ }}
+			  <a class="faceshow" href="javscript:;" lay-event="dealcontentshow">{{d.tradeContent.substring(0,7)}}...</a>
+		     {{#  } else { }}	
+		      <a class="faceshow" href="javscript:;" lay-event="dealcontentshow">{{}}</a>
+		 <!-- <a href="javscript:;" lay-event="faceshow"><img src="d.faceinfo[0]" alt="人脸图像" /></a>-->
+		   
+		    {{#  } }}
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="remarks"><i class="layui-icon">&#xe642;</i>编辑</a>
+		</script>
+		<script type="text/html" id="toLabel">
+			<span class="layui-badge">{{ d.wealth }}</span>
+		</script>
+	</body>
+</html>

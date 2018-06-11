@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>首页统计</title>
+		<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="common.css" />
+		<style>
+			.main {
+				padding-top: 14px;
+			}
+			
+			.info-box {
+				height: 85px;
+				background-color: white;
+				background-color: #ecf0f5;
+			}
+			
+			.info-box .info-box-icon {
+				border-top-left-radius: 2px;
+				border-top-right-radius: 0;
+				border-bottom-right-radius: 0;
+				border-bottom-left-radius: 2px;
+				display: block;
+				float: left;
+				height: 85px;
+				width: 85px;
+				text-align: center;
+				font-size: 45px;
+				line-height: 85px;
+				background: rgba(0, 0, 0, 0.2);
+			}
+			
+			.info-box .info-box-content {
+				padding: 5px 10px;
+				margin-left: 85px;
+			}
+			
+			.info-box .info-box-content .info-box-text {
+				display: block;
+				font-size: 14px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-transform: uppercase;
+			}
+			
+			.info-box .info-box-content .info-box-number {
+				display: block;
+				font-weight: bold;
+				font-size: 18px;
+			}
+			
+			.pie-chart {
+				width: 100%;
+				height: 265px;
+				border-top: 1px solid #0099FF;
+				border-left: 1px solid #0099FF;
+				border-right: 1px solid #0099FF;
+			}
+			
+			.chart-test {
+				/*background: red;*/
+			}
+			
+			.layui-tab-content {
+				padding: 0;
+				padding-top: 4px;
+			}
+			
+			#allmap,
+			#line1 {
+				width: 100%;
+				height: 650px;
+			}
+			
+			.pie-main {
+				padding-top: 6px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid main">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md9">
+					<div class="layui-row layui-col-space15">
+						<div class="layui-col-xs4">
+							<div class="info-box">
+								<span class="info-box-icon" style="background-color:#00c0ef !important;color:white;"><i class="fa fa-ambulance" aria-hidden="true"></i></span>
+								<div class="info-box-content">
+									<span class="info-box-text">CPU 利用率</span>
+									<span class="info-box-number">90%</span>
+								</div>
+							</div>
+						</div>
+						<div class="layui-col-xs4">
+							<div class="info-box">
+								<span class="info-box-icon" style="background-color:#dd4b39 !important;color:white;"><i class="fa fa-google-plus" aria-hidden="true"></i></span>
+								<div class="info-box-content">
+									<span class="info-box-text">在线人数</span>
+									<span class="info-box-number">25,412</span>
+								</div>
+							</div>
+						</div>
+						<div class="layui-col-xs4">
+							<div class="info-box">
+								<span class="info-box-icon" style="background-color:#00a65a !important;color:white;"><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
+								<div class="info-box-content">
+									<span class="info-box-text">注册人数</span>
+									<span class="info-box-number">654</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-row">
+						<div class="layui-tab" lay-filter="demo">
+							<ul class="layui-tab-title">
+								<li class="layui-this" lay-id="11">Amika分布图</li>
+								<li lay-id="22">7天使用情况</li>
+							</ul>
+							<div class="layui-tab-content">
+								<div class="layui-tab-item chart-test layui-show">
+									<div id="allmap"></div>
+								</div>
+								<div class="layui-tab-item chart-test">
+									<div id="line1"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md3 pie-main">
+					<div class="layui-col-xs12">
+						<div class="pie-chart" id="main1"></div>
+					</div>
+					<div class="layui-col-xs12">
+						<div class="pie-chart" id="main2"></div>
+					</div>
+					<div class="layui-col-xs12">
+						<div class="pie-chart " id="main3" style="border-bottom: 1px solid #0099FF;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="./plugins/layui/layui.js"></script>
+		<script src="./plugins/echarts.js"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=4KK4k0RFGpdKlLh4B82egV3iKqMiuIKB"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+		<script>
+			
+			layui.use('element', function() {
+				var $ = layui.jquery,
+					element = layui.element;
+
+				//触发事件
+				var active = {
+					tabAdd: function() {
+						//新增一个Tab项
+						element.tabAdd('demo', {
+							title: '新选项' + (Math.random() * 1000 | 0),
+							content: '内容' + (Math.random() * 1000 | 0),
+							id: new Date().getTime() 
+						})
+					},
+					tabDelete: function(othis) {
+						//删除指定Tab项
+						element.tabDelete('demo', '44'); //删除：“商品管理”
+						othis.addClass('layui-btn-disabled');
+					},
+					tabChange: function() {
+						//切换到指定Tab项
+						element.tabChange('demo', '22'); //切换到：用户管理
+					}
+				};
+
+				$('.site-demo-active').on('click', function() {
+					var othis = $(this),
+						type = othis.data('type');
+					active[type] ? active[type].call(this, othis) : '';
+				});
+
+				//Hash地址的定位
+				var layid = location.hash.replace(/^#test=/, '');
+				element.tabChange('test', layid);
+				element.on('tab(test)', function(elem) {
+					location.hash = 'test=' + $(this).attr('lay-id');
+				});
+			});
+
+			var myChart1 = echarts.init(document.getElementById('main1'));
+			var myChart2 = echarts.init(document.getElementById('main2'));
+			var myChart3 = echarts.init(document.getElementById('main3'));
+			option = {
+				title: {
+					text: '库存变化',
+					subtext: '药品库存变化',
+					x: 'left'
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				series: [{
+					name: '药品数量',
+					type: 'pie',
+					radius: '68%',
+					center: ['54%', '60%'],
+					data: [{
+							value: 50,
+							name: '上线药品 ' + 50
+						},
+						{
+							value: 12,
+							name: '之前药品 ' + 12
+						}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			};
+
+			myChart1.setOption(option);
+			myChart2.setOption(option);
+			myChart3.setOption(option);
+
+			var myChart1 = echarts.init(document.getElementById('line1'));
+
+			option_line = {
+				title: {
+					//			        text: '近7天用户使用概况'
+				},
+				tooltip: {
+					trigger: 'axis'
+				},
+				legend: {
+					data: ['登陆人数', '注册人数', '建档人数']
+				},
+				grid: {
+					left: '0%',
+					right: '0%',
+					bottom: '2%',
+					containLabel: true
+				},
+				toolbox: {
+					feature: {
+						saveAsImage: {}
+					}
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+						name: '登陆人数',
+						type: 'line',
+						stack: '总量',
+						data: [120, 132, 101, 134, 90, 230, 210]
+					},
+					{
+						name: '注册人数',
+						type: 'line',
+						stack: '总量',
+						data: [220, 182, 191, 234, 290, 330, 310]
+					},
+					{
+						name: '建档人数',
+						type: 'line',
+						stack: '总量',
+						data: [150, 232, 201, 154, 190, 330, 410]
+					}
+				]
+			};
+
+			myChart1.setOption(option_line);
+		</script>
+
+		<script type="text/javascript">
+			// 百度地图API功能
+			var map = new BMap.Map("allmap", {
+				minZoom: 4,
+				maxZoom: 12
+			});
+			map.centerAndZoom(new BMap.Point(116.404, 39.915), 5);
+			map.enableScrollWheelZoom();
+
+			var MAX = 10;
+			var markers = [];
+			var pt = null;
+			var i = 0;
+			for(; i < MAX; i++) {
+				pt = new BMap.Point(Math.random() * 40 + 85, Math.random() * 30 + 21);
+				markers.push(new BMap.Marker(pt));
+			}
+
+			// Amika分布图
+			var cr = new BMap.CopyrightControl({
+				anchor: BMAP_ANCHOR_TOP_RIGHT
+			}); //设置版权控件位置
+			map.addControl(cr); //添加版权控件
+
+			var bs = map.getBounds(); //返回地图可视区域
+			cr.addCopyright({
+				id: 1,
+				content: "<a href='#' style='font-size:16px;color: #555555;line-height: 24px;padding-right: 4px;letter-spacing: 2px'>分布图</a>",
+				bounds: bs
+			});
+
+			//创建小狐狸
+			//			var pt = new BMap.Point(116.417, 39.909);
+			//			var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+			//			var marker2 = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+			//			map.addOverlay(marker2);              // 将标注添加到地图中		
+
+			map.centerAndZoom(new BMap.Point(121.47, 31.23), 8);
+
+			setTimeout(function() {
+				map.panTo(new BMap.Point(121.47, 31.23)); //两秒后移动到上海
+			}, 4000);
+
+			//最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
+			var markerClusterer = new BMapLib.MarkerClusterer(map, {
+				markers: markers
+			});
+
+			//map.enableScrollWheelZoom(true);
+		</script>
+	</body>
+
+</html>

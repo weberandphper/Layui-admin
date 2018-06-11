@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>维修记录</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+			select.lay-ignore {
+				width: 100%;
+			    height: 38px;
+			    line-height: 1.3;
+			    line-height: 38px\9;
+			    border-width: 1px;
+			    border-style: solid;
+			    background-color: #fff;
+			    border-radius: 2px;
+				padding-right: 30px;
+    			cursor: pointer;
+    			border-color: #eeeeee;
+			}
+			
+			select.lay-ignore option {
+			    line-height: 36px;
+			    white-space: nowrap;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			}
+			
+			#robotrepair .update_p {
+				display: block;
+				width: 100%;
+				line-height: 38px
+			}
+			
+			#robotrepair .input_noborder {
+				border: 0;
+				display: inline-block;
+			}
+			
+			#robotrepair .layui-row {
+				margin: 5px 0
+			}
+			
+			#robotrepair .input_width input {
+				width: 70%;
+				display: inline-block;
+				margin-right: 4px
+			}
+			
+			#robotrepair .layui-input {
+				padding-left: 0;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="repairrecord">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query-form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<a href="javascript:;" class="datelink">~</a>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">保修类型：</label>
+								<div class="layui-input-inline iframe-select">
+									<select class="lay-ignore" name="Type" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="item in baseData.maintenanceType" :value="item.value">{{ item.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">保修设备：</label>
+								<div class="layui-input-inline iframe-select">
+									<select class="lay-ignore" name="Part" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="item in baseData.robotPart" :value="item.value">{{ item.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="Code" autocomplete="off" placeholder="请输入机器人ID/报修编号">
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">维修状态：</label>
+								<div class="layui-input-inline iframe-select">
+									<select class="lay-ignore" name="Status" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="item in baseData.maintenanceStatus" :value="item.value">{{ item.key }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+			
+			// 基础数据
+			var basedata = {
+				maintenanceType: [
+					
+				],
+				robotPart: [
+					
+				],
+				maintenanceStatus: [
+					
+				],
+			}
+			
+			var vm = new Vue({
+				el: "#repairrecord",
+				data: {
+					baseData: basedata,
+					selected: '1',
+				},
+				created() {
+					layui.use(['jquery', 'layer', 'table', 'laydate','ajaxmod'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate,
+							form = layui.form,
+							ajaxmod = layui.ajaxmod;
+							
+						var data = $.param({names: "MaintenanceType,RobotPart,MaintenanceStatus"});
+						
+						// 基础数据获取
+						ajaxmod.layuiGet("/Api/Common/Enums",data,function (res) {
+							if (res.success) {
+								vm.baseData = res.data;
+							} else {
+								layer.msg(res.message, {icon: 2});
+							}
+						});	
+						
+						laydate.render({
+						    elem: '#date1',
+//						    type: 'datetime'
+						});
+						
+						laydate.render({
+						    elem: '#date2',
+//						    type: 'datetime'
+						});
+
+						table.render({
+							elem: '#layui-table',
+							url: baseUrl+'/api/sys/robot/RobotRepairList',
+							page: true,
+							limit: 16,
+							limits: [10, 15, 20, 25, 30],
+							height: 'full-146',
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							where: {token: cookie.get('usertoken')},
+							request: {
+								
+							},
+							response: {
+							   statusCode: 200,
+							   msgName: 'message',
+							},
+							cols: [
+								[ 
+									{
+										field: 'id',
+										title: '报修编号',
+										width: '10%',
+									}, {
+										field: 'entStoreName',
+										title: '药店名称',
+										width: '10%',
+									}, {
+										field: 'code',
+										title: '机器人ID',
+										width: '10%',
+									}, {
+										field: 'createTime',
+										title: '报修时间',
+										width: '10%',
+									}, {
+										field: 'maintenanceTypeDesc',
+										title: '报修类型',
+										width: '10%',
+										sort: true
+									}, {
+										field: 'partDesc',
+										title: '报修设备',
+										width: '10%',
+										sort: true
+									}, {
+										field: 'reason',
+										title: '报修原因',
+										width: '10%',
+										sort: true
+									},{
+										field: 'statusDesc',
+										title: '维护状态',
+										width: '10%',
+										sort: true
+									}, {
+										field: 'remark',
+										title: '备注信息',
+										width: '10%',
+										sort: true
+									},  {
+										fixed: 'right',
+										title: '操作',
+										width: '10%',
+										align: 'center',
+										toolbar: '#barAction'
+									} 
+								]
+							],
+							done: function(res, curr, count) {}
+						});
+
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							if(layEvent === 'detail') {
+								
+								data.maintenanceTypeDesc=data.maintenanceTypeDesc==null?'':data.maintenanceTypeDesc;
+								data.remark=data.remark==null?'':data.remark;
+								
+								var str = `<form class="layui-form layui-row" action="" id="robotrepair">
+												<input type="text" class="hide" name="Id" value=`+data.id+`>
+												<input type="text" class="hide" name="RobotId" value=`+data.robotId+`>
+												<div class="layui-row">
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">机器人ID：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.code+`</p>
+														</div>
+													</div>
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">药店名称：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.entStoreName+`</p>
+														</div>
+													</div>
+												</div><br>
+												<div class="layui-row">
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">机器人类型：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.robotTypeDesc+`</p>
+														</div>
+													</div>
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">机器人状态：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.statusDesc+`</p>
+														</div>
+													</div>
+												</div><br>
+												<div class="layui-row">
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">生产企业：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.entCompanyName+`</p>
+														</div>
+													</div>
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">入库备注：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.remark+`</p>
+														</div>
+													</div>
+												</div><br>
+												<div class="layui-row">
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">出售时间：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.saleTime+`</p>
+														</div>
+													</div>
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">报修设备：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.partDesc+`</p>
+														</div>
+													</div>
+												</div><br>
+												<div class="layui-row">
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">报修类型：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px">`+data.maintenanceTypeDesc+`</p>
+														</div>
+													</div>
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">报修费用：</label>
+														<div class="layui-input-inline">
+															<p style="display:block;width:100%;line-height:38px"><input type="text" name="RepairCost" lay-verify="company" style='width:50%' readonly="readonly" class="layui-input input_noborder" value=`+data.repairCost+`>元</p>
+														</div>
+													</div>
+												</div><br>
+												<div class="layui-row">
+													<div class="layui-inline layui-col-xs6"><label class="layui-form-mid" style="width:150px;text-align:right">维修成本：</label>`
+													if(data.statusDesc=='已完成'){
+													str+=	`<div class="layui-input-inline" style="width:60%;"><input type="text" name="Cost"  readonly='readonly' placeholder="请输入维修成本" class="layui-input" value=`+data.cost+` style="border:0;width:24%;display:inline-block">元</div>`
+													}else{
+													str+=	`<div class="layui-input-inline positiondiv" style="width:60%"><input type="text" name="Cost" lay-verify="salenum" autocomplete="off" placeholder="请输入维修成本" class="layui-input" value=`+data.cost+`><span class="must-input positionspan"></span></div>`
+													}
+												str+=`</div>
+												</div><br>
+												<div class="layui-row">
+													<div class="layui-inline layui-col-xs10"><label class="layui-form-mid" style="width:150px;text-align:right">备注信息：</label>
+														<div class="layui-input-inline" style="width:60%"><input type="text" name="Remark" lay-verify="" autocomplete="off" placeholder="请输入备注信息" class="layui-input" value=`+data.remark+`></div>
+													</div>
+												</div>
+												<button class="layui-btn hide" lay-submit lay-filter="button1" id="button1">立即提交</button>
+											</form>`;
+											
+								// 数据提交
+								form.on('submit(button1)', function(data){
+					    			var data = $("#robotrepair").serialize();	
+						    		ajaxmod.layuiPost("/api/sys/robot/RobotRepairAddOrUpdate",data, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+		                            return false;
+								});	
+											
+								layer.open({
+						    		type: 1,
+						    		title: '机器人报修信息',
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','600px'],
+						    		offset: '100px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			$("#button1").click();
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			layer.closeAll();
+						    		},
+						    		success: function (layero,index) {
+								       form.render();
+						    		},
+						    	})
+							} else {
+								layer.msg('操作有误', {icon: 1});
+							}
+						});
+
+						// 触发函数
+						var active = {
+							// 查询
+							search: function() {
+								// 查询条件
+						        table.reload('tableReload', {
+							        page: {
+							            curr: 1 
+							        }
+							        ,where: unserialize($("#query-form").serialize())
+						        });
+							},
+						};
+
+						// 按钮搜索
+						$('#repairrecord .layui-btn').on('click', function() {
+							var type = $(this).data('type');
+							active[type] ? active[type].call(this) : '';
+						});
+						
+						// 回车搜索
+						$('#repairrecord input').on('keyup', function(e){
+					    	if (e.keyCode == 13) {
+								active.search();
+							}
+					    });
+					})
+				},
+				methods: {
+					linkagesel (sel) {
+						for(var key of vm.baseData.entCompany.items) {
+							if (sel === key.id) {
+								vm.linkage = key.stores
+							}
+						}
+					}
+				},
+				mounted() {
+
+				}
+			})
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon">&#xe642;</i>编辑</a>
+		</script>
+		<script type="text/html" id="toLabel">
+			<span class="layui-badge">{{ d.wealth }}</span>
+		</script>
+	</body>
+</html>

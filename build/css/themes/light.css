@@ -1,0 +1,69 @@
+/** kit_admin-v1.0.4 MIT License By http://kit/zhengjinfan.cn */
+
+.kit-theme .layui-layout-admin .layui-logo {
+	color: #2F4056
+}
+
+.kit-theme .kit-layout-admin .layui-header {
+	background-color: #EEEEF2
+}
+
+.kit-theme .layui-layout-admin .layui-header .layui-nav,
+.kit-theme .layui-layout-admin .layui-header .layui-nav .layui-nav-item a {
+	color: #1E1E1E
+}
+
+.kit-theme .layui-layout-left .layui-nav-item:hover {
+	background-color: #C9DEF5!important
+}
+
+.kit-theme .kit-side {
+	background-color: #EEE!important
+}
+
+.kit-theme .kit-side .layui-side-scroll .layui-nav-tree {
+	background-color: #fff!important
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-item {
+	background-color: #EEEEF2
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-item a:hover {
+	background-color: #EEEEF2;
+	color: #1E1E1E
+}
+
+.kit-theme .kit-side .layui-nav .layui-nav-item a {
+	color: #414141!important
+}
+
+.kit-theme .kit-side .layui-nav .layui-nav-itemed .layui-nav-child {
+	background-color: #fff!important
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-child dd.layui-this,
+.kit-theme .kit-side .layui-nav-tree .layui-nav-child dd.layui-this a,
+.kit-theme .kit-side .layui-nav-tree .layui-this,
+.kit-theme .kit-side .layui-nav-tree .layui-this>a,
+.kit-theme .kit-side .layui-nav-tree .layui-this>a:hover {
+	background-color: #E6E7EC!important
+}
+
+.kit-theme .kit-nav .layui-this {
+	background-color: #C9DEF5!important
+}
+
+.kit-theme .kit-side .layui-side-scroll .kit-side-fold {
+	color: #fff;
+	background-color: #2F4056
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-child dd.layui-this {
+	padding-left: 3px;
+	background-color: #2F4056!important
+}
+
+.kit-theme .kit-side .layui-nav-tree .layui-nav-bar {
+	background-color: #2F4056!important
+}

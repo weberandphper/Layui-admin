@@ -1,0 +1,98 @@
+[{
+    "id": "2",
+    "title": "组件",
+    "icon": "fa-cogs",
+    "spread": false,
+    "children": [{
+        "id": "12",
+        "title": "Navbar",
+        "icon": "fa-table",
+        "url": "navbar.html"
+    }, {
+        "id": "13",
+        "title": "Tab",
+        "icon": "&#xe658;",
+        "url": "tab.html"
+    }, {
+        "id": "14",
+        "title": "app.js主入口",
+        "icon": "&#xe658;",
+        "url": "app.html"
+    }]
+}, {
+    "id": "1",
+    "title": "基本元素",
+    "icon": "fa-cubes",
+    "spread": true,
+    "children": [{
+        "id": "7",
+        "title": "表格",
+        "icon": "&#xe6c6;",
+        "url": "test.html"
+    }, {
+        "id": "8",
+        "title": "表单",
+        "icon": "&#xe63c;",
+        "url": "form.html"
+    }, {
+        "id": "9",
+        "title": "导航栏",
+        "icon": "&#xe628;",
+        "url": "nav.html"
+    }, {
+        "id": "10",
+        "title": "列表四",
+        "icon": "&#xe614;",
+        "url": "list4.html"
+    }, {
+        "id": "11",
+        "title": "百度一下",
+        "icon": "&#xe658;",
+        "url": "https://www.baidu.com"
+    }]
+}, {
+    "id": "4",
+    "title": "地址本",
+    "icon": "fa-address-book",
+    "url": "",
+    "spread": false,
+    "children": [{
+        "id": "17",
+        "title": "Github",
+        "icon": "fa-github",
+        "url": "https://www.github.com/"
+    }, {
+        "id": "18",
+        "title": "QQ",
+        "icon": "fa-qq",
+        "url": "http://www.qq.com/"
+    }, {
+        "id": "19",
+        "title": "Fly社区",
+        "icon": "&#xe609;",
+        "url": "http://fly.layui.com/"
+    }, {
+        "id": "20",
+        "title": "新浪微博",
+        "icon": "fa-weibo",
+        "url": "http://weibo.com/"
+    }]
+}, {
+    "id": "5",
+    "title": "这是一级导航",
+    "icon": "fa-stop-circle",
+    "url": "https://www.baidu.com",
+    "spread": false
+}, {
+    "id": "6",
+    "title": "其他",
+    "icon": "fa-stop-circle",
+    "url": "#",
+    "spread": false,
+    "children": [{
+        "id": "21",
+        "title": "子窗体中打开选项卡",
+        "icon": "fa-github",
+        "url": "cop.html"
+    }]
+}]

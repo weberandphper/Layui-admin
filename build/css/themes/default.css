@@ -1,0 +1,14 @@
+.layui-layout-admin .layui-header {
+	background: #fff;
+}
+
+.kit-theme .layui-layout-admin .layui-logo {
+	background-color: #20222A
+}
+
+/*按钮颜色*/
+.kit-theme .layui-layer-btn .layui-layer-btn0 {
+    border-color: #dedede !important;
+    background-color: #fff !important;
+    color: #333;
+}

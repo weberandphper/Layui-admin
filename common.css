@@ -1,0 +1,193 @@
+/*公共样式*/
+.hide {
+	display: none !important;
+}
+
+[v-cloak] {
+	display: none;
+}
+
+/*自定义字体颜色*/
+.tx-red {
+	color: #FF5722!important;
+}
+
+.tx-green {
+	color: #009688!important;
+}
+
+.tx-blue {
+	color: #1E9FFF!important;
+}
+
+.tx-black {
+	color: #393D49!important;
+}
+
+.tx-gray {
+	color: #666!important;
+}
+
+
+/*弹窗或form上边距*/
+.form-top-kg {
+	margin-top: 100px;
+}
+
+.form-top-lg {
+	margin-top: 80px;
+}
+
+.form-top-md {
+	margin-top: 60px;
+}
+
+.form-top-sm {
+	margin-top: 40px;
+}
+
+
+.form-top-xs {
+	margin-top: 20px;
+}
+
+.formele-lg {
+	
+}
+
+.formele-md {
+	
+}
+
+.formele-sm {
+	width: 460px !important;
+}
+
+.formele-xs {
+	
+}
+
+/*查看更多*/
+.aview-more {
+    display: block;
+    margin: 0 auto;
+    width: 20px;
+}
+.aview-more i{
+	font-size: 20px;
+}
+
+.aline {
+	padding-top: 10px;
+}
+
+.datelink {
+	display: inline-block;
+	float: left;
+	height: 36px;
+	line-height: 36px;
+	margin-right: 10px;
+	font-size: 16px;
+	cursor: none
+}
+
+.iframe-top {
+	margin-top: 20px;
+}
+
+input[type='number'] {
+	-moz-appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0
+}
+
+
+
+
+.iframe-input-text {
+	width: 350px !important;
+}
+
+.iframe-btn-search {
+	width: 100px !important;
+}
+			
+
+/*layui slect替换*/
+select.lay-ignore {
+	width: 90%;
+    height: 38px;
+    line-height: 1.3;
+    line-height: 38px\9;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    border-radius: 2px;
+	padding-right: 30px;
+	cursor: pointer;
+	border-color: #eeeeee;
+}
+
+select.lay-ignore option {
+	line-height: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ancheckbox {
+	display: inline-block !important;
+	margin-right: 4px;
+}
+
+.ancheckbox-span {
+	margin-right: 10px;
+}
+
+.btn-search{width:120px!important}
+
+
+/*必填*/
+.must-input {
+	font-size: 14px;
+	color: red;
+	padding-right: 2px;
+}
+
+.disable-btn {
+	cursor: not-allowed;
+	background: #ccc;
+}
+
+
+.iframe-input-line {
+	width: 100%;
+}
+
+.must-input:after {
+	content:"*";
+	color: red;
+}
+
+/*必选项标注*/
+.positiondiv{position: relative;}
+.positionspan{right:-15px;top:15px;position: absolute;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

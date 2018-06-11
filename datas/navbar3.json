@@ -1,0 +1,236 @@
+[
+	{
+		"id": "1",
+		"title": "首页",
+		"url": "",
+		"icon": "fa fa-home",
+		"spread": true,
+		"catalog": "",
+		"children": []
+	}, {
+		"id": "2",
+		"title": "机器人管理",
+		"url": "",
+		"icon": "fa fa-android",
+		"spread": false,
+		"catalog": "robot",
+		"children": [
+			{
+				"id": "21",
+				"title": "添加机器人",
+				"icon": "",
+				"url": "module/robot/addrobot.html"
+			}, {
+				"id": "22",
+				"title": "机器人库",
+				"icon": "",
+				"url": "module/robot/robotstore.html"
+			}, {
+				"id": "23",
+				"title": "报修记录",
+				"icon": "",
+				"url": "module/robot/repairrecord.html"
+			}
+		]
+	}, {
+		"id": "3",
+		"title": "药店管理",
+		"url": "",
+		"icon": "fa fa-institution",
+		"catalog": "drugstore",
+		"children": [
+			{
+				"id": "31",
+				"title": "公司列表",
+				"icon": "",
+				"url": "module/drugstore/companylist.html"
+			}, {
+				"id": "32",
+				"title": "药店列表",
+				"icon": "",
+				"url": "module/drugstore/drugstorelist.html"
+			}, {
+				"id": "33",
+				"title": "药店销售统计",
+				"icon": "",
+				"url": "module/drugstore/drugstorecount.html"
+			}
+		]
+	}, {
+		"id": "4",
+		"title": "问药管理",
+		"url": "",
+		"icon": "fa fa-heartbeat",
+		"catalog": "query",
+		"children": [
+			{
+				"id": "41",
+				"title": "问药记录",
+				"icon": "",
+				"url": "module/query/queryrecord.html"
+			},
+			{
+				"id": "42",
+				"title": "问药数据统计",
+				"icon": "",
+				"url": "module/query/queryaccount.html"
+			}
+		]
+	}, {
+		"id": "5",
+		"title": "药品查询",
+		"url": "",
+		"icon": "fa fa-search-plus",
+		"catalog": "drug",
+		"children": [
+			{
+				"id": "51",
+				"title": "搜索关键词排名",
+				"icon": "",
+				"url": "module/drug/keyword.html"
+			}
+		]
+	}, {
+		"id": "6",
+		"title": "会员管理",
+		"url": "",
+		"icon": "fa fa-user",
+		"catalog": "member",
+		"children": [
+			{
+				"id": "71",
+				"title": "会员列表",
+				"icon": "",
+				"url": "module/member/memberlist.html"
+			}
+		]
+	}, {
+		"id": "7",
+		"title": "健康管理",
+		"url": "",
+		"icon": "fa fa-stethoscope",
+		"catalog": "health",
+		"children": [
+			{
+				"id": "61",
+				"title": "患者管理",
+				"icon": "",
+				"url": "module/health/patient.html"
+			}, {
+				"id": "62",
+				"title": "慢病患者统计",
+				"icon": "",
+				"url": "module/health/patientcount.html"
+			}
+		]
+	}, {
+		"id": "8",
+		"title": "语音交互",
+		"url": "",
+		"icon": "fa fa-volume-up",
+		"catalog": "voice",
+		"children": [
+			{
+				"id": "81",
+				"title": "语音记录",
+				"icon": "",
+				"url": "module/voice/voicerecord.html"
+			}, {
+				"id": "82",
+				"title": "特定语义管理",
+				"icon": "",
+				"url": "module/voice/semantic.html"
+			}, {
+				"id": "83",
+				"title": "语音交互数据统计",
+				"icon": "",
+				"url": "module/voice/semanticcount.html"
+			}
+		]
+	}, {
+		"id": "9",
+		"title": "人脸识别",
+		"url": "",
+		"icon": "fa fa-eye",
+		"catalog": "face",
+		"children": [
+			{
+				"id": "91",
+				"title": "人脸数据库",
+				"icon": "",
+				"url": "module/face/facedatabase.html"
+			}, {
+				"id": "92",
+				"title": "人脸识别数据统计",
+				"icon": "",
+				"url": "module/face/facecount.html"
+			}
+		]
+	}, {
+		"id": "10",
+		"title": "数据统计",
+		"url": "",
+		"icon": "fa fa-bar-chart",
+		"catalog": "count",
+		"children": [
+			{
+				"id": "101",
+				"title": "机器人使用统计",
+				"icon": "",
+				"url": "module/count/robotusecount.html"
+			}
+		]
+	}, {
+		"id": "11",
+		"title": "财务管理",
+		"url": "",
+		"icon": "fa fa-money",
+		"catalog": "finance",
+		"children": [
+			{
+				"id": "111",
+				"title": "交易明细",
+				"icon": "",
+				"url": "module/finance/tradedetail.html"
+			}
+		]
+	}, {
+		"id": "12",
+		"title": "账号管理",
+		"url": "",
+		"icon": "fa fa-user-secret",
+		"catalog": "account",
+		"children": [
+			{
+				"id": "121",
+				"title": "账号管理",
+				"icon": "",
+				"url": "module/account/account.html"
+			}, {
+				"id": "122",
+				"title": "角色管理",
+				"icon": "",
+				"url": "module/account/role.html"
+			}
+		]
+	}, {
+		"id": "13",
+		"title": "其他设置",
+		"url": "",
+		"icon": "fa fa-gear",
+		"catalog": "other",
+		"children": [
+			{
+				"id": "131",
+				"title": "操作日志",
+				"icon": "",
+				"url": "module/other/log.html"
+			}, {
+				"id": "132",
+				"title": "修改密码",
+				"icon": "",
+				"url": "module/other/resetpassword.html"
+			}
+		]
+	}
+]

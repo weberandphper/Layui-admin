@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>特定语义管理</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+			.lay-ignore {
+				width: 60% !important;
+			}
+			
+			.iframe-form {
+				padding-top: 20px;
+			}
+			
+			.iframe-form-item {
+				
+			}
+			
+			.iframe-form-item .ifr-item {
+				display: inline-block;
+				vertical-align: top;
+			}
+			
+			
+			.iframe-form-item label {
+				width: 10% !important;
+				margin-left: 10%;
+			}
+			
+			.iframe-form-item .layui-input-block {
+				width: 60% !important;
+				margin-left: 0 !important;
+			}
+			
+			.iframe-form-item .ifr-item input {
+				width: 90% !important;
+				margin-bottom: 14px;
+			}
+			
+			.iframe-form-item span {
+				
+			}
+			
+			.ifr-add {
+				border-radius: 50%;
+			    width: 26px;
+			    height: 26px;
+			    padding: 0;
+			    font-size: 16px;
+			}
+			
+			
+			#valid-time {
+				display: none;
+			}
+			
+			#valid-time input{
+				display: inline-block;
+				width: 40% !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="semantic">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query-form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<a href="javascript:;" class="datelink">~</a>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">语义类型：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="SemantemeType" class="lay-ignore" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.semantemeTypeEnum" value="option.value">{{ option.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">语义状态：</label>
+								<div class="layui-input-inline iframe-select">
+									<select name="SemantemeState" class="lay-ignore" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.semantemeStateEnum" value="option.value">{{ option.key }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="Text" autocomplete="off" placeholder="请输入语音编号/手机号">
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="layui-row">
+				<button class="layui-btn" type="button" data-type="create">添加特定语义</button>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+		
+			var vm = new Vue({
+				el: "#semantic",
+				data: {
+					baseData: {},
+					selected: '1',
+				},
+				created() {
+					
+					layui.use(['jquery', 'layer', 'table', 'laydate','ajaxmod','form'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate,
+							form = layui.form,
+							ajaxmod = layui.ajaxmod;
+						
+						// 基础数据
+						ajaxmod.layuiGet("/Api/Common/Enums",$.param({names: "SemantemeTypeEnum,SemantemeStateEnum"}),function (res) {
+							if (res.success) {
+								vm.baseData = res.data;
+							} else {
+								layer.msg(res.message, {icon: 2});
+							}
+						});	
+
+						//日期 1
+						laydate.render({
+							elem: '#date1'
+						});
+
+						//日期 2
+						laydate.render({
+							elem: '#date2'
+						});
+
+						table.render({
+							elem: '#layui-table',
+							url: baseUrl+'/api/sys/audio/SpecificSemantemeList',
+							page: true,
+							limit: 15,
+							height: 'full-146',
+							limits: [10, 15, 20, 25, 30],
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							where: {token: cookie.get('usertoken')},
+							request: {
+								
+							},
+							response: {
+							   statusCode: 200,
+							   msgName: 'message',
+							},
+							cols: [
+								[ 
+									{
+										field: 'id',
+										title: '语义编号',
+										width: '10%',
+										edit: true
+									}, {
+										field: 'createTime',
+										title: '添加时间',
+										width: '10%',
+										sort: true
+									},{
+										field: 'semantemes',
+										title: '特定语义',
+										width: '10%',
+										sort: true
+									}, {
+										field: 'answers',
+										title: '回答内容',
+										minWidth: 168,
+										templet:"#answerTpl",
+									}, {
+										field: 'semantemeTypeDesc',
+										title: '语义类型',
+										width: '10%',
+									}, {
+										field: 'semantemeStateDesc',
+										title: '语义状态',
+										width: '10%',
+										sort: true
+									}, {
+										field: 'startTime',
+										title: '开始时间',
+										width: '12%',
+										sort: true
+									}, {
+										field: 'endTime',
+										title: '结束时间',
+										width: '12%',
+										sort: true
+									}, {
+										fixed: 'right',
+										title: '操作',
+										width: '16%',
+										align: 'center',
+										toolbar: '#barAction'
+									} 
+								]
+							],
+							done: function(res, curr, count) {}
+						});
+
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							if(layEvent === 'edit') {
+								for (var Key in data) {if (data[Key] == null) {data[Key] = "";}}
+								active.create(data);
+							}else if (layEvent === 'answercontent') {
+								data.answers=data.answers==null?'':data.answers;
+								var ss = '';
+								ss += '<div class="answersshow"><ul>';
+								$.each(data.answers, function(i, v) {
+									ss += '<li>' + parseInt(i + 1) + '.<a href="javascript:;" style="margin-left:10px">' + v + '</a></li>'
+								})
+								ss += '</ul></div>'
+								layer.open({
+									title: '回答内容',
+									area: ['390px', '260px'],
+									content: ss
+								});
+							
+							}  else if(layEvent === 'delete') {
+								layer.confirm('确定删除此条特定语义吗？', function(index) {
+									var datas = $.param({Id: data.id});
+						    		ajaxmod.layuiPost("/api/sys/audio/DeleteSpecificSemanteme",datas, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+						    		return false;
+								});
+							} else {
+								alert("error")
+							}
+						});
+
+						// 触发函数
+						var active = {
+							create: function(data) {
+								var answerstr = "",
+								 	questionstr = "",
+									StartTime = "",
+									EndTime = "",
+									typestr = "",
+									semantemeid = "";
+								
+								$.each(vm.baseData.semantemeTypeEnum, function(i, v) {
+									typestr = typestr+'<option value='+v.value+'>'+v.key+'</option>';
+								})
+								
+								if (data != undefined) {
+									typestr = "";
+									$.each(vm.baseData.semantemeTypeEnum, function(i, v) {
+										typestr = data.semantemeType == v.value ? typestr+'<option value='+v.value+' selected>'+v.key+'</option>' : typestr+'<option value='+v.value+'>'+v.key+'</option>';
+									})
+									$.each(data.semantemes, function(i, v) {
+										answerstr = answerstr + '<input type="text" name="Semantemes[]" lay-verify="" placeholder="请输入语义"  autocomplete="off" class="layui-input" style="width:150px;" value='+v+'>';
+									})
+									$.each(data.answers, function(i, v) {
+										questionstr = questionstr + '<input type="text" name="Answers[]" lay-verify="" placeholder="请输入回答内容"  autocomplete="off" class="layui-input" style="width:150px;" value='+v+'>';
+									})
+									semantemeid = '<input type="hidden" name="Id" value='+data.id+'>'
+									StartTime = data.createTime;
+									EndTime = data.endTime;
+								} else {
+									var answerstr = `<input type="text" name="Semantemes[]"  lay-verify="required" placeholder="请输入语义" autocomplete="off" class="layui-input"><span class="must-input positionspan" style="right:15px"></span>
+													 <input type="text" name="Semantemes[]"  lay-verify="" placeholder="请输入语义" autocomplete="off" class="layui-input">
+													 <input type="text" name="Semantemes[]"  lay-verify="" placeholder="请输入语义" autocomplete="off" class="layui-input">`;
+													 
+									var questionstr = `<input type="text" name="Answers[]"  lay-verify="required" placeholder="请输入回答内容" autocomplete="off" class="layui-input"><span class="must-input positionspan" style="right:15px"></span>
+													   <input type="text" name="Answers[]"  lay-verify="" placeholder="请输入回答内容" autocomplete="off" class="layui-input">
+													   <input type="text" name="Answers[]"  lay-verify="" placeholder="请输入回答内容" autocomplete="off" class="layui-input">`;
+								}
+	
+								var str = `<form class="layui-form iframe-form" action="" id="remarkupdate">
+												<div class="layui-form-item iframe-form-item" id="yuyi">
+												    <label class="layui-form-mid ifr-item">语义类型：</label>
+												    <div class="layui-input-block ifr-item">
+												    	`+semantemeid+`
+												      	<select name="SemantemeType" class="lay-ignore" lay-verify="required" lay-ignore id="SemantemeType">
+															<option value="">--请选择--</option>
+															`+typestr+`
+														</select>
+														<span class="must-input"></span>
+												    </div>
+												</div>
+												<div class="layui-form-item iframe-form-item" id="valid-time">
+												    <label class="layui-form-mid ifr-item">有效时间：</label>
+												    <div class="layui-input-block ifr-item">
+												    	<input type="date" name="StartTime" value=`+StartTime+`>
+												    	<input type="date" name="EndTime" value=`+EndTime+`>
+												    	<span class="must-input"></span>
+												    </div>
+												</div>
+												<div class="layui-form-item iframe-form-item">
+												    <label class="layui-form-mid ifr-item">语义：</label>
+												    <div class="layui-input-block ifr-item positiondiv" id="ifr-ans-con">
+												    	`+answerstr+`
+												    </div>
+												    <span class="layui-btn  layui-btn-normal layui-btn-sm ifr-item ifr-add" id="ifr-add-ans"><i class="layui-icon">&#xe654;</i></span>
+												</div>
+												<div class="layui-form-item iframe-form-item">
+												    <label class="layui-form-mid ifr-item">回答内容：</label>
+												    <div class="layui-input-block ifr-item" id="ifr-que-con">
+												    	`+questionstr+`
+												    </div>
+												    <span class="layui-btn  layui-btn-normal layui-btn-sm ifr-item ifr-add" id="ifr-add-que"><i class="layui-icon">&#xe654;</i></span>
+												</div>
+												<button class="layui-btn hide" lay-submit lay-filter="button-suball" id="ifrbutton">立即提交</button>
+											</form>`;
+											
+								
+								var rowdata = data;
+											
+								form.on('submit(button-suball)', function(data){
+									
+									var urlstr = rowdata == undefined ? "/api/sys/audio/AddSpecificSemanteme" : "/api/sys/audio/UpdateSpecificSemanteme";
+									// var data = $("#remarkupdate").serialize();
+						    		ajaxmod.layuiPost(urlstr,data.field, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+                                    return false;
+                                }); 
+											
+								layer.open({
+									id: "addyuyi",
+						    		type: 1,
+						    		data: data,
+						    		title: data == undefined ? "添加特定语义" : "修改特定语义",
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','650px'],
+						    		offset: '50px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			$("#ifrbutton").click();
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			
+						    		},
+						    		success: function (layero,index) {
+						    			if (data != undefined) {
+						    				(data.semantemeType != 1 && data.semantemeType != undefined) ? $("#valid-time").css("display","block") : "";
+						    			}
+						    			form.render();
+						    		},
+						    	})
+							},
+							// 查询
+							search: function () {
+								// 查询条件
+						        table.reload('tableReload', {
+							        page: {
+							            curr: 1 
+							        }
+							        ,where: unserialize($("#query-form").serialize())
+						        });
+						    }
+						};
+
+						// 按钮搜索
+						$('#semantic .layui-btn').on('click', function() {
+							var type = $(this).data('type');
+							active[type] ? active[type].call(this) : '';
+						});
+						
+						// 回车搜索
+						$('#semantic input').on('keyup', function(e){
+							if (e.keyCode == 13) {
+								active.search(); 
+							}
+						});
+						
+						// 添加input事件监听
+						$(document).on("click","#ifr-add-que", function () {
+							var str = '<input type="text" name="Answers[]" required  lay-verify="required" placeholder="请输入问题" autocomplete="off" class="layui-input">';
+							$("#ifr-que-con").append(str);
+						})
+						
+						$(document).on("click","#ifr-add-ans", function () {
+							var str = '<input type="text" name="Semantemes[]" required  lay-verify="required" placeholder="请输入回复" autocomplete="off" class="layui-input">';
+							$("#ifr-ans-con").append(str);
+						})
+						
+						// 监听语义类型
+						$(document).on("change","#SemantemeType", function () {
+							var val = $(this).val();
+							if (val != 1 && val != undefined) {
+								$("#valid-time").css("display","block");
+							} else {
+								$("#valid-time").css("display","none");
+							}
+						})
+					})
+				},
+				mounted() {
+
+				}
+			})
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
+			<a 	class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</a>
+		</script>
+		<!-- 回答内容回调 -->
+		<script type="text/html" id="answerTpl">
+			{{# if(d.answers == null){ }}
+			 <a href="javascript:;" lay-event="answercontent">{{}}</a>
+			{{# } else { }}
+			 <a href="javascript:;" lay-event="answercontent">{{d.answers.toString().substring(0,7)}}...</a>
+			{{# } }}
+			
+		</script>
+	</body>
+</html>

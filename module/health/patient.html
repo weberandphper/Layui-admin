@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>患者管理</title>
+	<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../common.css">
+	<style>
+
+
+		.iframe-top {
+			margin-top: 20px;
+		}
+		
+		.iframe-select {
+			width: 150px;
+		}
+		
+		.iframe-input1 {
+			width: 350px !important;
+		}
+		
+		.iframe-btn1 {
+			width: 100px !important;
+		}
+
+		
+	</style>
+</head>
+<body>
+	<div class="layui-fluid iframe-top" id="patient">
+		<div class="layui-form-query">
+			<form class="layui-form" id="query_form">
+				<div class="layui-form-item">
+					<div class="layui-row">
+						<div class="layui-inline">
+							<label class="layui-form-mid">时间：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+							</div>
+							<a href="javascript:;" class="datelink">~</a>
+							<div class="layui-input-inline">
+								<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-mid">公司名称：</label>
+							<div class="layui-input-inline iframe-select">
+								<select class="lay-ignore" name="EntCompanyId" lay-ignore @change="linkagesel(selected)" v-model="selected">
+									<option value="" lay-ignore>--请选择--</option>
+									<option v-for="option in baseData.entCompany" :value="option.id">{{ option.name }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-mid">药店名称：</label>
+							<div class="layui-input-inline iframe-select">
+								<select name="EntStoreId" class="lay-ignore" lay-ignore>
+									<option value="">--全部--</option>
+									<option v-for="option in linkage" :value="option.key">{{ option.value }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<div class="layui-input-inline iframe-input1">
+								<input class="layui-input" type="text" name="Text" autocomplete="off" placeholder="请输入档案编号/手机号/姓名">
+							</div>
+						</div>
+						<div class="layui-inline iframe-btn1">
+							<div class="layui-input-inline">
+								<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+							</div>
+						</div>
+					</div>
+					<div class="layui-row">
+						<div class="layui-inline">
+							<label class="layui-form-mid">性别：</label>
+							<div class="layui-input-inline iframe-select">
+								<select class="lay-ignore" name="Gender" lay-ignore>
+									<option value="" lay-ignore>--请选择--</option>
+									<option v-for="option in baseData.enums.genderEnum" :value="option.value">{{ option.key }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-mid">疾病：</label>
+							<div class="layui-input-inline iframe-select">
+								<select class="lay-ignore" name="DiseaseType" lay-ignore>
+									<option value="" lay-ignore>--请选择--</option>
+									<option v-for="option in baseData.enums.diseaseTypeEnum" :value="option.value">{{ option.key }}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<table id="layui-table" lay-filter="layui-action"></table>
+	</div>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script src="../../plugins/vue.min.js"></script>
+	<script src="../../common.js"></script>
+	<script>
+		var vm = new Vue({
+			el: "#patient",
+			data: {
+				baseData: {
+					"enums": {
+						"genderEnum": [],
+						"diseaseTypeEnum": []
+					},
+				},
+				selected: '',
+				linkage: [],
+			},
+			created() {
+				//layui  渲染数据
+				layui.use(['jquery', 'layer', 'table', 'laydate', 'form','ajaxmod'], function() {
+					var $ = layui.jquery,
+						table = layui.table,
+						layer = layui.layer,
+						form = layui.form,
+						laydate = layui.laydate,
+						ajaxmod = layui.ajaxmod;
+						
+					var data = $.param({names: "MaintenanceType,RobotPart,MaintenanceStatus,GenderEnum,DiseaseTypeEnum",includeEnt: true});
+					
+					// 基础数据获取
+					ajaxmod.layuiGet("/Api/Common/Enums",data,function (res) {
+						if (res.success) {
+							vm.baseData = res.data;
+						} else {
+							layer.msg(res.message, {icon: 2});
+						}
+					});	
+					
+					laydate.render({
+					    elem: '#date1',
+//						    type: 'datetime'
+					});
+					
+					laydate.render({
+					    elem: '#date2',
+//						    type: 'datetime'
+					});
+						
+					table.render({
+						elem: '#layui-table',
+						url: baseUrl + '/api/sys/healthmanagement/ArchiveList',
+						page: true,
+						height: 'full-150',
+						limit: 15,
+						limits: [10, 15, 20, 25, 30],
+						id: 'tableReload',
+						loading: true,
+						method: 'get',
+						where: {token: cookie.get('usertoken')},
+						request: {
+
+						},
+						response: {
+							statusCode: 200,
+							msgName: 'message',
+						},
+						cols: [
+							[{
+								field: 'id',
+								unresize: true,
+								title: '档案编号',
+								width: '8%',
+							}, {
+								field: 'name',
+								unresize: true,
+								title: '姓名',
+								width: '8%',
+							}, {
+								field: 'createTime',
+								unresize: true,
+								title: '建档时间',
+								width: '14%',
+							}, {
+								field: 'mobile',
+								unresize: true,
+								title: '手机号',
+								width: '8%',
+							}, {
+								field: 'genderDesc',
+								unresize: true,
+								title: '性别',
+								width: '6%',
+
+							}, {
+								field: 'age',
+								unresize: true,
+								title: '年龄',
+								width: '8%',
+
+							}, {
+								field: 'diseaseTypeDesc',
+								unresize: true,
+								title: '疾病',
+								width: '8%',
+
+							}, {
+								field: 'height',
+								unresize: true,
+								title: '身高',
+								templet: '#heightTpl',
+								width: '6%',
+
+							}, {
+								field: 'weight',
+								unresize: true,
+								title: '体重',
+								templet: '#weightTpl',
+								//	width: '6%',
+
+							}, {
+								field: 'pharmacy',
+								unresize: true,
+								title: '目前用药',
+								//	width: '8%',
+								minWidth: 135,
+								templet: '#currentTpl',
+							}, {
+								field: 'remark',
+								unresize: true,
+								fixed: 'right',
+								title: '备注信息',
+								width: '8%',
+
+							}, {
+								fixed: 'right',
+								unresize: true,
+								title: '操作',
+								width: '8%',
+								toolbar: '#barAction'
+							}]
+						],
+						data: [],
+						done: function(res, curr, count) {
+							vm.pageCurr=curr;
+							
+						}
+					});
+					
+					//回车搜索事件
+                    document.onkeyup=function(evt){
+                    	var evt=event||window.event;
+                    	var code=evt.charCode||evt.keyCode;
+                    	if(code==13){
+                    		active.search()
+                    	}
+                    }
+					// 操作事件
+					table.on('tool(layui-action)', function(obj) {
+						var data = obj.data;
+						//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+						var layEvent = obj.event;
+						//获得当前行 tr 的DOM对象
+						var tr = obj.tr;
+						if(layEvent === 'detail') {
+							layer.alert('查看行：<br>' + JSON.stringify(data))
+						} else if(layEvent === 'del') {
+							
+						} else if(layEvent === 'remarks') {
+							
+							for (var Key in data) {if (data[Key] == null) {data[Key] = "";}}
+							
+							vm.remarks = data.remark;
+							vm.filenumber = data.id;
+							var str = '';
+							str += '<div id="remarksshow"><form class="layui-form layui-row" action="javascript::" id="patientRemark"><div class="layui-form-item"><label class="layui-form-label">备注信息:</label>'
+							str += '<div class="layui-input-block"><input type="hidden" name="Id" value="' + vm.filenumber + '">'
+							str += '<textarea name="Remark" placeholder="请输入内容" class="layui-textarea" style="resize:none">' + vm.remarks + '</textarea></div></div></form></div>'
+							// 赋值
+							layer.open({
+								title: '患者备注',
+								area: ['600px', '340px'],
+								offset: '200px',
+								content: str,
+								btn: ['确定', '取消'],
+								// 成功回掉
+								success: function(layero, index) {
+									form.render();
+								},
+								// 确认回掉
+								yes: function(index, layero) {
+									var data = $("#patientRemark").serialize();
+						    		ajaxmod.layuiPost("/api/sys/healthmanagement/UpdateRemark",data, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+						    		return false;
+								},
+								btn2: function(index, layero) {
+									//按钮【按钮二】的回调
+									layer.closeAll();
+									//return false 开启该代码可禁止点击该按钮关闭
+								},
+								// 插回掉
+								cancel: function(index, layero) {
+									layer.closeAll();
+									//if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+									//  layer.close(index)
+									//}
+									return false;
+								}
+							});
+						} else if(layEvent === 'showdrug') {
+							data.pharmacy = data.pharmacy == undefined ? '暂无用药' : data.pharmacy;
+							vm.showdrug = data.pharmacy.split('|');
+							var ss = '';
+							ss += '<div><ul>';
+							$.each(vm.showdrug, function(i, v) {
+								ss += '<li>' + parseInt(i + 1) + '.<a href="javascript:;" style="margin-left:10px">' + v + '</a></li>'
+							})
+							ss += '</ul></div>'
+							layer.open({
+								title: '当前用药',
+								area: ['390px', '260px'],
+								content: ss
+							});
+						}
+						return
+					});
+
+					// 触发函数
+					var	active = {
+						// 查询
+						search: function() {
+							var demoReload = $('#demoReload');
+							//执行重载
+							table.reload('tableReload', {
+								page: {
+									//重新从第 1 页开始
+									curr: 1
+								},
+								where: unserialize(decodeURIComponent($("#query_form").serialize(),true))
+								
+							});
+						},
+					};
+
+					// 按钮搜索
+					$('#patient .layui-btn').on('click', function() {
+						var type = $(this).data('type');
+						active[type] ? active[type].call(this) : '';
+					});
+					
+					// 回车搜索
+					$('#patient input').on('keyup', function(e){
+						if (e.keyCode == 13) {
+							active.search();
+						}
+					});
+				})
+			},
+			methods: {
+				linkagesel (sel) {
+					for(var key of vm.baseData.entCompany) {
+						if (sel === key.id) {
+							vm.linkage = key.stores
+						}
+					}
+				}
+			},
+			mounted() {
+
+			}
+		})
+	</script>
+	<!-- 身高回调 -->
+	<script type="text/html" id="heightTpl">
+		{{# if(d.height === undefined){ }}
+		<a href="javascript:;"></a>
+		{{# } else { }}
+		<a href="javascript:;">{{d.height}}&nbsp;&nbsp;cm</a>
+		{{# } }}
+	</script>
+	<!-- 体重回调 -->
+	<script type="text/html" id="weightTpl">
+		{{# if(d.weight === undefined){ }}
+		<a href="javascript:;"></a>
+		{{# } else { }}
+		<a href="javascript:;">{{d.weight}}&nbsp;&nbsp;kg</a>
+		{{# } }}
+	</script>
+	<!--//性别判断-->
+	<script type="text/html" id="sexTpl">
+		{{# if(d.genderDesc === '女'){ }}
+		<span style="color: #F581B1;">{{ d.genderDesc }}</span> {{# } else { }} {{ d.genderDesc }} {{# } }}
+	</script>
+	<!--//当前用药-->
+	<script type="text/html" id="currentTpl">
+		{{# if(d.pharmacy!=undefined){ }} {{# if(d.pharmacy.length > 7){ }}
+		<a data-id="{{ d.id }}" lay-event="showdrug">{{d.pharmacy.slice(0,7)}}...</a>
+		{{# } else { }}
+		<a data-id="{{ d.id }}" lay-event="showdrug">{{d.pharmacy}}</a>
+		{{# } }} {{# } else { }}
+		<a data-id="{{ d.id }}" lay-event="showdrug">{{'暂无用药'}}</a>
+		{{# } }}
+	</script>
+	<!-- 操作 -->
+	<script type="text/html" id="barAction">
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="remarks"><i class="layui-icon">&#xe642;</i>备注</a>
+	</script>
+</body>
+	
+</html>

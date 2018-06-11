@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="common.css">
+    <style type="text/css">
+		
+        #login-page:after {
+            content: '';
+            background: url(resources/images/backgrounds.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            -webkit-filter: blur(3px);
+            -moz-filter: blur(3px);
+            -o-filter: blur(3px);
+            -ms-filter: blur(3px);
+            filter: blur(3px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        #login-form {
+            margin-top: 220px;
+            margin-right: -20px;
+            background: #fff;
+            border: 1px solid #eeeeee;
+            border-radius: 10px;
+            padding: 50px 30px 20px 20px;
+        }
+
+        #login-form label {
+            font-weight: 400;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        #login-form .verification {
+            width: 150px;
+        }
+
+        #captchaPic {
+            margin-top: -9px;
+            margin-left: -36px;
+        }
+
+        .logo-title {
+            display: none;
+            text-align: center;
+            padding-bottom: 20px;
+            font-weight: 100;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body id="login-page">
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md5 layui-col-md-offset7">
+                <div class="layui-form" id="login-form">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item logo-title">
+                            <h1>用户登录</h1>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="UserName" lay-verify="required" placeholder="请输入用户名或者邮箱" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码:</label>
+                            <div class="layui-input-block">
+                                <input type="password" name="Password" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item" style="margin: 0;">
+                            <label class="layui-form-label">验证码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="Captcha" lay-verify="captcha" placeholder="请输入验证码" autocomplete="off" class="layui-input verification">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                <img style="width:70px;" id="captchaPic" src="">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住帐号?">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="form-login"> 登陆</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./plugins/layui/layui.js"></script>
+    <script src="common.js"></script>
+    <script>
+        var uuid = "";
+
+        function uuidfun() {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+
+            var uuid = s.join("");
+            return uuid;
+        }
+
+        function uuidstr() {
+            uuid = uuidfun();
+            return uuid;
+        }
+
+        layui.use(['jquery', 'form', 'ajaxmod', 'layer'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                layer = layui.layer,
+                ajaxmod = layui.ajaxmod;
+
+            if (localStorage.getItem('rememberme')) {
+                var setval = JSON.parse(localStorage.getItem('rememberme'));
+                $("input[name='UserName']").val(setval.username)
+                $("input[name='Password']").val(setval.password)
+            }
+
+            // 初始img
+            $("#captchaPic").attr('src', baseUrl + "/api/sys/security/GetCaptcha?uuid=" + uuidstr());
+
+            // 验证码
+            $("#captchaPic").click(function () {
+                $("#captchaPic").attr('src', baseUrl + "/api/sys/security/GetCaptcha?uuid=" + uuidstr());
+            });
+
+            //监听提交
+            form.on('submit(form-login)', function (data) {
+                data.field.CaptchaKey = uuid;
+                ajaxmod.layuiPost("/api/sys/home/Login", data.field, function (res) {
+                    if (res.success) {
+                        cookie.set("usertoken", res.data.token)
+                        cookie.set("username", res.data.userName)
+                        cookie.set("name", res.data.name)
+
+                        var reobj = {
+                            username: data.field.UserName,
+                            password: data.field.Password
+                        }
+
+                        if (data.field.rememberMe) {
+                            localStorage.setItem("rememberme", JSON.stringify(reobj));
+                        } else {
+                            localStorage.removeItem("rememberme");
+                        }
+
+                        layer.msg('登录成功', {
+                            icon: 1
+                        });
+                        window.location.href = "index.html"
+                    } else {
+                        layer.msg(res.message, {
+                            icon: 2
+                        });
+                        $("#captchaPic").attr('src', baseUrl +
+                            "/api/sys/security/GetCaptcha?uuid=" + uuidstr());
+                    }
+                })
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

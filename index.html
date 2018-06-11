@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>后台管理系统</title>
+		<!--layui-v2.3.0-->
+		<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="./plugins/font-awesome-4.7.0/css/font-awesome.min.css" />
+		<!--功能按钮样式-->
+		<link rel="stylesheet" href="./build/css/app.css" media="all">
+		<!--默认样式-->
+		<link rel="stylesheet" href="styles.css" />
+		<!--默认皮肤-->
+		<link rel="stylesheet" href="./build/css/themes/default.css" media="all" id="skin" kit-skin />
+		<!--公共样式-->
+		<link rel="stylesheet" href="common.css" />
+		<link rel="shortcut icon" href="favicon.ico">
+	</head>
+	<body class="kit-theme">
+		<div class="layui-layout layui-layout-admin kit-layout-admin" id="page-wrapper" v-cloak>
+			<div class="layui-header">
+				<div class="layui-logo">Anspray管理后台</div>
+				<div class="layui-logo kit-logo-mobile">K</div>
+				<form class="layui-form layui-layout-left search-menu">
+					<select lay-search="" lay-filter="component" id="search-menu">
+						<option value="">便捷菜单查询</option>
+						<option value="item.name" v-for="(item, index) in menuList">
+							{{ item.name }}
+						</option>
+					</select>
+				</form>
+				<ul class="layui-nav layui-layout-left kit-nav">
+					<li class="layui-nav-item layui-action" data-type="jurisdiction">
+						<a href="javascript:;">权限管理一</a>
+					</li>
+					<li class="layui-nav-item layui-action" data-type="tonpl" id="tonpl" id="changemenu">
+						<a href="javascript:;">权限管理二</a>
+					</li>
+				</ul>
+				<ul class="layui-nav layui-layout-right kit-nav" id="right-menu">
+					<!--服务器时间-->
+					<li class="layui-nav-item">
+						<!--<div class="digital-clock">00:00:00</div>-->
+						<div class="digital-clock">{{ serverDate }}</div>
+					</li>
+					<!--天气展示-->
+					<li class="layui-nav-item">
+						<div><a target="_blank" href="http://tianqi.qq.com/?province=%E4%B8%8A%E6%B5%B7%E5%B8%82&amp;city=%E4%B8%8A%E6%B5%B7%E5%B8%82&amp;district=" style="color: rgb(20, 20, 20); font-size: 13px; line-height: 50px; text-decoration: none; position: relative;"><img src="//mat1.gtimg.com/pingjs/ext2020/weather/mobile2.0/assets/weather/day/03.png" style="height: 20px; width: 20px; vertical-align: middle; margin-top: -3px;"><span style="padding: 0px 6px;">上海市</span><span style="padding-right: 6px;">16°</span><span>阵雨</span></a></div>
+					</li>
+					<li class="layui-nav-item hide" id="tag">
+						<a href="javascript:;"><i class="fa fa-tag" aria-hidden="true"></i></a>
+					</li>
+					<li class="layui-nav-item" id="color">
+						<a href="javascript:;">皮肤<span class="layui-badge-dot"></span></a>
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;">
+							<img src="resources/images/admin.jpg" class="layui-nav-img">欢迎, {{ cookie.get('name') }}
+						</a>
+						<dl class="layui-nav-child">
+							<dd class="layui-action" data-type="baseinfo">
+								<a href="javascript:;">基本资料</a>
+							</dd>
+							<dd class="layui-action" data-type="resetpassword">
+								<a href="javascript:;">修改密码</a>
+							</dd>
+							<dd class="layui-action" data-type="loginout">
+								<a href="javascript:;">退出</a>
+							</dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item" id="news">
+						<a href="javascript:;">消息<span class="layui-badge-dot"></span></a>
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;" id="copyright" style="color:#333;"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+					</li>
+				</ul>
+			</div>
+			<div class="layui-side layui-bg-black kit-side">
+				<div class="layui-side-scroll">
+					<div class="kit-side-fold">
+						<i class="fa fa-navicon" aria-hidden="true"></i>
+					</div>
+					<!--菜单列表-->
+					<ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar></ul>
+				</div>
+			</div>
+			<div class="layui-body" id="container">
+				<!-- 内容主体区域 -->
+				<div style="padding: 15px;">内容加载中,请稍等...</div>
+			</div>
+			<div class="layui-footer">
+				<!-- 底部固定区域 -->
+				2018 &copy; CopyRight © 2017
+				<a href=""> xxxxxx有限公司 </a>all rights rerserved MIT license
+			</div>
+		</div>
+		<!--锁屏-->
+		<div class="admin-header-lock" id="lock-box" style="display: none;">
+			<div class="admin-header-lock-img"><img src="http://iwmzc.com/images/face.jpg" /></div>
+			<div class="admin-header-lock-name" id="lockUserName">anspray</div>
+			<div class="input_btn">
+				<input type="password" name="lockPwd" class="admin-header-lock-input layui-input" placeholder="请输入密码解锁.." id="lockPwd" />
+				<button class="layui-btn" id="unlock">解锁</button>
+			</div>
+			<p>请输入登陆密码进行解锁 !</p>
+		</div>
+		<script src="./plugins/layui/layui.js"></script>
+		<!--前端路由-->
+		<script src="./plugins/router.js"></script>
+		<!--v2.2.2-->
+		<script src="./plugins/vue.min.js"></script>
+		<!--公共函数库-->
+		<script src="./common.js"></script>
+		<script src="https://js.fundebug.cn/fundebug.1.1.0.min.js"
+        apikey="52bc85eea4bc6c35cd9265f880502c96c5790ffd0ffbf0baa53f73aaf9e8fc00"></script>
+		<script>
+			
+			var vm = new Vue({
+				el: '#page-wrapper',
+				data: {
+					menuList: [],
+					serverDate: "0000-00-00 00:00:00",
+				},
+			});
+			
+			layui.config({
+				base: 'build/js/'
+			}).use(['app', 'message', 'tab', 'ajaxmod','form'], function() {
+
+				var app = layui.app,
+					$ = layui.jquery,
+					element = layui.element,
+					layer = layui.layer,
+					tab = layui.tab,
+					form = layui.form,
+					ajaxmod = layui.ajaxmod,
+					router = layui.router,
+					// 将message设置为全局以便子页面调用
+					message = layui.message;
+					
+				//主入口
+				app.set({
+					type: 'iframe',
+					// 设置切换是否刷新
+					isrefresh: true
+				}).init();
+				
+				// 获取服务器时间
+				ajaxFun("GET","",function (ajaxobj) {
+					var zDate= ajaxobj.getResponseHeader("Date") + (3600000 * 8);
+					var timeStamp = new Date(zDate).getTime();
+					setInterval(function() {
+						timeStamp = timeStamp - 500;
+						var date = new Date(timeStamp);
+						Y = date.getFullYear() + '-';
+						M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+						D = date.getDate() + ' ';
+						h = date.getHours() + ':';
+						m = date.getMinutes() + ':';
+						s = date.getSeconds(); 
+						vm.serverDate = Y+M+D+h+m+s;
+						// var times = new Date(parseInt(timeStamp) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+					}, 500);
+				})
+
+				active = {
+					changePage(data) {
+						var data = data == undefined ? {
+							icon: "",
+							id: "1tab1",
+							title: "机器人库",
+							url: "main.html"
+						} : data;
+						$(".layui-tab-title").children("li[lay-id]").each(function() {
+							var e = $(this).attr("lay-id"); -
+							1 != e && element.tabDelete('kitTab', e);
+						})
+						layer.load(2, {
+							shade: [0.2, "black"]
+						});
+						setTimeout(function() {
+							layer.closeAll('loading');
+							tab.tabAdd(data);
+						}, 1000);
+					},
+					// 修改密码
+					resetpassword() {
+						var data = {
+							icon: "",
+							id: "1tab1",
+							title: "修改密码",
+							url: "module/other/resetpassword.html"
+						};
+						active.changePage(data);
+					},
+					// 权限管理
+					jurisdiction() {
+						active.changePage();
+					},
+					// 退出
+					loginout() {
+						cookie.clear();
+						window.location.href = "/login.html"
+					}
+				};
+
+				// 按钮事件
+				$('#page-wrapper .layui-action').on('click', function() {
+					var type = $(this).data('type');
+					active[type] ? active[type].call(this) : '';
+				});
+
+				var searchArr = [];
+
+				// 验证登录
+				if(cookie.get('usertoken') == "" || cookie.get('usertoken') == undefined) {
+					layer.msg("对不起，你没有登录", {
+						icon: 2
+					});
+					window.location.href = "login.html"
+				} else {
+					
+// 					ajaxmod.layuiGet("/api/sys/account/GetUserMenuList", "", function(res) {
+// 						var str = `<option value="">便捷菜单查询</option>`;
+// 						res.data.forEach(function (e) {
+// 							e.children.forEach(function (i) {
+// 								searchArr.push(i);
+// 								str+=`<option value=${i.id}>${i.title}</option>`;
+// 							})
+// 						})
+// 						$("#search-menu").html(`<select lay-filter="select-search" lay-search >${str}</select>`);
+// 						form.render();
+// 						if(!res.success) {
+// 							layer.msg(res.message, {
+// 								icon: 2
+// 							});
+// 							window.location.href = "login.html"
+// 						}
+// 					})
+					
+				}
+				
+				// 便捷查询
+			    form.on('select(select-search)', function(data){  
+			    	searchArr.forEach(function (e) {
+						if (e.id == data.value) {
+							active.changePage(e);
+						}
+			    	})
+	            }); 
+			});
+
+			// token失效跳转
+			function tologins() {
+				window.location.href = "/login.html"
+			}
+			
+		</script>
+	</body>
+</html>

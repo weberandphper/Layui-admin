@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>搜索关键词排名</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../common.css">
+		<style>
+			
+			.iframe-top {
+				margin-top: 20px;
+			}
+			
+			.iframe-select {
+				width: 150px;
+			}
+			
+			.iframe-input1 {
+				width: 350px !important;
+			}
+			
+			.iframe-btn1 {
+				width: 100px !important;
+			}
+			
+			#valid-time {
+				display: none;
+			}
+			
+			#valid-time input{
+				display: inline-block;
+				width: 40% !important;
+			}
+			#addkeyword,#updatekeyword{
+				box-sizing: border-box;
+				padding: 8%;
+			    height: 100%;
+			    display: flex;
+			    flex-direction: column;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="layui-fluid iframe-top" id="keyword">
+			<div class="layui-form-query">
+				<form class="layui-form" id="query_form">
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<div class="layui-inline">
+								<label class="layui-form-mid">时间：</label>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+								<a href="javascript:;" class="datelink">~</a>
+								<div class="layui-input-inline">
+									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">关键词类型：</label>
+								<div class="layui-input-inline iframe-select">
+									<select class="lay-ignore" name="Type" lay-ignore @change="linkagesel(selected)" v-model="selected">
+										<option value="">--请选择--</option>
+										<option v-for="option in baseData.typeAndStates" v-bind:value="option.id">{{ option.name }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-mid">关键词状态：</label>
+								<div class="layui-input-inline iframe-select">
+									<select class="lay-ignore" name="Status" lay-ignore>
+										<option value="">--请选择--</option>
+										<option v-for="option in linkage" v-bind:value="option.key">{{ option.value }}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<div class="layui-input-inline iframe-input1">
+									<input class="layui-input" type="text" name="Text" autocomplete="off" placeholder="请输入关键词内容">
+								</div>
+							</div>
+							<div class="layui-inline iframe-btn1" >
+								<div class="layui-input-inline">
+									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="layui-row">
+				<button class="layui-btn layui-btn-normal" data-type="addkeyword">添加关键词</button>
+			</div>
+			<table id="layui-table" lay-filter="layui-action"></table>
+		</div>
+		<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../plugins/vue.min.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+			
+			var vm = new Vue({
+				el: "#keyword",
+				data: {
+					baseData: {},
+					selected: '',
+					// 公司-药店联动
+					linkage: []
+				},
+				created() {
+					
+					layui.use(['jquery', 'layer', 'table', 'laydate','ajaxmod','form'], function() {
+						var $ = layui.jquery,
+							table = layui.table,
+							laydate = layui.laydate,
+							form = layui.form,
+							ajaxmod = layui.ajaxmod;
+						
+						// 基础数据获取
+						ajaxmod.layuiGet("/api/sys/drug/GetBaseData",{},function (res) {
+							if (res.success) {
+								vm.baseData = res.data;
+								console.log(vm.baseData)
+							} else {
+								layer.msg(res.message, {icon: 2});
+							}
+						});	
+						
+						//日期 1
+						laydate.render({
+							elem: '#date1',
+//							type: 'datetime'
+						});
+
+						//日期 2
+						laydate.render({
+							elem: '#date2',
+//							type: 'datetime'
+						});
+
+						table.render({
+							elem: '#layui-table',
+							url: baseUrl+'/api/sys/drug/GetSysDrugQueryKeyList',
+							page: true,
+							limit: 15,
+							limits: [10, 15, 20, 25, 30],
+							height: 'full-140',
+							id: 'tableReload',
+							loading: true,
+							method: 'get',
+							where: {token: cookie.get('usertoken')},
+							request: {
+							},
+							response: {
+							   statusCode: 200,
+							   msgName: 'message',
+							},
+							cols: [
+								[ 
+									{
+										field: 'rank',
+										title: '排名序号',
+										width: '12%',
+									}, 
+									{
+										field: 'text',
+										title: '关键词内容',
+										width: '12%',
+										sort: true,
+										toolbar: '#textColor'
+									}, {
+										field: 'count',
+										title: '搜索频次',
+										width: '12%',
+									}, {
+										field: 'typeDesc',
+										title: '关键词类型',
+										width: '12%',
+									}, {
+										field: 'statusDesc',
+										title: '关键词状态',
+										width: '12%',
+										sort: true
+									}, {
+										field: 'startTime',
+										title: '开始时间',
+										width: '12%',
+										sort: true
+									}, {
+										field: 'endTime',
+										title: '结束时间',
+										width: '12%',
+										sort: true
+									}, {
+										fixed: 'right',
+										title: '操作',
+										width: '16%',
+										align: 'center',
+										toolbar: '#barAction'
+									} 
+								]
+							],
+							done: function(res, curr, count) {}
+						});
+
+						// 操作事件
+						table.on('tool(layui-action)', function(obj) {
+							var data = obj.data; 
+							//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+							var layEvent = obj.event; 
+							//获得当前行 tr 的DOM对象
+							var tr = obj.tr; 
+							if(layEvent === 'detail') {
+								for (var Key in data) {if (data[Key] == null) {data[Key] = "";}}
+								
+								var orderstr = "",
+								    keywordtype= "",
+								    StartTime = data.startTime,
+								    EndTime = data.endTime;
+								    
+								$.each(vm.baseData.ranks, function(j, k) {
+									orderstr = k.key == data.rank ? orderstr+'<option value='+k.value+' selected>'+k.key+'</option>' : orderstr+'<option value='+k.value+'>'+k.key+'</option> ';
+								})
+								
+								$.each(vm.baseData.typeAndStates, function(a, b) {
+									keywordtype = b.id == data.type ? keywordtype+'<option value='+b.id+' selected>'+b.name+'</option>' : keywordtype+'<option value='+b.id+'>'+b.name+'</option> ';
+								})
+								
+								var str = `<form class="layui-form" id="updatekeyword">
+												<input type="hidden" name="TagId" value=`+data.id+`>
+												<div class="layui-form-item">
+													<label class="layui-form-label">排名序号:</label>
+													<div class="layui-input-block">
+														<select name="Sort" lay-ignore="" class="lay-ignore" lay-verify="required">
+															<option value="">--请选择--</option>`+orderstr+`
+														</select>
+														<span class="must-input"></span>
+													</div>
+												</div>
+												<div class="layui-form-item">
+													<label class="layui-form-label">关键词类型:</label>
+													<div class="layui-input-block">
+														<select name="Type" lay-ignore="" class="lay-ignore" id="Type" lay-verify="required">
+															<option value="">--请选择--</option>`+keywordtype+`
+														</select>
+														<span class="must-input"></span>
+													</div>
+												</div>
+												<div class="layui-form-item" id="valid-time">
+												    <label class="layui-form-label">有效时间：</label>
+												    <div class="layui-input-block">
+												    	<input type="date" name="StartTime" value=`+StartTime+`>
+												    	<input type="date" name="EndTime" value=`+EndTime+`>
+												    	<span class="must-input"></span>
+												    </div>
+												</div>
+												<button class="layui-btn hide" lay-submit lay-filter="button-suball" id="ifrbutton">立即提交</button>
+											</form>`;
+								
+								form.on('submit(button-suball)', function(data){
+                                    // var data = $("#updatekeyword").serialize();	
+						    		ajaxmod.layuiPost("/api/sys/drug/UpdateSysDrugQueryKey",data.field, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+                                    return false;
+                                }); 
+											
+								layer.open({
+						    		type: 1,
+						    		title: "修改关键词排名",
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','600px'],
+						    		offset: '100px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			$("#ifrbutton").click();
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    			layer.closeAll();
+						    		},
+						    		success: function (layero,index) {
+						    			// 开启时间
+										if (data.type == 2) {
+											$("#valid-time").css("display","block");
+										}
+						    			form.render();
+						    		},
+						    	})
+								
+							} else if(layEvent === 'delete') {
+							//	layer.confirm('真的删除ID为' + obj.data.id + '行么?', function(index) {
+								layer.confirm('真的删除此条数据吗?', function(index) {
+									var datas = $.param({TagId: data.id});
+						    		ajaxmod.layuiPost("/api/sys/drug/DeleteSysDrugQueryKey",datas, function (res) {
+										if(res.success){
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+											layer.closeAll();
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+						    		return false;
+								});
+								
+							} else if(layEvent === 'edit') {
+								for (var Key in data) {if (data[Key] == null) {data[Key] = "";}}
+								vm.editForm = data;
+								// 赋值
+								obj = data;
+								layer.open({
+									type: 2,
+									title: '提示框',
+									area: ['800px', '700px'],
+									skin: 'demo-class',
+									content: 'form.html',
+									//content: formstr,
+									//content: vm.message,
+									// 成功回掉
+									success: function(layero, index) {
+
+									},
+									// 确认回掉
+									yes: function(index, layero) {
+										//do something
+										layer.closeAll(); //如果设定了yes回调，需进行手工关闭
+									},
+									// 插回掉
+									cancel: function(index, layero) {
+										layer.closeAll();
+										//if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
+										//  layer.close(index)
+										//}
+										return false;
+									}
+								});
+							}
+						});
+
+
+						// 触发函数
+						var active = {
+							// 查询
+							search: function() {
+								var demoReload = $('#demoReload');
+								//执行重载
+								table.reload('tableReload', {
+									page: {
+										//重新从第 1 页开始
+										curr: 1
+									},
+									where: unserialize(decodeURIComponent($("#query_form").serialize(),true))
+								});
+							},
+							addkeyword: function () {
+								var orderstr = "";
+								var keywordtype = "";
+								var StartTime = "";
+								var EndTime = "";
+								
+								$.each(vm.baseData.ranks, function(j, k) {
+									orderstr = orderstr + '<option value='+k.value+'>'+k.key+'</option> ';
+								})
+								
+								$.each(vm.baseData.typeAndStates, function(a, b) {
+									keywordtype = keywordtype + '<option value='+b.id+'>'+b.name+'</option> ';
+								})
+								
+								var str = `<form class="layui-form" id="addkeyword">
+												<div class="layui-form-item">
+													<label class="layui-form-label">排名序号:</label>
+													<div class="layui-input-block">
+														<select name="Sort" lay-ignore="" lay-verify="required" class="lay-ignore">
+															<option value="">--请选择--</option>`+orderstr+`
+														</select>
+														<span class="must-input"></span>
+													</div>
+												</div>
+												<div class="layui-form-item positiondiv">
+													<label class="layui-form-label">关键词内容:</label>
+													<div class="layui-input-block">
+														<textarea name="Text" placeholder="请输入内容" lay-verify="required" class="layui-textarea" style="resize:none"></textarea>
+														<span class="must-input positionspan"></span>
+													</div>
+												</div>
+												<div class="layui-form-item">
+													<label class="layui-form-label">关键词类型:</label>
+													<div class="layui-input-block">
+														<select name="Type" lay-ignore="" lay-verify="required" class="lay-ignore" id="Type">
+															<option value="">--请选择--</option> `+keywordtype+`
+														</select>
+														<span class="must-input"></span>
+													</div>
+												</div>
+												<div class="layui-form-item" id="valid-time">
+												    <label class="layui-form-label">有效时间：</label>
+												    <div class="layui-input-block">
+												    	<input type="date" name="StartTime" value=`+StartTime+`>
+												    	<input type="date" name="EndTime" value=`+EndTime+`>
+												    	<span class="must-input"></span>
+												    </div>
+												</div>
+												<button class="layui-btn hide" lay-submit lay-filter="button-suball" id="ifrbutton">立即提交</button>
+											</form>`;
+											
+								form.on('submit(button-suball)', function(data){
+									// var data = $("#addkeyword").serialize();	
+						    		ajaxmod.layuiPost("/api/sys/drug/AddSysDrugQueryKey",data.field, function (res) {
+										if(res.success){
+											layer.closeAll();
+											$(".layui-laypage-btn").click();
+											layer.msg('操作成功', {icon: 1});
+						                }else{
+						                	layer.msg(res.message, {icon: 2});
+						                }
+									})
+                                    return false;
+                                }); 
+								
+								layer.open({
+						    		type: 1,
+						    		title: "添加关键词",
+						    		content: str,
+						    		skin: 'demo-class',
+						    		shade: 0.3,
+						    		shadeClose: true,
+						    		area: ['800px','600px'],
+						    		offset: '100px',
+						    		move: false,
+						    		btn: ['确认','取消'],
+						    		// 确认
+						    		yes: function (index,layero) {
+						    			$("#ifrbutton").click();
+						    		},
+						    		// 取消
+						    		btn2: function (index,layero) {
+						    		},
+						    		success: function (layero,index) {
+						    			form.render();
+						    		},
+						    	})
+							}
+						};
+
+						// 按钮搜索
+						$('#keyword .layui-btn').on('click', function() {
+							var type = $(this).data('type');
+							active[type] ? active[type].call(this) : '';
+						});
+						
+						// 回车搜索
+						$('#keyword input').on('keyup', function(e){
+							if (e.keyCode == 13) {
+								active.search();
+							}
+						});
+						
+						// 监听语义类型
+						$(document).on("change","#Type", function () {
+							var val = $(this).val();
+							if (val == 2) {
+								$("#valid-time").css("display","block");
+							} else {
+								$("#valid-time").css("display","none");
+							}
+						});
+						
+					})
+				},
+				methods: {
+					linkagesel (sel) {
+						for(var key of vm.baseData.typeAndStates) {
+							if (sel === key.id) {
+								vm.linkage = key.states
+							}
+						}
+					}
+				},
+				mounted() {
+
+				}
+			})
+		</script>
+		<!-- 操作 -->
+		<script type="text/html" id="barAction">
+			<a 	class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon">&#xe642;</i>编辑</a>
+			<a 	class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</a>
+		</script>
+		<script type="text/html" id="textColor">
+			{{#  if(d.isManual == true){ }}
+				<p class="tx-red">
+					{{ d.text }}
+				</p>
+			{{#  } else { }}
+				<p>
+					{{ d.text }}
+				</p>
+			{{#  } }}
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+

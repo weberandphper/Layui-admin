@@ -1,0 +1,2 @@
+<p>当前版本：apspray-v1.0</p><p>开发基于：Layui2</p><p>Layui版本：2.2.5</p><p>关于版权<hr></p><p>© 2018 Anspray 版权所有</p>
+你所看到的内容均来自About.txt
