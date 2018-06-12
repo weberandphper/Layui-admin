@@ -129,7 +129,7 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 				
 				
 				// 获取权限列表
-				ajaxmod.layuiGet("/anspray-admin/datas/menulist.json","",function (res) {
+				ajaxmod.layuiGet("/datas/menulist.json","",function (res) {
 					if (res.success) {
                         if (res.data.length != 0) { 
                             navbar.set({

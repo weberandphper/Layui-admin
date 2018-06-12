@@ -223,23 +223,23 @@
 					window.location.href = "login.html"
 				} else {
 					
-// 					ajaxmod.layuiGet("/api/sys/account/GetUserMenuList", "", function(res) {
-// 						var str = `<option value="">便捷菜单查询</option>`;
-// 						res.data.forEach(function (e) {
-// 							e.children.forEach(function (i) {
-// 								searchArr.push(i);
-// 								str+=`<option value=${i.id}>${i.title}</option>`;
-// 							})
-// 						})
-// 						$("#search-menu").html(`<select lay-filter="select-search" lay-search >${str}</select>`);
-// 						form.render();
-// 						if(!res.success) {
-// 							layer.msg(res.message, {
-// 								icon: 2
-// 							});
-// 							window.location.href = "login.html"
-// 						}
-// 					})
+					ajaxmod.layuiGet("/api/sys/account/GetUserMenuList", "", function(res) {
+						var str = `<option value="">便捷菜单查询</option>`;
+						res.data.forEach(function (e) {
+							e.children.forEach(function (i) {
+								searchArr.push(i);
+								str+=`<option value=${i.id}>${i.title}</option>`;
+							})
+						})
+						$("#search-menu").html(`<select lay-filter="select-search" lay-search >${str}</select>`);
+						form.render();
+						if(!res.success) {
+							layer.msg(res.message, {
+								icon: 2
+							});
+							window.location.href = "login.html"
+						}
+					})
 					
 				}
 				
