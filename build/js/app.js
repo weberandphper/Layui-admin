@@ -8,7 +8,7 @@
 
 var tab;
 
-layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar', 'onelevel','ajaxmod'], function(exports) {
+layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar', 'onelevel','ajaxmod','router'], function(exports) {
 	
 	var $ = layui.jquery,
 		element = layui.element,
@@ -22,6 +22,7 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 		navbar = layui.navbar,
 		tab = layui.tab,
 		ajaxmod = layui.ajaxmod,
+		router = layui.router,
 		_componentPath = 'components/';
 		
 	// 转换

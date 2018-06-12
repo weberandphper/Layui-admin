@@ -9,7 +9,8 @@ layui.config({
 	base: '/build/js/'
 }).extend({
 	ajaxmod: 'ajaxmod',
-	verifymod: 'verifymod'
+	verifymod: 'verifymod',
+	arouter: 'router'
 });
 
 

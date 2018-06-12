@@ -128,7 +128,7 @@
 			
 			layui.config({
 				base: 'build/js/'
-			}).use(['app', 'message', 'tab', 'ajaxmod','form'], function() {
+			}).use(['app', 'message', 'tab', 'ajaxmod','form','arouter'], function() {
 
 				var app = layui.app,
 					$ = layui.jquery,
@@ -137,7 +137,7 @@
 					tab = layui.tab,
 					form = layui.form,
 					ajaxmod = layui.ajaxmod,
-					router = layui.router,
+					arouter = layui.router,
 					// 将message设置为全局以便子页面调用
 					message = layui.message;
 					
@@ -227,6 +227,11 @@
 						var str = `<option value="">便捷菜单查询</option>`;
 						res.data.forEach(function (e) {
 							e.children.forEach(function (i) {
+								
+								
+							
+								
+								
 								searchArr.push(i);
 								str+=`<option value=${i.id}>${i.title}</option>`;
 							})
@@ -239,6 +244,10 @@
 							});
 							window.location.href = "login.html"
 						}
+						
+						console.log("test"+arouter.lists)
+						
+						
 					})
 					
 				}
