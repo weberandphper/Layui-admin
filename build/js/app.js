@@ -8,7 +8,7 @@
 
 var tab;
 
-layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar', 'onelevel','ajaxmod','router'], function(exports) {
+layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar', 'onelevel','ajaxmod', 'routermod'], function(exports) {
 	
 	var $ = layui.jquery,
 		element = layui.element,
@@ -22,7 +22,7 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 		navbar = layui.navbar,
 		tab = layui.tab,
 		ajaxmod = layui.ajaxmod,
-		router = layui.router,
+		routermod = layui.routermod,
 		_componentPath = 'components/';
 		
 	// 转换
@@ -133,6 +133,10 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 				ajaxmod.layuiGet("/datas/menulist.json","",function (res) {
 					if (res.success) {
                         if (res.data.length != 0) { 
+                        	
+                        	
+                        	
+                        	
                             navbar.set({
                                 data: res.data
                             }).render(function (data) {
@@ -143,10 +147,6 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 						layer.msg("获取用户权限列表失败,推荐联系管理员", {icon: 2});
 					}
 				},1)
-				
-				
-				
-				
 			}
 			return that;
 		}
@@ -162,17 +162,6 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 			tab.tabAdd(data);
 		});
 	});
-
-	// 换肤
-//	$("document").on("click","dl.skin > dd", function () {
-//		var skin = $this.children('a').data('skin');
-//		switchSkin(skin);
-//	})
-//	
-//	$('dl.skin > dd').on('click', function() {
-//		var skin = $this.children('a').data('skin');
-//		switchSkin(skin);
-//	});
 	
 	var setSkin = function(value) {
 			layui.data('kit_skin', {

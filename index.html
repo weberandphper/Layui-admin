@@ -114,8 +114,8 @@
 		<script src="./plugins/vue.min.js"></script>
 		<!--公共函数库-->
 		<script src="./common.js"></script>
-		<script src="https://js.fundebug.cn/fundebug.1.1.0.min.js"
-        apikey="52bc85eea4bc6c35cd9265f880502c96c5790ffd0ffbf0baa53f73aaf9e8fc00"></script>
+		<!--<script src="https://js.fundebug.cn/fundebug.1.1.0.min.js"
+        apikey="52bc85eea4bc6c35cd9265f880502c96c5790ffd0ffbf0baa53f73aaf9e8fc00"></script>-->
 		<script>
 			
 			var vm = new Vue({
@@ -128,7 +128,7 @@
 			
 			layui.config({
 				base: 'build/js/'
-			}).use(['app', 'message', 'tab', 'ajaxmod','form','arouter'], function() {
+			}).use(['app', 'message', 'tab', 'ajaxmod','form', 'routermod'], function() {
 
 				var app = layui.app,
 					$ = layui.jquery,
@@ -137,7 +137,7 @@
 					tab = layui.tab,
 					form = layui.form,
 					ajaxmod = layui.ajaxmod,
-					arouter = layui.router,
+					routermod = layui.routermod,
 					// 将message设置为全局以便子页面调用
 					message = layui.message;
 					
@@ -174,10 +174,10 @@
 							title: "机器人库",
 							url: "main.html"
 						} : data;
-						$(".layui-tab-title").children("li[lay-id]").each(function() {
-							var e = $(this).attr("lay-id"); -
-							1 != e && element.tabDelete('kitTab', e);
-						})
+//						$(".layui-tab-title").children("li[lay-id]").each(function() {
+//							var e = $(this).attr("lay-id"); -
+//							1 != e && element.tabDelete('kitTab', e);
+//						})
 						layer.load(2, {
 							shade: [0.2, "black"]
 						});
@@ -216,22 +216,35 @@
 				var searchArr = [];
 
 				// 验证登录
-				if(cookie.get('usertoken') == "" || cookie.get('usertoken') == undefined) {
-					layer.msg("对不起，你没有登录", {
-						icon: 2
-					});
+				if (!cookie.has('usertoken')) {
+			    	layer.msg("登录验证失效，即将跳转到登录页面", {
+			    		icon: 2,
+			    		shade: [0.8, '#393D49']
+			    	});
 					window.location.href = "login.html"
-				} else {
-					
+			    } else {
 					ajaxmod.layuiGet("/api/sys/account/GetUserMenuList", "", function(res) {
 						var str = `<option value="">便捷菜单查询</option>`;
 						res.data.forEach(function (e) {
 							e.children.forEach(function (i) {
+								var strarr = i.url.split("/");
+								var anchor = strarr[strarr.length-1].split(".")[0];
+								routermod.add(anchor, (function (i) {
+					        		return function () {
+					        			var data = {
+											icon: i.icon,
+											id: i.id,
+											title: i.title,
+											url: i.url
+										};
+					        			active.changePage(data);
+					        		}
+					        	}(i)))
 								
-								
-							
-								
-								
+								window.onhashchange = function() {
+						            routermod.reload();
+						        };
+												
 								searchArr.push(i);
 								str+=`<option value=${i.id}>${i.title}</option>`;
 							})
@@ -244,12 +257,7 @@
 							});
 							window.location.href = "login.html"
 						}
-						
-						console.log("test"+arouter.lists)
-						
-						
-					})
-					
+					})					
 				}
 				
 				// 便捷查询
@@ -266,7 +274,6 @@
 			function tologins() {
 				window.location.href = "/login.html"
 			}
-			
 		</script>
 	</body>
 </html>

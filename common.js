@@ -10,16 +10,8 @@ layui.config({
 }).extend({
 	ajaxmod: 'ajaxmod',
 	verifymod: 'verifymod',
-	arouter: 'router'
+	routermod: 'routermod'
 });
-
-
-
-
-
-
-
-
 
 // 提示更新浏览器
 (function(w) {
@@ -95,6 +87,10 @@ layui.config({
 	function get(name){
 		return decodeURIComponent(getCookiesObj()[name]) || null;
 	}
+	// 判断cookie存在
+	function has(name) {
+		return document.cookie.indexOf(name) == -1 ? false : true;
+	}
 	//清除某个cookie
 	function remove(name){
 		if(getCookiesObj()[name]){
@@ -128,6 +124,7 @@ layui.config({
 	global['cookie'] = {
 		'getCookies': getCookies,
 		'set': set,
+		'has': has,
 		'get': get,
 		'remove': remove,
 		'clear': clear,
