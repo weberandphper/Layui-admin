@@ -144,6 +144,8 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 				},1)
 				
 				
+				
+				
 			}
 			return that;
 		}
