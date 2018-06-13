@@ -150,13 +150,19 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 
 	// 菜单切换
 	$('#tonpl').on('click', function() {
-		navbar.set({
-			remote: {
-				url: '/nlplist.json'+"?token"+parameter
+		ajaxmod.layuiGet("/datas/nlplist.json","",function (res) {
+			if (res.success) {
+				if (res.data.length != 0) { 
+					navbar.set({
+						data: res.data
+					}).render(function(data) {
+						tab.tabAdd(data);
+					});
+				}
+			} else {
+				layer.msg("获取用户权限列表失败,推荐联系管理员", {icon: 2});
 			}
-		}).render(function(data) {
-			tab.tabAdd(data);
-		});
+		},1)
 	});
 	
 	var setSkin = function(value) {
