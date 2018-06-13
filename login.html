@@ -2,11 +2,11 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
+	<title>登录</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录</title>
     <link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="./common.css">
+	<link rel="shortcut icon" href="favicon.ico">
     <style type="text/css">
 		
         #login-page:after {
@@ -86,7 +86,6 @@
 		
     </style>
 </head>
-
 <body id="login-page">
     <div class="layui-container">
 		<div class="layui-row layui-row-space10">
@@ -101,15 +100,15 @@
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-icon layui-icon-username" for="UserName"></label>
-							<input type="text" name="UserName" id="UserName" lay-verify="required" placeholder="用户名或者邮箱" autocomplete="off" class="layui-input">
+							<input type="text" name="UserName" id="UserName" lay-verify="required|account" placeholder="用户名或者邮箱" autocomplete="off" class="layui-input">
 						</div>
 						<div class="layui-form-item">
 							<label class="layui-icon layui-icon-password" for="Password"></label>
-							<input type="password" name="Password" id="Password" lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+							<input type="password" name="Password" id="Password" lay-verify="required|password" placeholder="密码" autocomplete="off" class="layui-input">
 						</div>
 						<div class="layui-form-item">
 						    <label class="layui-icon layui-icon-vercode" for="Captcha"></label>
-							<input type="text" name="Captcha" id="Captcha" lay-verify="captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification">
+							<input type="text" name="Captcha" id="Captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification">
 							<div class="captcha-img">
 								<img id="captchaPic" src="">
 							</div>
@@ -152,11 +151,12 @@
             return uuid;
         }
 
-        layui.use(['jquery', 'form', 'ajaxmod', 'layer'], function () {
+        layui.use(['jquery', 'form', 'layer', 'ajaxmod', 'verifymod'], function () {
             var $ = layui.jquery,
                 form = layui.form,
                 layer = layui.layer,
-                ajaxmod = layui.ajaxmod;
+                ajaxmod = layui.ajaxmod,
+				verifymod = layui.verifymod;
 
             if (localStorage.getItem('rememberme')) {
                 var setval = JSON.parse(localStorage.getItem('rememberme'));
@@ -171,6 +171,9 @@
             $("#captchaPic").click(function () {
                 $("#captchaPic").attr('src', baseUrl + "/api/sys/security/GetCaptcha?uuid=" + uuidstr());
             });
+			
+			// 字段校验
+			form.verify(verifymod);
 
             //监听提交
             form.on('submit(form-login)', function (data) {
@@ -200,8 +203,7 @@
                         layer.msg(res.message, {
                             icon: 2
                         });
-                        $("#captchaPic").attr('src', baseUrl +
-                            "/api/sys/security/GetCaptcha?uuid=" + uuidstr());
+                        $("#captchaPic").attr('src', baseUrl + "/api/sys/security/GetCaptcha?uuid=" + uuidstr());
                     }
                 })
                 return false;

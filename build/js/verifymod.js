@@ -17,180 +17,46 @@ layui.define(['jquery'], function(exports) {
 			
 		// 常见验证规则 
 		
-		// account
-		cAccount: function (value) {
-			
-			
-			
-		},
+		// 账号
+		account: [/(.+){4,12}$/, '账号必须4到12位'],
 		// 姓名
-		cUsername: function (value) {
-			
-			
+		username: function (value) {
 			
 		},
 		// 密码
-		cPassword: function (value) {
-			
-			
-			
-		},
+		password: [/(.+){4,10}$/, '密码必须4到10位'],
 		// 验证码
-		cCaptchaPic: function (value) {
-			
-			
-			
+		captcha: function (value) {
+			if(value.length != 4) {
+				return '验证码必须为4位';
+			}
 		},
 		// 金额
-		cPrice: function (value) {
+		price: function (value) {
 			
 			
 			
 		},
 		// 经度
-		cLongitude: function (value) {
+		longitude: function (value) {
 			
 			
 			
 		},
 		// 维度
-		cDimension: function (value) {
+		dimension: function (value) {
 			
 			
 			
 		},
 		// 备注等类似字串
-		cStr: function (value) {
+		remark: function (value) {
 			
 			
 		},
-		
- 
- 
- 
-
-		// 公共部分
-		price: function (value) {					// 价格
-			
-		},
-		
-		// 添加机器人
-		code: function (value) {					// 机器人出场编号
-			
-		},
-		price: function (value) {					// 入库价格
-		
-		},
-		// 机器人库
-		reason: function (value) {					// 报修原因
-			
-		},
-		repaircost: function (value) {				// 报修费用
-			
-			
-		},
-		// 维修记录
-		cost: function (value) {					// 维修成本
-			
-			
-		},
-		// 公司列表
-		Code: function (value) {
-			
-		},
-		Code: function (value) {
-			
-		},
-		Code: function (value) {
-			
-		},
-		
-		
-		
-		Code: function (value) {
-			
-		},
-		Code: function (value) {
-			
-		},
-		Code: function (value) {
-			
-		},
-		
-
-
-		company: function(value) {
-			if(value.length < 5) {
-				return '标题至少得5个字符啊';
-			}
-		},
-		pass: [/(.+){6,12}$/, '密码必须6到12位'],
-		content: function(value) {
-			layedit.sync(editIndex);
-		},
-		address: function(value) {
-			if(value == '') {
-				return '';
-			}
-		},
-		contacts: function(value) {
-			
-			
-			
-
-			//	    	if(value!=$("#addaccount input[id='pass']").val()){
-			//	    		return '密码不一致';
-			//	    	}
-
-		},
-		contacts2: function(value) {
-
-			//	    	if(value!=$("#addaccount input[id='resetpass']").val()){
-			//	    		return '密码不一致';
-			//	    	}
-
-		},
-		
-		
-		oldpassword: function(value) {
-			
-			
-			
-
-			//	    	if(value!=$("#addaccount input[id='pass']").val()){
-			//	    		return '密码不一致';
-			//	    	}
-
-
-
-		},
-		newpassword: function(value) {
-
-
-
-
-
-			//	    	if(value!=$("#addaccount input[id='resetpass']").val()){
-			//	    		return '密码不一致';
-			//	    	}
-			
-			
-			
-
-		},
-		
-		
-		
 		
 	};
 
 
-
-
-
 	exports('verifymod', verifyobj);
-	
-	
-	
-	
 });
