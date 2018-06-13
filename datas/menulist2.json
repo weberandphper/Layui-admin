@@ -1,98 +1,187 @@
-[{
-    "id": "2",
-    "title": "组件",
-    "icon": "fa-cogs",
-    "spread": false,
-    "children": [{
-        "id": "12",
-        "title": "Navbar",
-        "icon": "fa-table",
-        "url": "navbar.html"
-    }, {
-        "id": "13",
-        "title": "Tab",
-        "icon": "&#xe658;",
-        "url": "tab.html"
-    }, {
-        "id": "14",
-        "title": "app.js主入口",
-        "icon": "&#xe658;",
-        "url": "app.html"
-    }]
-}, {
-    "id": "1",
-    "title": "基本元素",
-    "icon": "fa-cubes",
-    "spread": true,
-    "children": [{
-        "id": "7",
-        "title": "表格",
-        "icon": "&#xe6c6;",
-        "url": "test.html"
-    }, {
-        "id": "8",
-        "title": "表单",
-        "icon": "&#xe63c;",
-        "url": "form.html"
-    }, {
-        "id": "9",
-        "title": "导航栏",
-        "icon": "&#xe628;",
-        "url": "nav.html"
-    }, {
-        "id": "10",
-        "title": "列表四",
-        "icon": "&#xe614;",
-        "url": "list4.html"
-    }, {
-        "id": "11",
-        "title": "百度一下",
-        "icon": "&#xe658;",
-        "url": "https://www.baidu.com"
-    }]
-}, {
-    "id": "4",
-    "title": "地址本",
-    "icon": "fa-address-book",
-    "url": "",
-    "spread": false,
-    "children": [{
-        "id": "17",
-        "title": "Github",
-        "icon": "fa-github",
-        "url": "https://www.github.com/"
-    }, {
-        "id": "18",
-        "title": "QQ",
-        "icon": "fa-qq",
-        "url": "http://www.qq.com/"
-    }, {
-        "id": "19",
-        "title": "Fly社区",
-        "icon": "&#xe609;",
-        "url": "http://fly.layui.com/"
-    }, {
-        "id": "20",
-        "title": "新浪微博",
-        "icon": "fa-weibo",
-        "url": "http://weibo.com/"
-    }]
-}, {
-    "id": "5",
-    "title": "这是一级导航",
-    "icon": "fa-stop-circle",
-    "url": "https://www.baidu.com",
-    "spread": false
-}, {
-    "id": "6",
-    "title": "其他",
-    "icon": "fa-stop-circle",
-    "url": "#",
-    "spread": false,
-    "children": [{
-        "id": "21",
-        "title": "子窗体中打开选项卡",
-        "icon": "fa-github",
-        "url": "cop.html"
-    }]
-}]
+{
+	"data": [{
+		"id": 1,
+		"title": "机器人管理",
+		"url": "",
+		"icon": "fa fa fa-android",
+		"children": [{
+			"id": 13,
+			"title": "添加机器人",
+			"url": "module/robot/addrobot.html",
+			"icon": "fa fa-plus",
+			"children": []
+		}, {
+			"id": 14,
+			"title": "机器人库",
+			"url": "module/robot/robotstore.html",
+			"icon": "fa fa-bank",
+			"children": []
+		}, {
+			"id": 15,
+			"title": "维修记录",
+			"url": "module/robot/repairrecord.html",
+			"icon": "fa fa-list-alt",
+			"children": []
+		}]
+	}, {
+		"id": 2,
+		"title": "药店管理",
+		"url": null,
+		"icon": "fa fa fa-institution",
+		"children": [{
+			"id": 16,
+			"title": "公司列表",
+			"url": "module/drugstore/companylist.html",
+			"icon": "fa fa-hospital-o",
+			"children": []
+		}, {
+			"id": 17,
+			"title": "药店列表",
+			"url": "module/drugstore/drugstorelist.html",
+			"icon": "fa fa-medkit",
+			"children": []
+		}, {
+			"id": 18,
+			"title": "药店销售统计",
+			"url": "module/drugstore/drugstorecount.html",
+			"icon": "fa fa-bar-chart",
+			"children": []
+		}]
+	}, {
+		"id": 3,
+		"title": "问药管理",
+		"url": null,
+		"icon": "fa fa fa-heartbeat",
+		"children": [{
+			"id": 19,
+			"title": "问药记录",
+			"url": "module/query/queryrecord.html",
+			"icon": "fa fa-list-alt",
+			"children": []
+		}]
+	}, {
+		"id": 4,
+		"title": "药品查询",
+		"url": null,
+		"icon": "fa fa fa-search-plus",
+		"children": [{
+			"id": 21,
+			"title": "搜索关键词排名",
+			"url": "module/drug/keyword.html",
+			"icon": "fa fa-key",
+			"children": []
+		}]
+	}, {
+		"id": 5,
+		"title": "会员管理",
+		"url": null,
+		"icon": "fa fa fa-user",
+		"children": [{
+			"id": 22,
+			"title": "会员列表",
+			"url": "module/member/memberlist.html",
+			"icon": "fa fa-list-alt",
+			"children": []
+		}]
+	}, {
+		"id": 6,
+		"title": "健康管理",
+		"url": null,
+		"icon": "fa fa fa-stethoscope",
+		"children": [{
+			"id": 23,
+			"title": "患者列表",
+			"url": "module/health/patient.html",
+			"icon": "fa fa-list-alt",
+			"children": []
+		}, {
+			"id": 24,
+			"title": "慢病患者统计",
+			"url": "module/health/patientcount.html",
+			"icon": "fa fa-area-chart",
+			"children": []
+		}]
+	}, {
+		"id": 7,
+		"title": "语音交互",
+		"url": null,
+		"icon": "fa fa fa-volume-up",
+		"children": [{
+			"id": 25,
+			"title": "语音记录",
+			"url": "module/voice/voicerecord.html",
+			"icon": "fa fa-volume-off",
+			"children": []
+		}, {
+			"id": 26,
+			"title": "特定语义管理",
+			"url": "module/voice/semantic.html",
+			"icon": "fa fa-tags",
+			"children": []
+		}]
+	}, {
+		"id": 9,
+		"title": "数据统计",
+		"url": null,
+		"icon": "fa fa fa-bar-chart",
+		"children": [{
+			"id": 30,
+			"title": "机器人使用统计",
+			"url": "module/count/robotusecount.html",
+			"icon": "fa fa-pie-chart",
+			"children": []
+		}]
+	}, {
+		"id": 10,
+		"title": "财务管理",
+		"url": null,
+		"icon": "fa fa fa-money",
+		"children": [{
+			"id": 31,
+			"title": "交易明细",
+			"url": "module/finance/tradedetail.html",
+			"icon": "fa fa-cny",
+			"children": []
+		}]
+	}, {
+		"id": 11,
+		"title": "账号管理",
+		"url": null,
+		"icon": "fa fa fa-user-secret",
+		"children": [{
+			"id": 32,
+			"title": "账号管理",
+			"url": "module/account/account.html",
+			"icon": "fa fa-user fa-fw",
+			"children": []
+		}, {
+			"id": 33,
+			"title": "角色管理",
+			"url": "module/account/role.html",
+			"icon": "fa fa-user-circle-o",
+			"children": []
+		}]
+	}, {
+		"id": 12,
+		"title": "其他设置",
+		"url": null,
+		"icon": "fa fa fa-gear",
+		"children": [{
+			"id": 34,
+			"title": "操作日志",
+			"url": "module/other/log.html",
+			"icon": "fa fa-list-alt",
+			"children": []
+		}, {
+			"id": 35,
+			"title": "修改密码",
+			"url": "module/other/resetpassword.html",
+			"icon": "fa fa-key fa-fw",
+			"children": []
+		}]
+	}],
+	"count": 0,
+	"success": true,
+	"message": "",
+	"code": 200
+}

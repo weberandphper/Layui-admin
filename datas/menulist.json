@@ -58,12 +58,6 @@
 			"url": "module/query/queryrecord.html",
 			"icon": "fa fa-list-alt",
 			"children": []
-		}, {
-			"id": 20,
-			"title": "问药数据统计",
-			"url": "module/query/queryaccount.html",
-			"icon": "fa fa-line-chart",
-			"children": []
 		}]
 	}, {
 		"id": 4,
@@ -123,30 +117,6 @@
 			"title": "特定语义管理",
 			"url": "module/voice/semantic.html",
 			"icon": "fa fa-tags",
-			"children": []
-		}, {
-			"id": 27,
-			"title": "语音交互数据统计",
-			"url": "module/voice/semanticcount.html",
-			"icon": "fa fa-area-chart",
-			"children": []
-		}]
-	}, {
-		"id": 8,
-		"title": "人脸识别",
-		"url": null,
-		"icon": "fa fa fa-eye",
-		"children": [{
-			"id": 28,
-			"title": "人脸数据库",
-			"url": "module/face/facedatabase.html",
-			"icon": "fa fa-female",
-			"children": []
-		}, {
-			"id": 29,
-			"title": "人脸识别数据统计",
-			"url": "module/face/facecount.html",
-			"icon": "fa fa-pie-chart",
 			"children": []
 		}]
 	}, {
