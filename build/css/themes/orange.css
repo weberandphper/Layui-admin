@@ -5,6 +5,10 @@
 	background-color: #ff6700
 }
 
+.kit-theme .layui-layout-admin .layui-logo a{
+	color: #fff;
+}
+
 .kit-theme .kit-layout-admin .layui-header {
 	background-color: #fff;
 	border-bottom: 2px solid #ff6700

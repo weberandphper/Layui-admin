@@ -120,16 +120,15 @@ input[type='number']::-webkit-outer-spin-button {
 /*layui slect替换*/
 select.lay-ignore {
 	width: 90%;
-    height: 38px;
+    height: 36px;
     line-height: 1.3;
     line-height: 38px\9;
-    border-width: 1px;
-    border-style: solid;
     background-color: #fff;
-    border-radius: 2px;
-	padding-right: 30px;
+	border: 0px;
+    outline: 1px solid #eeeeee;
 	cursor: pointer;
-	border-color: #eeeeee;
+	position: relative;
+	top: 1px;
 }
 
 select.lay-ignore option {

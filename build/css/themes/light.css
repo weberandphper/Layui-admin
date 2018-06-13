@@ -4,6 +4,10 @@
 	color: #2F4056
 }
 
+.kit-theme .layui-layout-admin .layui-logo a{
+	color: #fff;
+}
+
 .kit-theme .kit-layout-admin .layui-header {
 	background-color: #EEEEF2
 }
