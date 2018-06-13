@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,87 +26,107 @@
             bottom: 0;
             z-index: -1;
         }
-
-        #login-form {
-            margin-top: 220px;
-            margin-right: -20px;
-            background: #fff;
-            border: 1px solid #eeeeee;
-            border-radius: 10px;
-            padding: 50px 30px 20px 20px;
-        }
-
-        #login-form label {
-            font-weight: 400;
-            font-size: 16px;
-            text-align: left;
-        }
-
-        #login-form .verification {
-            width: 150px;
-        }
-
-        #captchaPic {
-            margin-top: -9px;
-            margin-left: -36px;
-        }
-
-        .logo-title {
-            display: none;
-            text-align: center;
-            padding-bottom: 20px;
-            font-weight: 100;
-            letter-spacing: 2px;
-        }
+		
+		.logo-title {
+			text-align: center;
+			letter-spacing: 2px;
+			padding: 14px 0;
+		}
+		
+		.logo-title h1{
+			color: #007DDB;
+			font-size: 32px;
+			font-weight: 400;
+		}
+		
+		#login-form {
+			margin-top: 180px;
+			background-color: #fff;
+			border: 1px solid #fff;
+			border-radius: 3px;
+			padding: 14px 20px;
+			box-shadow: 0 0 8px #eeeeee;
+		}
+		
+		#login-form .layui-form-item {
+			position: relative;
+		}
+		
+		#login-form .layui-form-item label {
+			position: absolute;
+			left: 1px;
+			top: 1px;
+			width: 38px;
+			line-height: 36px;
+			text-align: center;
+			color: #d2d2d2;
+		}
+		
+		#login-form .layui-form-item input {
+			padding-left: 36px;
+		}
+		
+		#Captcha {
+			width: 60%;
+			display: inline-block;
+		}
+		
+		.captcha-img {
+			display: inline-block;
+			width: 34%;
+			float: right;
+		}
+		
+		.captcha-img img {
+			height: 34px;
+			border: 1px solid #e6e6e6;
+			height: 36px;
+			width: 100%;
+		}
+		
     </style>
 </head>
 
 <body id="login-page">
     <div class="layui-container">
-        <div class="layui-row">
-            <div class="layui-col-md5 layui-col-md-offset7">
-                <div class="layui-form" id="login-form">
-                    <form class="layui-form" action="">
-                        <div class="layui-form-item logo-title">
-                            <h1>用户登录</h1>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">用户名:</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="UserName" lay-verify="required" placeholder="请输入用户名或者邮箱" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">密码:</label>
-                            <div class="layui-input-block">
-                                <input type="password" name="Password" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item" style="margin: 0;">
-                            <label class="layui-form-label">验证码</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="Captcha" lay-verify="captcha" placeholder="请输入验证码" autocomplete="off" class="layui-input verification">
-                            </div>
-                            <div class="layui-form-mid layui-word-aux">
-                                <img style="width:70px;" id="captchaPic" src="">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label"></label>
-                            <div class="layui-input-block">
-                                <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住帐号?">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <div class="layui-input-block">
-                                <button class="layui-btn" lay-submit lay-filter="form-login"> 登陆</button>
-                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+		<div class="layui-row layui-row-space10">
+			<div class="layui-col-xs2 layui-col-md4">
+				.
+			</div>
+			<div class="layui-col-xs8 layui-col-md4">
+				<div class="layui-form" id="login-form">
+					<form class="layui-form" action="">
+						<div class="layui-form-item logo-title">
+							<h1>用户登录</h1>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-icon layui-icon-username" for="UserName"></label>
+							<input type="text" name="UserName" id="UserName" lay-verify="required" placeholder="用户名或者邮箱" autocomplete="off" class="layui-input">
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-icon layui-icon-password" for="Password"></label>
+							<input type="password" name="Password" id="Password" lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+						</div>
+						<div class="layui-form-item">
+						    <label class="layui-icon layui-icon-vercode" for="Captcha"></label>
+							<input type="text" name="Captcha" id="Captcha" lay-verify="captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification">
+							<div class="captcha-img">
+								<img id="captchaPic" src="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住密码">
+						</div>
+						<div class="layui-form-item">
+							<button class="layui-btn layui-btn-fluid" lay-submit lay-filter="form-login">登 入</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="layui-col-xs2 layui-col-md4">
+				.
+			</div>
+		</div>
     </div>
     <script src="./plugins/layui/layui.js"></script>
     <script src="common.js"></script>
