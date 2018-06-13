@@ -133,10 +133,6 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 				ajaxmod.layuiGet("/datas/menulist.json","",function (res) {
 					if (res.success) {
                         if (res.data.length != 0) { 
-                        	
-                        	
-                        	
-                        	
                             navbar.set({
                                 data: res.data
                             }).render(function (data) {
