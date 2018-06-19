@@ -52,15 +52,16 @@
 }
 
 .formele-lg {
-	
+	display: inline-block;
 }
 
 .formele-md {
-	
+	display: inline-block;
 }
 
 .formele-sm {
 	width: 460px !important;
+	display: inline-block;
 }
 
 .formele-xs {
@@ -154,7 +155,8 @@ select.lay-ignore option {
 .must-input {
 	font-size: 14px;
 	color: red;
-	padding-right: 2px;
+	padding-left: 8px;
+	display: inline-block;
 }
 
 .disable-btn {
@@ -171,11 +173,6 @@ select.lay-ignore option {
 	content:"*";
 	color: red;
 }
-
-/*必选项标注*/
-.positiondiv{position: relative;}
-.positionspan{right:-15px;top:15px;position: absolute;}
-
 
 
 

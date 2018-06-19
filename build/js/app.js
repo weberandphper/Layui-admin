@@ -294,7 +294,7 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 			id: 'systemnews',
 			btn: ['知道了 !'],
 			moveType: 1,
-			content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; text-indent:2em;border-bottom:1px solid #e2e2e2;"><p>科大智能健康顾问平台是建立于AI的技术基础上，为医疗领域做出新突破，帮助我们合理了解自身情况的服务平台。</p></div>',
+			content: '<div style="padding:15px 20px; text-align:justify; line-height: 22px; text-indent:2em;border-bottom:1px solid #e2e2e2;"><p>一个基于layui和vue的后台管理系统模版</p></div>',
 			success: function(layero) {
 				var btn = layero.find('.layui-layer-btn');
 				btn.css('text-align', 'center');

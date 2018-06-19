@@ -1,265 +1,161 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>添加机器人</title>
-		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
-		<link rel="stylesheet" href="../../common.css">
-		<style>
-			
-			/*私有公共样式修改,只能在该页面中有效*/
-			#addrobot-form {
-				margin-top: 50px;
-			}
-			
-			.layui-input-block {
-			    margin-left: 136px;
-			}
-			
-			.label-box {
-				background: #f3f3f3;
-			}
-			
-			.lay-ignore {
-				width: 100% !important;
-			}
-			
-			/*.layui-form-item {
-				position: relative;
-			}
-			
-			.layui-badge {
-			    height: 24px;
-			    line-height: 24px;
-			}*/
-			
-		</style>
-	</head>
-	<body>
-		<div class="layui-fluid iframe-top" id="addrobot">
-			<div class="layui-row">
-				<div class="layui-col-md2">
-					&nbsp;
-				</div>
-				<div class="layui-col-md5">
-					<div class="layui-form-query">
-						<form class="layui-form" id="addrobot-form">
-							<div class="layui-form-item positiondiv">
-								<label class="layui-form-mid">机器人类型：</label>
-								<div class="layui-input-block formele-sm">
-									<select class="lay-ignore" name="Type" lay-verify="required" lay-ignore>
-										<option value="">请选择机器人类型</option>
-										<option v-for="item in baseData.robotType" :value="item.key">{{ item.value }}</option>
-									</select>
-								</div>
-								<span class="must-input positionspan"></span>
-							</div>
-							<div class="layui-form-item positiondiv">
-								<label class="layui-form-mid">生产企业：</label>
-								<div class="layui-input-block formele-sm">
-									<select class="lay-ignore" name="ProduceCompanyId" lay-verify="required" lay-ignore>
-										<option value="">请选择生产企业</option>
-										<option v-for="item in baseData.producer" :value="item.key">{{ item.value }}</option>
-									</select>
-								</div>
-								<span class="must-input positionspan"></span>
-							</div>
-							<div class="layui-form-item positiondiv">
-								<label class="layui-form-mid">机器人出场编号：</label>
-								<div class="layui-input-block">
-									<input type="text" class="layui-input formele-sm" name="Code" lay-verify="required|code" placeholder="机器人出场编号" autocomplete="off" >
-								</div>
-								<span class="must-input positionspan"></span>
-							</div>
-							<!--<div class="layui-form-item">
-								<label class="layui-form-mid">机器人配件：</label>
-								<div class="layui-input-block">
-									<button class="layui-btn layui-btn-primary layui-btn-sm" type="button" data-type="choose"> 选 择 </button>
-								</div>
-							</div>-->
-							<div class="layui-form-item robotpart positiondiv">
-								<label class="layui-form-mid">机器人配件：</label>
-								<div class="layui-input-block label-box formele-sm robotparts" v-cloak>
-									<span class="ancheckbox-span" v-for="(item,index) in baseData.robotPart">
-										<input type="checkbox" class="ancheckbox" name="Parts[]" :id="item.key" :title="item.value" :value="item.key" lay-skin="primary"><label :for="item.key">{{ item.value }}</label>
-									</span>
-								</div>
-								<span class="must-input positionspan"></span>
-							</div>
-							<div class="layui-form-item positiondiv">
-								<label class="layui-form-mid">入库价格：</label>
-								<div class="layui-input-block">
-									<input type="text" class="layui-input formele-sm" name="Price" lay-verify="required|price" placeholder="请输入入库价格" autocomplete="off">
-								</div>
-								<span class="must-input positionspan"></span>
-							</div>
-							<div class="layui-form-item">
-								<label class="layui-form-mid">备注信息：</label>
-								<div class="layui-input-block">
-									<input type="text" class="layui-input formele-sm" name="Remark" placeholder="请输入备注信息" autocomplete="off">
-								</div>
-							</div>
-							<div class="layui-form-item">
-								<br>
-								<div class="layui-input-block">
-									<button class="layui-btn layui-btn-lg layui-btn-normal" lay-submit lay-filter="submit-form">提交</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="layui-col-md5">
-					&nbsp;
-				</div>
-			</div>
-		</div>
-		<script src="../../plugins/layui/layui.js"></script>
-		<script src="../../plugins/vue.min.js"></script>
-		<script src="../../common.js"></script>
-		<script>
-			
-			// 基础数据
-			var vm = new Vue({
-				el: "#addrobot",
-				data: {
-					baseData: {},
-					
-				},
-				created() {
-					
-					layui.use(['form','layer','jquery','ajaxmod','verifymod'], function () {
-						var $ = layui.jquery,
-						    layer = layui.layer,
-						    form = layui.form,
-						    ajaxmod = layui.ajaxmod,
-						    verifymod = layui.verifymod;
-						    
-						// 基础数据获取
-						ajaxmod.layuiPost("/api/sys/robot/RobotAddStatic","",function (res) {
-							if (res.success) {
-								vm.baseData = res.data;
-							} else {
-								layer.msg(res.message, {icon: 2});
-							}
-						});
-						
-						var	active = {
-						    // 选择
-						    choose: function () {
-						    	var obj = [
-					    			{
-					    				id: 2,
-					    				name: '机器人主体',
-					    				checked: true,
-					    				value: 1
-					    			},
-					    			{
-					    				id: 3,
-					    				name: '血压计',
-					    				checked: true,
-					    				value: 1
-					    			},
-					    			{
-					    				id: 4,
-					    				name: '血氧仪',
-					    				checked: true,
-					    				value: 1
-					    			},
-					    			{
-					    				id: 5,
-					    				name: '体温计',
-					    				checked: true,
-					    				value: 1
-					    			},
-					    			{
-					    				id: 6,
-					    				name: '电源适配器',
-					    				checked: true,
-					    				value: 1
-					    			},
-				    			];
-				    			
-				    			var content = '';
-				    			$.each(obj, function(index,value) {
-				    				content = content+'<div class="layui-col-xs4"><input type="checkbox" name='+value.name+' value='+value.id+' lay-skin="primary" title='+value.name+' lay-filter="soncheckbox" class="soncheckbox"></div>';
-				    			});
-				    			var str = '<form class="layui-form iframe-top" action="" id="parts" ><div class="layui-form-item" pane=""><div class="layui-input-block"><div class="layui-col-xs4"><input type="checkbox" name="" lay-skin="primary" title="全选" lay-filter="allcheck" class="allcheck"></div>'+content+'</div></div></form>';
-						    	layer.open({
-						    		type: 1,
-						    		title: '机器人配件',
-						    		content: str,
-						    		skin: 'demo-class',
-						    		shade: 0.3,
-						    		shadeClose: true,
-						    		area: ['600px','400px'],
-						    		offset: '150px',
-						    		move: false,
-						    		btn: ['确认','取消'],
-						    		// 确认
-						    		yes: function (index,layero) {
-						    			vm.baseData.robotparts = $("#parts").serializeArray();
-						    			layer.close(index);
-						    		},
-						    		// 取消
-						    		btn2: function (index,layero) {
-						    			
-						    		},
-						    		success: function (layero,index) {
-						    			form.render();
-						    		},
-						    	})
-						    },
-						};
-					    
-					    // 字段校验
-						form.verify(verifymod);
-						
-						// 监听提交
-						form.on('submit(submit-form)', function(data){
-							// 获取机器人配件，以实际看到的标签为准
-							// var arr = vm.baseData.robotparts;
-							var data = $("#addrobot-form").serialize();
-							ajaxmod.layuiPost("/api/sys/robot/RobotAdd",data, function (res) {
-								if(res.success){
-									layer.msg('操作成功', {icon: 1});
-				                }else{
-				                	layer.msg(res.message, {icon: 2});
-				                }
-							})
-				            return false;
-						});
+
+<head>
+    <meta charset="utf-8">
+    <title>添加机器人</title>
+    <link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../common.css">
+    <style>
+        /*私有公共样式修改,只能在该页面中有效*/
+  
+        .lay-ignore {
+            width: 100% !important;
+        }
 				
-						form.on('checkbox(allcheck)', function(data) {
-							data.elem.checked ? $(".soncheckbox").attr("checked","checked"):$(".soncheckbox").attr("checked",false);
-							data.elem.checked ? $(".soncheckbox").prop("checked",true):$(".soncheckbox").prop("checked",false);
-							form.render();
-						});
-						
-						form.on('checkbox(soncheckbox)', function(data) {
-							var arr = [];
-							$(this).attr("checked","checked")
-							
-							$(".soncheckbox").map(function (index,ele) {
-								arr.push(ele.checked);
-							});
-							console.log(arr);
-							var key = arr.every(function (b) {
-								return b == true;
-							})
-							key ? $(".allcheck").attr("checked","checked") : $(".allcheck").attr("checked",false);
-							form.render();
-						})
-		
-						$('#addrobot .layui-btn').on('click', function(){
-					        var type = $(this).data('type');
-					        active[type] ? active[type].call(this) : '';
-					    });
-					})
-				},
-				mounted() {
-					
+				.position-rel {
+					position: relative;
 				}
-			})
-		</script>
-	</body>
+				
+				.must-input {
+					position: absolute;
+					top: 14px;
+					right: -16px;
+				}
+				
+    </style>
+</head>
+
+<body>
+    <div class="layui-fluid iframe-top" id="addrobot">
+        <div class="layui-row">
+            <div class="layui-col-sm1 layui-col-md2">
+                &nbsp;
+            </div>
+            <div class="layui-col-sm8 layui-col-md6">
+                <div class="layui-form-query">
+                    <form class="layui-form" id="addrobot-form">
+                        <div class="layui-form-item position-rel">
+                            <label class="layui-form-mid">ID编号：</label>
+                            <div class="layui-input-block">
+                                <select class="lay-ignore" name="Type" lay-verify="required" lay-ignore>
+                                    <option value="">请选择相关类型</option>
+                                    <option v-for="item in baseData.robotType" :value="item.key">{{ item.value }}</option>
+                                </select>
+                            </div>
+                            <span class="must-input"></span>
+                        </div>
+                        <div class="layui-form-item position-rel">
+                            <label class="layui-form-mid">用户名：</label>
+                            <div class="layui-input-block">
+                                <select class="lay-ignore" name="ProduceCompanyId" lay-verify="required" lay-ignore>
+                                    <option value="">请选择生产企业</option>
+                                    <option v-for="item in baseData.producer" :value="item.key">{{ item.value }}</option>
+                                </select>
+                            </div>
+                            <span class="must-input"></span>
+                        </div>
+                        <div class="layui-form-item position-rel">
+                            <label class="layui-form-mid">性别：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" name="Code" lay-verify="required|code" placeholder="机器人出场编号" autocomplete="off">
+                            </div>
+                            <span class="must-input"></span>
+                        </div>
+                        <div class="layui-form-item position-rel">
+                            <label class="layui-form-mid">城市：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" name="Price" lay-verify="required|price" placeholder="请输入入库价格" autocomplete="off">
+                            </div>
+                            <span class="must-input"></span>
+                        </div>
+                        <div class="layui-form-item position-rel">
+                            <label class="layui-form-mid">积分：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" name="Remark" placeholder="请输入备注信息" autocomplete="off">
+                            </div>
+                        </div>
+												<div class="layui-form-item position-rel">
+														<label class="layui-form-mid">职业：</label>
+														<div class="layui-input-block">
+															<select class="lay-ignore" name="Type" lay-verify="required" lay-ignore>
+																	<option value="">请选择相关类型</option>
+																	<option v-for="item in baseData.robotType" :value="item.key">{{ item.value }}</option>
+															</select>
+														</div>
+														<span class="must-input"></span>
+												</div>
+                        <div class="layui-form-item">
+                            <br/>
+                            <div class="layui-input-block formele-sm">
+                                <button class="layui-btn layui-btn-lg layui-btn-normal" lay-submit lay-filter="submit-form">提交</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+				<div class="layui-col-sm3 layui-col-md4">
+					&nbsp;
+				</div>
+        </div>
+    </div>
+    <script src="../../plugins/layui/layui.js"></script>
+    <script src="../../plugins/vue.min.js"></script>
+    <script src="../../common.js"></script>
+    <script>
+        // 基础数据
+        var vm = new Vue({
+            el: "#addrobot",
+            data: {
+                baseData: {},
+
+            },
+            created() {
+
+                layui.use(['form', 'layer', 'jquery', 'ajaxmod', 'verifymod'], function () {
+                    var $ = layui.jquery,
+                        layer = layui.layer,
+                        form = layui.form,
+                        ajaxmod = layui.ajaxmod,
+                        verifymod = layui.verifymod;
+
+                    // 基础数据获取
+                    ajaxmod.layuiPost("/api/sys/robot/RobotAddStatic", "", function (res) {
+                        if (res.success) {
+                            vm.baseData = res.data;
+                        } else {
+                            layer.msg(res.message, {
+                                icon: 2
+                            });
+                        }
+                    });
+
+                    // 字段校验
+                    form.verify(verifymod);
+
+                    // 监听提交
+                    form.on('submit(submit-form)', function (data) {
+                        // 获取机器人配件，以实际看到的标签为准
+                        // var arr = vm.baseData.robotparts;
+                        var data = $("#addrobot-form").serialize();
+                        ajaxmod.layuiPost("/api/sys/robot/RobotAdd", data, function (res) {
+                            if (res.success) {
+                                layer.msg('操作成功', {
+                                    icon: 1
+                                });
+                            } else {
+                                layer.msg(res.message, {
+                                    icon: 2
+                                });
+                            }
+                        })
+                        return false;
+                    });
+                })
+            }
+        })
+    </script>
+</body>
+
 </html>
