@@ -84,7 +84,7 @@ git clone https://github.com/weberandphper/Layui-admin.git
 
 ## 运行程序
 
-配置common.js接口和Layui模块入口
+配置common.js接口地址和Layui模块入口
 
 localhost/index.html
 
@@ -201,6 +201,9 @@ vue 绑定数据在遇到select和checkbox有问题
 本项目是后台系统，所以主要开发任务在于功能页面的开发，前端module内的模块划分按照业务模块（原型）或者后端模块划分即可，具体命名可以和后端统一下。划分和单页应用开发的划分是类似的。
 
 
+## 前端路由部分
+
+该后台模板支持前端路由，采用url hash 原理，比如即  http://localhost/index.html#adduser, iframe 就会去请求module/user/adduser.html 页面完成加载。路由地址在build/js/routermod.js下，路由模块加载位于common.js下，在index.html完成对权限列表的添加。
 
 
 

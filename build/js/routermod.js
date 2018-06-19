@@ -49,15 +49,12 @@ layui.define(function(exports) {
      * 重载页面
      */
     Router.prototype.reload = function() {
-    	
-    	
-//  	console.log(this.hashList)
-        
-        
+    	console.log(this.hashList)
         var self = this;
         var hash = window.location.hash.replace('#' + self.key, '');
         var addr = hash.split('/')[0];
         var cb = getCb(addr, self.hashList);
+       
         if(cb != false) {
             var arr = hash.split('/');
             arr.shift();
