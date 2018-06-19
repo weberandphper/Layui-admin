@@ -229,6 +229,15 @@ Layui配合vue使用中出现的问题
 Layui对原生表单的封装在和vue绑定数据的时候会有问题。
 
 
+## 存在的问题
+
+iframe中相同资源的加载
+
+index.html和子iframe中的相同静态资源浏览器是怎么处理的呢？
+
+你会发现假如你在父页面中引用了common.css,在子页面中的common.css是不是直接用缓存了呢？实际上iframe的所有资源浏览器是会重新请求一遍。这点不同于子页面是ajax获取渲染的方式。父页面和子页面（iframe）的数据传递就不要用url传值了，这个在序列化复杂对象时会有问题，推荐直接layero.find("iframe")[0].contentWindow.vm.setdata(data)这种，细节见代码，子对父的传值 parent.closeandrefresh()，加上双向数据绑定开发会很方便
+
+
 
 
 ## 目标
