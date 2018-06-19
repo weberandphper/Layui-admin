@@ -69,10 +69,6 @@ git clone https://github.com/weberandphper/Layui-admin.git
 
 
 
-
-
-
-
 ## 效果展示
 
 [查看demo请戳这里](http://www.anspray.com/)（请用chrome浏览器预览）
@@ -235,8 +231,11 @@ iframe中相同资源的加载
 
 index.html和子iframe中的相同静态资源浏览器是怎么处理的呢？
 
-你会发现假如你在父页面中引用了common.css,在子页面中的common.css是不是直接用缓存了呢？实际上iframe的所有资源浏览器是会重新请求一遍。这点不同于子页面是ajax获取渲染的方式。父页面和子页面（iframe）的数据传递就不要用url传值了，这个在序列化复杂对象时会有问题，推荐直接layero.find("iframe")[0].contentWindow.vm.setdata(data)这种，细节见代码，子对父的传值 parent.closeandrefresh()，加上双向数据绑定开发会很方便
+你会发现假如你在父页面中引用了common.css,在子页面中的common.css是不是直接用缓存了呢？实际上iframe的所有资源浏览器是会重新请求一遍。这点不同于子页面是ajax获取渲染的方式。父页面和子页面（iframe）的数据传递就不要用url传值了，这个在序列化复杂对象时会有问题，推荐直接layero.find("iframe")[0].contentWindow.vm.setdata(data)这种，细节见代码，子对父的传值 parent.closeandrefresh()，加上双向数据绑定开发会很方便，contentWindow和parent请自行查阅文档
 
+关于缓存
+
+由于该后台模板不是按照单页面那样开发的，所以没有办法对静态资源部分进行单独处理。但在我实际的开发中页面缓存又很烦人，我这边采用的方式是配置应用缓存，appcache的配置和使用方法请自行查阅，web服务器端的meta头的设置不要忘了，不管是IIS还是apache还是nginx思路都是一样的。
 
 
 
@@ -246,13 +245,14 @@ index.html和子iframe中的相同静态资源浏览器是怎么处理的呢？
 我的目标是想编写一个相对完整的后台系统模板，它的交互方式成熟，页面风格统一，页面整齐。定制化程度相对较高。无论是前端还是后端都能够快速上手，帮助你又好又快的完成产品或者项目。
 
 
-
 ## 最后
 
 
 由于我不太善于表达，所以文本都很生硬，请大家见谅
 
-如果喜欢一定要star呀
+由于水平和时间有限，所以难免会有错误，欢迎lssues提出，我会在线解决。
 
-有问题欢迎lssues提出，我会在线解答
+如果喜欢一定要star呀 ！
+
+
 
