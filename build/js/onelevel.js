@@ -1,4 +1,3 @@
-/** kit_admin-v1.0.4 MIT License By http://kit/zhengjinfan.cn */ ;
 layui.define(["jquery", "laytpl", "element"], function(e) {
 	var i = layui.jquery,
 		n = (i(window), i(document)),

@@ -150,7 +150,7 @@ layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar'
 
 	// 菜单切换
 	$('#tonpl').on('click', function() {
-		ajaxmod.layuiGet("/datas/nlplist.json","",function (res) {
+		ajaxmod.layuiGet("/datas/menulist2.json","",function (res) {
 			if (res.success) {
 				if (res.data.length != 0) { 
 					navbar.set({

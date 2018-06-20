@@ -1,0 +1,59 @@
+{
+	"data": {
+		"enums": {},
+		"entCompany": [{
+			"id": 1045337171,
+			"name": "华氏大药房",
+			"stores": [{
+				"key": 1045337172,
+				"value": "梅花路店"
+			}, {
+				"key": 1045340323,
+				"value": "百香果"
+			}, {
+				"key": 1045340325,
+				"value": "西柚"
+			}, {
+				"key": 1045340327,
+				"value": "张江路分店"
+			}]
+		}, {
+			"id": 1045340321,
+			"name": "公司A",
+			"stores": []
+		}, {
+			"id": 1045340322,
+			"name": "公司B",
+			"stores": [{
+				"key": 1045349406,
+				"value": "ochmd"
+			}]
+		}],
+		"businessUser": [{
+			"key": 1033250389,
+			"value": "test"
+		}, {
+			"key": 1045340319,
+			"value": "lifei"
+		}, {
+			"key": 1045340320,
+			"value": "sunxin"
+		}, {
+			"key": 1045340329,
+			"value": "穆梓-ff01"
+		}, {
+			"key": 1045342494,
+			"value": "yuweifeng"
+		}, {
+			"key": 1045348482,
+			"value": "liucong"
+		}, {
+			"key": 1045348851,
+			"value": "caofawei"
+		}]
+	},
+	"count": 0,
+	"success": true,
+	"message": "",
+	"code": 200
+}

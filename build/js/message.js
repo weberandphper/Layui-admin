@@ -1,4 +1,3 @@
-/** kit_admin-v1.0.4 MIT License By http://kit/zhengjinfan.cn */ ;
 layui.define(["jquery"], function(i) {
 	var s = layui.jquery,
 		e = (s(document), s("body")),

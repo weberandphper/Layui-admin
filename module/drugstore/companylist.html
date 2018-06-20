@@ -6,10 +6,6 @@
 		<link rel="stylesheet" href="../../common.css">
 		<style>
 			
-			.iframe-top {
-				margin-top: 20px;
-			}
-			
 			.iframe-select {
 				width: 150px;
 			}
@@ -124,13 +120,13 @@
 						var data = $.param({includeEnt: true});
 	
 						// 基础数据获取
-						ajaxmod.layuiGet("/Api/Common/Enums",data,function (res) {
+						ajaxmod.layuiGet("/datas/companylist.json",data,function (res) {
 							if (res.success) {
 								vm.baseData = res.data;
 							} else {
 								layer.msg(res.message, {icon: 2});
 							}
-						});	
+						},1);	
 						
 						laydate.render({
 						    elem: '#date1',
@@ -276,14 +272,6 @@
 					})
 				},
 			})
-		</script>
-		<!-- 机器人数量回调 -->
-		<script type="text/html" id="RobotCountTpl">
-			<a href="javascript:;">{{d.entRobotCount}}&nbsp;&nbsp;台</a>
-		</script>
-		<!-- 药店数量回调 -->
-		<script type="text/html" id="StoreCountTpl">
-			<a href="javascript:;">{{d.entStoreCount}}&nbsp;&nbsp;个</a>
 		</script>
 		<!-- 操作 -->
 		<script type="text/html" id="barAction">

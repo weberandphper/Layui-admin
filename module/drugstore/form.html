@@ -7,125 +7,17 @@
     <link rel="stylesheet" href="../../common.css">
     <style>
     	
-    	.img-edit {
-    		border: 1px solid silver;
-    		border-radius: 6px;
-    		margin-left: 2px;
-    	}
-    	
-    	.img-ib {
-    		position: relative;
-    		display: inline-block;
-    		width: 160px;
-    		/*height: 120px;*/
-    	}
-    	
-    	.badge-delete {
-    		position: absolute;
-    		top: 4px;
-    		right: 4px;
-    		width: 20px;
-    		height: 20px;
-    		border-radius: 50%;
-    		cursor: pointer;
-    	}
-    	
-    	.badge-delete i {
-    		font-size: 18px !important;
-    		color: red !important;
-    		font-weight: 600;
-    		text-shadow: 1px 1px 3px silver;
-    		transition: all .5s;
-    	}
-    	
-    	.badge-delete i:hover {
-    		text-shadow: none;
-    	}
-    	
-    	#imgpreview img {
-    		width: 100%;
-    		height: 100%;
-    	}
-    	
     </style>
 </head>
 <body >
     <div class="layui-container" id="form-page">
 	    <div class="layui-row">
-		    <div class="layui-col-md2">
-		    	.
-		    </div>
-		    <div class="layui-col-md8">
+		    <div class="layui-col-md-offset2 layui-col-md8">
 			    <div class="layui-form" id="login-form">
 					<form class="layui-form" action="" method="post" enctype="multiple/form-data">
-						<div class="layui-form-item positiondiv">
-							<label class="layui-form-label">公司名称：</label>
-							<div class="layui-input-block">
-								<input type="hidden" name="Id"  v-model="paramObj.id">
-								<input type="text" name="Name" lay-verify="required" lay-verify="Name" autocomplete="off" placeholder="请输入公司名称" class="layui-input" v-model="paramObj.name">
-								<span class="must-input positionspan"></span>
-							</div>
-						</div>
-						<div class="layui-form-item positiondiv">
-							<label class="layui-form-label">公司地址：</label>
-							<div class="layui-input-block">
-								<input type="text" name="Address" lay-verify="required" lay-verify="address" autocomplete="off" placeholder="请输入公司地址" class="layui-input" v-model="paramObj.address">
-								<span class="must-input positionspan"></span>
-							</div>
-						</div>
-						<div class="layui-form-item positiondiv">
-							<label class="layui-form-label">联系人：</label>
-							<div class="layui-input-block">
-								<input type="text" name="ContactName" lay-verify="required" lay-verify="contacts" autocomplete="off" placeholder="请输入联系人" class="layui-input" v-model="paramObj.contactName">
-								<span class="must-input positionspan"></span>
-							</div>
-						</div>
-						<div class="layui-form-item positiondiv">
-							<label class="layui-form-label">联系电话：</label>
-							<div class="layui-input-block">
-								<input type="text" name="ContactMobile" required  lay-verify="required|phone" autocomplete="off" placeholder="请输入联系电话" class="layui-input" v-model="paramObj.contactMobile">
-								<span class="must-input positionspan"></span>
-							</div>
-						</div>
-						<div class="layui-form-item">
-							<label class="layui-form-label">公司资质：</label>
-							<div class="layui-input-block">
-								<div class="layui-upload">
-									<button type="button" class="layui-btn" id="fileupload"><label for="inputfile">多图片上传</label></button>
-									<input type="file" class="hide" name="file[]" id="inputfile" multiple="true" value="多图片上传">
-									<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-									    <span v-if="!paramObj.files.length">
-									    	暂无图片   <span class="red">(至少需要一张图片)</span>
-									    </span>
-									    <span v-else>
-									    	预览图：
-									    </span>
-										<div class="layui-upload-list" id="imgpreview">
-											<div v-if="paramObj.files.length" class="img-ib" v-for="imgurl in paramObj.files">
-												<span class="badge-delete" title="删除图片" :data-companyid="paramObj.id" :data-filename="imgurl"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#x1006;</i></span>
-												<img :src="imgurl" alt="资质文件" class="layui-upload-img img-edit">
-											</div>
-										</div>
-									</blockquote>
-								</div>
-							</div>
-						</div>
-						<div class="layui-form-item">
-							<label class="layui-form-label">商务人员：</label>
-							<div class="layui-input-block">
-								<select name="BusinessUserId" class="lay-ignore" lay-ignore lay-verify="required" v-model="selected">
-									<option value="">--请选择--</option>
-									<option v-for="option in paramObj.businessUser" :value="option.key">{{ option.value }}</option>
-								</select>
-								<span class="must-input"></span>
-							</div>
-						</div>
-						<button type="button" class="layui-btn hide"  lay-submit id="startupload" lay-filter="formDemo">开始上传</button>
+				
 					</form>
 				</div>
-		    </div>
-		    <div class="layui-col-md2">
-		    	.
 		    </div>
 	    </div>
     </div>
@@ -154,53 +46,15 @@
 		})
     	
       	layui.use(['jquery','form','upload','ajaxmod'], function(){
-      		
 			var $ = layui.jquery,
 			    form = layui.form,
 			    upload = layui.upload,
 			    ajaxmod = layui.ajaxmod;
-			    
-			$("#inputfile").change(function () {
-				var file = "";
-				for (var i = 0;i<$('#inputfile')[0].files.length;i++) {
-					file = $('#inputfile')[0].files[i];
-					if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
-				        layer.msg("图片格式不正确，请重新上传", {icon: 2});
-				        return false;
-				    }
-					// 读取文件:
-				    var reader = new FileReader();
-				    reader.onload = function(e) {
-				        var data = e.target.result; 
-				        $("#imgpreview").append('<img src='+data+' alt="资质文件" class="layui-upload-img img-edit">')
-				    };
-					reader.readAsDataURL(file);
-				}
-			})
-			
-			// 删除图片
-			$(document).on("click",".badge-delete",function () {
-				var data = {
-					Id: $(this).data("companyid"),
-					Name: $(this).data("filename").split("/").pop()
-				}
-
-				layer.confirm('确定删除'+data.Name+'?', function(index) {
-					ajaxmod.layuiPost("/api/sys/ent/EntCompanyQualificationFileDelete",data, function (res) {
-						if(res.success){
-							layer.msg('删除成功', {icon: 1});
-							vm.paramObj.files.splice($.inArray(data.Name,vm.paramObj.files),1);
-		                }else{
-		                	layer.msg(res.message, {icon: 2});
-		                }
-					})
-				});
-			});
 			
 			form.on('submit(formDemo)', function(data){
 				
 				var formData = new FormData();
-				
+				// 文件包括表单获取
 				data = {
 					Name: $("input[name='Name']").val(),
 					Address: $("input[name='Address']").val(),
@@ -259,10 +113,8 @@
 		            	layer.close();
 		            });
 				})
-			
 			    return false;
 			});
-		
     </script>
 </body>
 </html>

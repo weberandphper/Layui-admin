@@ -130,6 +130,7 @@
     <script src="./plugins/layui/layui.js"></script>
     <script src="common.js"></script>
     <script>
+    	
         var uuid = "";
 
         function uuidfun() {
@@ -178,7 +179,7 @@
             //监听提交
             form.on('submit(form-login)', function (data) {
                 data.field.CaptchaKey = uuid;
-                ajaxmod.layuiPost("/api/sys/home/Login", data.field, function (res) {
+                ajaxmod.layuiGet("/datas/login.json", data.field, function (res) {
                     if (res.success) {
                         cookie.set("usertoken", res.data.token)
                         cookie.set("username", res.data.userName)
@@ -198,14 +199,16 @@
                         layer.msg('登录成功', {
                             icon: 1
                         });
+                        
                         window.location.href = "index.html"
+                        
                     } else {
                         layer.msg(res.message, {
                             icon: 2
                         });
                         $("#captchaPic").attr('src', baseUrl + "/api/sys/security/GetCaptcha?uuid=" + uuidstr());
                     }
-                })
+                },1)
                 return false;
             });
         });

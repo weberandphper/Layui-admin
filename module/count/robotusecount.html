@@ -6,130 +6,12 @@
 		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
 		<link rel="stylesheet" type="text/css" href="../../common.css"/>
 		<style>
-			
-			.iframe-top {
-				margin-top: 20px;
-			}
-			
-			.iframe-select {
-				width: 150px;
-			}
-			
-			.iframe-input1 {
-				width: 350px !important;
-			}
-			
-			.iframe-btn1 {
-				
-				width: 100px !important;
-			}
-			
-		   .pie-show {
-				width: 100%;
-				height: 265px;
-							
-			}
-			.line-show{
-				width: 100%;
-				height: 300px;
-			}
-			.chart-top{
-				margin-bottom:80px;
-			}
-			.chart-show .layui-col-md4{box-sizing: border-box;padding:0 15px;}
-			.layui-form-item .layui-input-inline{width:175px;}
-		    select.lay-ignore {
-				width: 180px;
-				height: 38px;
-				line-height: 1.3;
-				line-height: 38px\9;
-				border-width: 1px;
-				border-style: solid;
-				background-color: #fff;
-				border-radius: 2px;
-				padding-right: 30px;
-				cursor: pointer;
-				border-color: #eeeeee;
-			}
-			
-			.seoption {
-				line-height: 36px;
-				height: 36px;
-			}
-			
-			select.lay-ignore option {
-				line-height: 36px;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-			
+		
 		</style>
 	</head>
 	<body>
 		<div class="layui-fluid iframe-top" id="robotusecount">
-			<div class="layui-form-query">
-				<form class="layui-form" id="query_form">
-					<div class="layui-form-item">
-						<div class="layui-row">
-							<div class="layui-inline">
-								<label class="layui-form-mid">时间：</label>
-								<div class="layui-input-inline">
-									<input type="text" name="CreateTimeFrom" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
-								</div>
-								<a href="javascript:;" class="datelink">~</a>
-								<div class="layui-input-inline">
-									<input type="text" name="CreateTimeTo" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
-								</div>
-							</div>
-							<div class="layui-inline">
-								<label class="layui-form-mid">公司名称：</label>
-								<div class="layui-input-inline iframe-select">
-									<select name="EntCompanyId" class="lay-ignore" v-model="selectedCompany" lay-ignore @change="changeStores">
-										<option value="" class="seloption" lay-ignore>--全部--</option>
-										<option v-for="option in baseData.company" v-bind:value="option.id" class="seloption" lay-ignore>{{ option.name }}</option>
-									</select>
-								</div>
-							</div>
-							<div class="layui-inline">
-								<label class="layui-form-mid">药店名称：</label>
-								<div class="layui-input-inline iframe-select">
-									<select name="EntStoreId" class="lay-ignore" v-model="selectedDrug" lay-ignore>
-										<option value="">--全部--</option>
-										<option v-for="option in baseData.stores" v-bind:value="option.key">{{ option.value }}</option>
-									</select>
-								</div>
-							</div>
-							<div class="layui-inline">
-							<label class="layui-form-mid">功能模块：</label>
-							<div class="layui-input-inline iframe-select">
-									<select name="FunctionModule" class="lay-ignore" v-model="selectedModule" lay-ignore>
-										<option value="" selected="selected">--请选择--</option>
-										<option v-for="option in baseData.muse" v-bind:value="option.value">{{ option.key }}</option>
-									</select>
-								</div>
-							</div>
-							<div class="layui-inline">
-								<label class="layui-form-mid">性别：</label>
-								<div class="layui-input-inline iframe-select">
-									<select name="Gender" class="lay-ignore" v-model="selectedSex" id="selectsex" lay-ignore>
-										<option value="">--请选择--</option>
-										<option v-for="option in baseData.sex" v-bind:value="option.value">{{ option.key }}</option>
-									</select>
-								</div>
-							</div>
-							<div class="layui-inline iframe-btn1" >
-								<div class="layui-input-inline btn-search">
-									<button class="layui-btn" type="button" data-type="search"><i class="layui-icon">&#xe615;</i>搜索</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="chart-show">
-			  	等待你发挥...
-			</div>
+			等待你发挥...
 		</div>
 		<script type="text/javascript" src="../../plugins/jquery-2.1.0.js"></script>
 		<script src="../../plugins/layui/layui.js"></script>
@@ -138,8 +20,6 @@
 		<script type="text/javascript" src="../../plugins/echarts.js"></script>
 		<script>
 		
-			
-	
 		</script>
 	</body>
 </html>
