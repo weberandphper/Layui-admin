@@ -47,6 +47,8 @@ git clone https://github.com/weberandphper/Layui-admin.git
 
 修改common.js的接口配置文件
 
+var baseUrl = window.baseUrl='http://192.168.1.138:8001';
+
 设置WEB服务器站点(nginx,apache,iis,编辑器内置web服务器都可以)
 
 浏览器访问 http:localhost/login.html
@@ -71,7 +73,7 @@ git clone https://github.com/weberandphper/Layui-admin.git
 
 ## 效果展示
 
-[查看demo请戳这里](http://www.anspray.com/)（请用chrome浏览器预览）
+[查看demo请戳这里](http://www.anspray.com:8081/)（请用chrome浏览器预览）
 
 
 ## 上图

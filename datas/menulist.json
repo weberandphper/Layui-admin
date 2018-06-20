@@ -1,23 +1,5 @@
 {
 	"data": [{
-		"id": 1,
-		"title": "机器人管理",
-		"url": "",
-		"icon": "fa fa fa-android",
-		"children": [{
-			"id": 13,
-			"title": "添加机器人",
-			"url": "module/robot/addrobot.html",
-			"icon": "fa fa-plus",
-			"children": []
-		}, {
-			"id": 14,
-			"title": "机器人库",
-			"url": "module/robot/robotstore.html",
-			"icon": "fa fa-bank",
-			"children": []
-		}]
-	}, {
 		"id": 2,
 		"title": "药店管理",
 		"url": null,
@@ -27,12 +9,6 @@
 			"title": "公司列表",
 			"url": "module/drugstore/companylist.html",
 			"icon": "fa fa-hospital-o",
-			"children": []
-		}, {
-			"id": 17,
-			"title": "药店列表",
-			"url": "module/drugstore/drugstorelist.html",
-			"icon": "fa fa-medkit",
 			"children": []
 		}]
 	}, {
@@ -54,7 +30,7 @@
 		"icon": "fa fa fa-bar-chart",
 		"children": [{
 			"id": 30,
-			"title": "机器人使用统计",
+			"title": "使用统计",
 			"url": "module/count/robotusecount.html",
 			"icon": "fa fa-pie-chart",
 			"children": []
