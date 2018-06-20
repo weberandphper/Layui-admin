@@ -3,10 +3,10 @@
 		"enums": {},
 		"entCompany": [{
 			"id": 1045337171,
-			"name": "华氏大药房",
+			"name": "fdsfd",
 			"stores": [{
 				"key": 1045337172,
-				"value": "梅花路店"
+				"value": "hgfh"
 			}, {
 				"key": 1045340323,
 				"value": "百香果"
@@ -15,7 +15,7 @@
 				"value": "西柚"
 			}, {
 				"key": 1045340327,
-				"value": "张江路分店"
+				"value": "gfdgf分店"
 			}]
 		}, {
 			"id": 1045340321,
@@ -40,7 +40,6 @@
 			"value": "sunxin"
 		}]
 	},
-	"count": 0,
 	"success": true,
 	"message": "",
 	"code": 200

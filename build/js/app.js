@@ -1,8 +1,6 @@
 /**
  * Name:app.js
  * Author:Anspray
- * E-mail:1428729528@qq.com
- * Website:http://www.anspray.com/
  * LICENSE:MIT
  */
 

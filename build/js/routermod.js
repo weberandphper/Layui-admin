@@ -1,14 +1,11 @@
 // ajax 封装
 layui.define(function(exports) { 
-	
     window.Router = function() {
         var self = this;
         self.hashList = {}; /* 路由表 */
         self.index = null;
         self.key = '/';
         window.onhashchange = function() {
-        	
-        	
             self.reload();
         };
     }; 

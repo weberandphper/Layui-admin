@@ -1,6 +1,3 @@
-/** Power By Anspray */ ;
-
-
 //layui.use(['layer'], function(){
 //  $('.layui-tip').on('mouseenter',function(){
 //      layer.tips($(this).attr("layui-tips"), $(this), {

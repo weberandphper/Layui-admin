@@ -96,19 +96,11 @@ localhost/index.html
 ├── components                                  // 自定义组件
 ├── datas                                       // 模拟接口数据
 ├── module                                      // 业务模块划分(业务代码)
-│   ├── components                              // 组件
-│   │   ├── common                              // 公共组件
-│   │   │   ├── alertTip.vue                    // 弹出框组件
-│   │   │   ├── buyCart.vue                     // 购物车组件
-│   │   │   ├── computeTime.vue                 // 倒计时组件
-│   │   │   ├── loading.vue                     // 页面初始化加载数据的动画组件
-│   │   │   ├── mixin.js                        // 组件混合(包括：指令-下拉加载更多，处理图片地址)
-│   │   │   ├── ratingStar.vue                  // 评论的五颗星组件
-│   │   │   └── shoplist.vue                    // msite和shop页面的餐馆列表公共组件
-│   │   ├── footer
-│   │   │   └── footGuide.vue                   // 底部公共组件
-│   │   └── header
-│   │       └── head.vue                        // 头部公共组件
+│   ├── account                              	// 账号模块
+│   │   ├── account.html                        // 账号管理页面
+│   │   └── role.html							// 角色管理页面
+│   ├── other                              	    // 账号模块
+│   │   ├── resetpassword.html                  // 重置密码
 │   ├── plugins                                 // 引用的插件或者资源库存（Layui+vue+echarts）
 │   ├── resources                               // 静态资源
 │   ├── About.txt                               // 更新说明
@@ -245,16 +237,15 @@ index.html和子iframe中的相同静态资源浏览器是怎么处理的呢？
 
 
 
-
-
 ## 目标
 
 
 我的目标是想编写一个相对完整的后台系统模板，它的交互方式成熟，页面风格统一，页面整齐。定制化程度相对较高。无论是前端还是后端都能够快速上手，帮助你又好又快的完成产品或者项目。
 
 
-## 最后
 
+
+## 最后
 
 由于我不太善于表达，所以文本都很生硬，请大家见谅
 
