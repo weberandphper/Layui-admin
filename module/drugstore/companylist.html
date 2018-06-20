@@ -127,8 +127,6 @@
 						ajaxmod.layuiGet("/Api/Common/Enums",data,function (res) {
 							if (res.success) {
 								vm.baseData = res.data;
-								
-								console.log(vm.baseData);
 							} else {
 								layer.msg(res.message, {icon: 2});
 							}
@@ -141,10 +139,11 @@
 						laydate.render({
 						    elem: '#date2',
 						});
-		
+						
+						// 目前调用的是线上接口，记的配置nginx反向代理
 						table.render({
 							elem: '#layui-table',
-							url: baseUrl+'/api/sys/ent/EntCompanyList',
+							url: '/demo/table/user/',
 							page: true,
 							limit: 16,
 							limits: [10, 15, 20, 25, 30],
@@ -156,37 +155,35 @@
 							request: {
 							},
 							response: {
-							   statusCode: 200,
-							   msgName: 'message',
+//							   statusCode: 200,
+//							   msgName: 'message',
 							},
 							cols: [
 								[ 
 									{
 										field: 'id',
-										title: '公司编号',
+										title: 'ID',
 										width: '15%',
 									}, 
 									{
-										field: 'createTime',
-										title: '添加时间',
+										field: 'username',
+										title: '用户名',
 										width: '15%',
 									}, {
-										field: 'name',
-										title: '公司名称',
+										field: 'sex',
+										title: '性别',
 										width: '15%',
 									}, {
-										field: 'entStoreCount',
-										title: '药店数量',
+										field: 'city',
+										title: '城市',
 										width: '15%',
-										templet: '#StoreCountTpl',
 									}, {
-										field: 'entRobotCount',
-										title: '机器人数量',
+										field: 'sign',
+										title: '签名',
 										width: '15%',
-										templet: '#RobotCountTpl',
 									}, {
-										field: 'businessUserName',
-										title: '商务人员',
+										field: 'experience',
+										title: '积分',
 										width: '15%',
 									}, {
 										fixed: 'right',
@@ -211,7 +208,7 @@
 							if(layEvent === 'detail') {
 								active.create(data);
 							} else {
-								alert("ok")
+								alert("error")
 							} 
 						});
 						
@@ -278,9 +275,6 @@
 					    });
 					})
 				},
-				mounted() {
-					
-				}
 			})
 		</script>
 		<!-- 机器人数量回调 -->

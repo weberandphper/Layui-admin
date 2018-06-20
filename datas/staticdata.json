@@ -1,0 +1,56 @@
+{
+	"data": {
+		"enums": {
+			"robotType": [{
+				"key": 1,
+				"value": "阿米喀机器人"
+			}, {
+				"key": 2,
+				"value": "平板端机器人"
+			}],
+			"robotState": [{
+				"key": 1,
+				"value": "库存"
+			}, {
+				"key": 2,
+				"value": "维修中"
+			}, {
+				"key": 3,
+				"value": "使用中"
+			}]
+		},
+		"entCompany": {
+			"items": [{
+				"id": 1045337171,
+				"name": "华氏大药房",
+				"stores": [{
+					"key": 1045337172,
+					"value": "梅花路店"
+				}, {
+					"key": 1045340323,
+					"value": "百香果"
+				}, {
+					"key": 1045340325,
+					"value": "西柚"
+				}, {
+					"key": 1045340327,
+					"value": "张江路分店"
+				}]
+			}, {
+				"id": 1045340321,
+				"name": "公司A",
+				"stores": []
+			}, {
+				"id": 1045340322,
+				"name": "公司B",
+				"stores": [{
+					"key": 1045349406,
+					"value": "ochmd"
+				}]
+			}]
+		}
+	},
+	"success": true,
+	"message": "",
+	"code": 200
+}

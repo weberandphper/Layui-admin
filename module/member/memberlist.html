@@ -171,30 +171,28 @@
 						ajaxmod = layui.ajaxmod;
 
 					// 基础数据获取
-					ajaxmod.layuiPost("/api/sys/robot/RobotListStatic", "", function(res) {
+					ajaxmod.layuiGet("/datas/staticdata.json", "", function(res) {
 						if(res.success) {
 							vm.baseData = res.data;
 							console.log(vm.baseData);
 						} else {
 							layer.msg(res.message, {icon: 2});
 						}
-					});
+					},1);
 
 					//日期 1
 					laydate.render({
 						elem: '#date1',
-//							type: 'datetime'
 					});
 
 					//日期 2
 					laydate.render({
 						elem: '#date2',
-//							type: 'datetime'
 					});
 
 					table.render({
 						elem: '#layui-table',
-						url: baseUrl + '/api/sys/platformuser/GetUsers',
+						url: '/demo/table/user/',
 						page: true,
 						limit: 16,
 						height: 'full-110',
@@ -209,56 +207,46 @@
 
 						},
 						response: {
-							statusCode: 200,
-							msgName: 'message',
+//							statusCode: 200,
+//							msgName: 'message',
 						},
 						cols: [
 							[{
 								field: 'id',
 								unresize: true,
-								title: '用户编号',
-								//	width: '10%',
+								title: 'ID',
 							}, {
-								field: 'createTime',
+								field: 'username',
 								unresize: true,
-								title: '注册时间',
-								width: '15%',
+								title: '用户名',
 							}, {
-								field: 'mobile',
+								field: 'sex',
 								unresize: true,
-								title: '手机号码',
-								width: '10%',
+								title: '性别',
 							}, {
-								field: 'faceImages',
+								field: 'city',
 								unresize: true,
-								title: '人脸信息',
-								//	width: '20%',
-								templet: '#faceinfoTpl',
+								title: '城市',
 							}, {
-								field: 'wenYaoCount',
+								field: 'sign',
 								unresize: true,
-								title: '问药次数',
-								//	width: '10%',
+								title: '签名',
 							}, {
-								field: 'orderCount',
+								field: 'experience',
 								unresize: true,
-								title: '下单次数',
-								//	width: '10%',
+								title: '积分',
 							}, {
-								field: 'totalPrice',
+								field: 'score',
 								unresize: true,
-								title: '下单总金额',
-								//	width: '10%',
+								title: '评分',
 							}, {
-								field: 'totalRefund',
+								field: 'classify',
 								unresize: true,
-								title: '退款总金额',
-								//	width: '10%',
+								title: '职业',
 							}, {
-								field: 'remark',
+								field: 'wealth',
 								unresize: true,
-								title: '备注信息',
-								width: '15%'
+								title: '财富',
 
 							}, {
 								fixed: 'right',
@@ -284,13 +272,6 @@
 						var tr = obj.tr;
 
 						if(layEvent === 'remarks') {
-					
-							for (var Key in data) {
-							    if (data[Key] == null) {
-							        data [Key] = "";
-							    }
-							}
-							
 							vm.remarks = data.remarks;
 							// 赋值
 							layer.open({
@@ -299,10 +280,6 @@
 								content: `<form id="remarksshow"><div class="layui-form-item"><label class="layui-form-label">备注信息:</label><div class="layui-input-block"><input class="layui-input" type="hidden" name="Id" value="` + data.id + `"><textarea name="Remark" placeholder="请输入内容" class="layui-textarea" style="resize:none" rows=8>` + data.remark + `</textarea></div></div></form>`,
 								offset: '200px',
 								btn: ['确定', '取消'],
-								// 成功回掉
-								success: function(layero, index) {
-
-								},
 								// 确认回掉
 								yes: function(index, layero) {
 									var data = $("#remarksshow").serialize();
@@ -321,39 +298,13 @@
 								btn2: function(index, layero) {
 
 								},
-							});
-						} else if(layEvent === 'faceshow') {
-
-							//展示人脸信息
-							var faceimg = data.faceinfo;
-							var str = `<div id="faceshow"><div class="top"><a href="javascript:;" lay-event="imgdetail"><img src="` + data.faceImages[1] + `" alt="抬头20°照片" /></a></div>
-							<div class="middle"><a href="javascript:;" lay-event="imgdetail"><img src="` + data.faceImages[2] + `" alt="左侧20°照片" /></a>
-							<a href="javascript:;"><img src="` + data.faceImages[0] + `" alt="正脸照" /></a><a href="javascript:;" lay-event="imgdetail"><img src="` + data.faceImages[3] + `" alt="右侧20°照片" /></a></div>
-							<div class="bottom"><a href="javascript:;" lay-event="imgdetail"><img src="` + data.faceImages[4] + `" alt="低头20°照片" /></a></div></div>`
-
-							layer.open({
-								type: 1,
-								title: '人脸信息',
-								content: str,
-								skin: 'demo-class',
-								shade: 0.3,
-								shadeClose: true,
-								area: ['600px', '600px'],
-								offset: '100px',
-								move: false,
-								btn: ['确认', '取消'],
-								// 确认
-								yes: function(index, layero) {
-									layer.closeAll();
-								},
-								// 取消
-								btn2: function(index, layero) {
-									layer.closeAll();
-								},
+								// 成功回掉
 								success: function(layero, index) {
-									//form.render();
+
 								},
 							});
+						} else {
+							alert("error");
 						}
 					});
 
@@ -393,24 +344,12 @@
 						}
 					}
 				}
-			},
-			mounted() {
-
 			}
 		})
-	</script>
-	<!--人脸回调-->
-	<script type="text/html" id="faceinfoTpl">
-		{{# if(d.faceImages.length){ }}
-		<a class="faceshow" href="javscript:;" lay-event="faceshow">
-			<img src={{d.faceImages[0]}} onerror="this.src='http://www.csgrobot.net:9002/NoFaceImage.png'" alt="人脸图像" />
-		</a>
-		{{# } else { }} {{# } }}
 	</script>
 	<!-- 操作 -->
 	<script type="text/html" id="barAction">
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="remarks"><i class="layui-icon">&#xe63a;</i>备注</a>
 	</script>
 </body>
-
 </html>
