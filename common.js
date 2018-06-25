@@ -146,12 +146,6 @@ function unserialize (data) {
 	return obj;
 }
 
-// 遍历对象去空（提交参数,针对一层对象）
-function objTrim (obj) {
-	
-	
-}
-
 // url参数转对象，适用于iframe的参数传递,对象中存在数组处理欠佳
 function geturlparam () {
 	var searchstr = decodeURI(location.search),
@@ -244,11 +238,6 @@ function ajaxFun (method,url,dosome) {
 layui.use(['jquery'], function () {
 	var $ = layui.jquery;
 
-	$("body").keydown(function (e) {
-        if (76 == e.keyCode && e.altKey){
-        }
-	})
-	
 	$(".aview-more").click(function () {
 		if ($(".search-2").css("display") == "none") {
 			$(this).css({"transform":"rotate(180deg)"});

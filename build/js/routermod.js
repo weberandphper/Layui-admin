@@ -5,9 +5,9 @@ layui.define(function(exports) {
         self.hashList = {}; /* 路由表 */
         self.index = null;
         self.key = '/';
-        window.onhashchange = function() {
-            self.reload();
-        };
+//         window.onhashchange = function() {
+//             self.reload();
+//         };
     }; 
     /**
      * 添加路由,如果路由已经存在则会覆盖
@@ -46,7 +46,7 @@ layui.define(function(exports) {
      * 重载页面
      */
     Router.prototype.reload = function() {
-    	console.log(this.hashList)
+    	  console.log(this.hashList)
         var self = this;
         var hash = window.location.hash.replace('#' + self.key, '');
         var addr = hash.split('/')[0];
@@ -86,20 +86,6 @@ layui.define(function(exports) {
     }
 
 	var router = new Router();
-
-
-//  window.onload = function() {
-//      var router = new Router();
-//      for(j = 0; j < obj.length; j++) {
-//      	router.add(obj[j].name, (function (j) {
-//      		return function () {
-//      			alert(obj[j].name)
-//      		}
-//      	}(j)))
-//		} 
-//      router.setIndex('home');
-//      router.start();
-//  };
 	
 	exports('routermod', router);
 });

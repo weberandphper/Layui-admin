@@ -99,7 +99,16 @@ localhost/index.html
 │   ├── account                              	// 账号模块
 │   │   ├── account.html                        // 账号管理页面
 │   │   └── role.html							// 角色管理页面
-│   ├── other                              	    // 账号模块
+│   ├── count                              	    // 会员管理
+│   │   ├── account.html                        // 会员列表
+│   ├── drugstore                              	// 公司管理模块
+│   │   ├── companylist.html                    // 公司列表
+│   │   └── form.html							// 外部表单
+│   ├── finance                              	// 财务管理模块
+│   │   ├── tradedetail.html                    // 交易明细
+│   ├── member                              	// 会员管理模块
+│   │   ├── memberlist.html                     // 会员列表
+│   ├── other                              	    // 其他模块
 │   │   ├── resetpassword.html                  // 重置密码
 │   ├── plugins                                 // 引用的插件或者资源库存（Layui+vue+echarts）
 │   ├── resources                               // 静态资源

@@ -55,144 +55,49 @@
 				font-size: 18px;
 			}
 			
-			.pie-chart {
-				width: 100%;
-				height: 265px;
-				border-top: 1px solid #0099FF;
-				border-left: 1px solid #0099FF;
-				border-right: 1px solid #0099FF;
-			}
-			
-			.chart-test {
-				/*background: red;*/
-			}
-			
-			.layui-tab-content {
-				padding: 0;
-				padding-top: 4px;
-			}
-			
-			#allmap,
-			#line1 {
-				width: 100%;
-				height: 650px;
-			}
-			
-			.pie-main {
-				padding-top: 6px;
-			}
-			
 		</style>
 	</head>
 	<body>
 		<div class="layui-fluid main">
 			<div class="layui-row layui-col-space15">
-				<div class="layui-col-md9">
-					<div class="layui-row layui-col-space15">
-						<div class="layui-col-xs4">
-							<div class="info-box">
-								<span class="info-box-icon" style="background-color:#00c0ef !important;color:white;"><i class="fa fa-ambulance" aria-hidden="true"></i></span>
-								<div class="info-box-content">
-									<span class="info-box-text">CPU 利用率</span>
-									<span class="info-box-number">90%</span>
-								</div>
-							</div>
-						</div>
-						<div class="layui-col-xs4">
-							<div class="info-box">
-								<span class="info-box-icon" style="background-color:#dd4b39 !important;color:white;"><i class="fa fa-google-plus" aria-hidden="true"></i></span>
-								<div class="info-box-content">
-									<span class="info-box-text">在线人数</span>
-									<span class="info-box-number">25,412</span>
-								</div>
-							</div>
-						</div>
-						<div class="layui-col-xs4">
-							<div class="info-box">
-								<span class="info-box-icon" style="background-color:#00a65a !important;color:white;"><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
-								<div class="info-box-content">
-									<span class="info-box-text">注册人数</span>
-									<span class="info-box-number">654</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="layui-row">
-						<div class="layui-tab" lay-filter="demo">
-							<ul class="layui-tab-title">
-								<li class="layui-this" lay-id="11">分布图</li>
-								<li lay-id="22">7天使用情况</li>
-							</ul>
-							<div class="layui-tab-content">
-								<div class="layui-tab-item chart-test layui-show">
-									<div id="allmap"></div>
-								</div>
-								<div class="layui-tab-item chart-test">
-									<div id="line1"></div>
-								</div>
-							</div>
+				<div class="layui-col-xs3">
+					<div class="info-box">
+						<span class="info-box-icon" style="background-color:#00c0ef !important;color:white;"><i class="fa fa-ambulance" aria-hidden="true"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">CPU 利用率</span>
+							<span class="info-box-number">90%</span>
 						</div>
 					</div>
 				</div>
-				<div class="layui-col-md3 pie-main">
-					<div class="layui-col-xs12">
-						<div class="pie-chart" id="main1"></div>
+				<div class="layui-col-xs3">
+					<div class="info-box">
+						<span class="info-box-icon" style="background-color:#dd4b39 !important;color:white;"><i class="fa fa-google-plus" aria-hidden="true"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">在线人数</span>
+							<span class="info-box-number">25,412</span>
+						</div>
 					</div>
-					<div class="layui-col-xs12">
-						<div class="pie-chart" id="main2"></div>
+				</div>
+				<div class="layui-col-xs3">
+					<div class="info-box">
+						<span class="info-box-icon" style="background-color:#00a65a !important;color:white;"><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">注册人数</span>
+							<span class="info-box-number">654</span>
+						</div>
 					</div>
-					<div class="layui-col-xs12">
-						<div class="pie-chart " id="main3" style="border-bottom: 1px solid #0099FF;"></div>
+				</div>
+				<div class="layui-col-xs3">
+					<div class="info-box">
+						<span class="info-box-icon" style="background-color:#00a65a !important;color:white;"><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
+						<div class="info-box-content">
+							<span class="info-box-text">今日登录</span>
+							<span class="info-box-number">654</span>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="./plugins/layui/layui.js"></script>
-		<script src="./plugins/echarts.js"></script>
-		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=4KK4k0RFGpdKlLh4B82egV3iKqMiuIKB"></script>
-		<script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
-		<script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
-		<script>
-			
-			layui.use('element', function() {
-				var $ = layui.jquery,
-					element = layui.element;
-
-				//触发事件
-				var active = {
-					tabAdd: function() {
-						//新增一个Tab项
-						element.tabAdd('demo', {
-							title: '新选项' + (Math.random() * 1000 | 0),
-							content: '内容' + (Math.random() * 1000 | 0),
-							id: new Date().getTime() 
-						})
-					},
-					tabDelete: function(othis) {
-						//删除指定Tab项
-						element.tabDelete('demo', '44'); //删除：“商品管理”
-						othis.addClass('layui-btn-disabled');
-					},
-					tabChange: function() {
-						//切换到指定Tab项
-						element.tabChange('demo', '22'); //切换到：用户管理
-					}
-				};
-
-				$('.site-demo-active').on('click', function() {
-					var othis = $(this),
-						type = othis.data('type');
-					active[type] ? active[type].call(this, othis) : '';
-				});
-
-				//Hash地址的定位
-				var layid = location.hash.replace(/^#test=/, '');
-				element.tabChange('test', layid);
-				element.on('tab(test)', function(elem) {
-					location.hash = 'test=' + $(this).attr('lay-id');
-				});
-			});
-			
-		</script>
 	</body>
 </html>

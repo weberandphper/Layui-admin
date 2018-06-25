@@ -106,9 +106,6 @@ input[type='number']::-webkit-outer-spin-button {
 	margin: 0
 }
 
-
-
-
 .iframe-input-text {
 	width: 350px !important;
 }
@@ -116,7 +113,6 @@ input[type='number']::-webkit-outer-spin-button {
 .iframe-btn-search {
 	width: 100px !important;
 }
-			
 
 /*layui slect替换*/
 select.lay-ignore {
@@ -149,7 +145,6 @@ select.lay-ignore option {
 }
 
 .btn-search{width:120px!important}
-
 
 /*必填*/
 .must-input {
