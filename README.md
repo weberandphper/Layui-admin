@@ -83,19 +83,27 @@ var baseUrl = window.baseUrl='http://192.168.1.138:8001';
 
 ## 上图
 
+### 登录
 
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/login.png)
+
+### 
 
 ![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/account.png)
 
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/companylist.png)
 
-![image](https://note.youdao.com/favicon.ico)
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/resetpassword.png)
 
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/lock.png)
 
-![image](https://note.youdao.com/favicon.ico)
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/changecolor.png)
 
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/menulist.png)
 
-![image](https://note.youdao.com/favicon.ico)
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/robotstore.png)
 
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/info.png)
 
 
 
