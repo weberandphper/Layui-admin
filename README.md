@@ -85,7 +85,7 @@ var baseUrl = window.baseUrl='http://192.168.1.138:8001';
 
 
 
-![image](https://note.youdao.com/favicon.ico)
+![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/account.png)
 
 
 ![image](https://note.youdao.com/favicon.ico)
