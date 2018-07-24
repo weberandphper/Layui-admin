@@ -115,7 +115,7 @@ var baseUrl = window.baseUrl='http://192.168.1.138:8001';
 
 ![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/robotstore.png)
 
-### 其他
+### 版本提示
 
 ![image](https://github.com/weberandphper/Layui-admin/blob/master/showimg/info.png)
 
