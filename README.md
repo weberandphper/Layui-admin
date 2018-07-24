@@ -85,6 +85,21 @@ var baseUrl = window.baseUrl='http://192.168.1.138:8001';
 
 
 
+![image](https://note.youdao.com/favicon.ico)
+
+
+![image](https://note.youdao.com/favicon.ico)
+
+
+![image](https://note.youdao.com/favicon.ico)
+
+
+![image](https://note.youdao.com/favicon.ico)
+
+
+
+
+
 ## 运行程序
 
 配置common.js接口地址和Layui模块入口
