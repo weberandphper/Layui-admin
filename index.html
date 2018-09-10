@@ -152,7 +152,7 @@
 					var zDate= ajaxobj.getResponseHeader("Date") + (3600000 * 8);
 					var timeStamp = new Date(zDate).getTime();
 					setInterval(function() {
-						timeStamp = timeStamp - 500;
+						timeStamp = timeStamp + 500;
 						var date = new Date(timeStamp);
 						Y = date.getFullYear() + '-';
 						M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
@@ -241,7 +241,7 @@
 					        	}(i)))
 								
 								window.onhashchange = function() {
-						            routermod.reload();
+						            routermod.go();
 						        };
 												
 								searchArr.push(i);

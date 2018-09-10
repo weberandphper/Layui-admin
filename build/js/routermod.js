@@ -1,13 +1,13 @@
-// ajax 封装
+// 路由封装
 layui.define(function(exports) { 
     window.Router = function() {
         var self = this;
         self.hashList = {}; /* 路由表 */
         self.index = null;
         self.key = '/';
-//         window.onhashchange = function() {
-//             self.reload();
-//         };
+        window.onhashchange = function() {
+            self.reload();
+        };
     }; 
     /**
      * 添加路由,如果路由已经存在则会覆盖
