@@ -17,6 +17,7 @@ layui.define(function(exports) {
     Router.prototype.add = function(addr, callback) {
         var self = this;
         self.hashList[addr] = callback;
+				//console.log(self.hashList)
     };
     /**
      * 删除路由
@@ -39,8 +40,30 @@ layui.define(function(exports) {
      * @param addr: 地址值
      */
     Router.prototype.go = function(addr) {
-        var self = this;
-        window.location.hash = '#' + self.key + addr;
+			
+			
+			
+			console.log(this.hashList)
+			var self = this;
+			var hash = window.location.hash.replace('#' + self.key, '');
+			//var addr = hash.split('/')[0];
+			var cb = getCb(addr, self.hashList);
+			
+			if(cb != false) {
+					var arr = hash.split('/');
+					arr.shift();
+					cb.apply(self, arr);
+			} else {
+					self.index && self.go(self.index);
+			}
+			
+			
+			
+			
+//         var self = this;
+// 				// var addr = "companylist";
+// 				//alert('#' + self.key + addr);
+//         window.location.hash = '#' + self.key + addr;
     }; 
     /**
      * 重载页面

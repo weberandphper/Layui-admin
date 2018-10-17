@@ -18,6 +18,16 @@
 		<!--公共样式-->
 		<link rel="stylesheet" href="common.css" />
 		<link rel="shortcut icon" href="favicon.ico">
+		<!--访问统计 百度-->
+		<script>
+			var _hmt = _hmt || [];
+			(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?1123c6760cbd8bd962766d0f2d3f2cf4";
+			var s = document.getElementsByTagName("script")[0]; 
+			s.parentNode.insertBefore(hm, s);
+			})();
+		</script>
 	</head>
 	<body class="kit-theme">
 		<div class="layui-layout layui-layout-admin kit-layout-admin" id="page-wrapper" v-cloak>
@@ -46,9 +56,9 @@
 						<div class="digital-clock">{{ serverDate }}</div>
 					</li>
 					<!--天气展示-->
-					<li class="layui-nav-item hide">
+					<!-- <li class="layui-nav-item">
 						<iframe width="180" scrolling="no" height="18" frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=1&icon=1&wind=1&num=2&site=12"></iframe>
-					</li>
+					</li> -->
 					<li class="layui-nav-item hide" id="tag">
 						<a href="javascript:;"><i class="fa fa-tag" aria-hidden="true"></i></a>
 					</li>
@@ -95,6 +105,7 @@
 			<div class="layui-footer">
 				<!-- 底部固定区域 -->
 				CopyRight © 2017<a href=""> xxxxxx有限公司 </a>all rights rerserved MIT license
+				<a href="#/companylist">前端路由测试</a><br />
 			</div>
 		</div>
 		<!--锁屏-->
@@ -116,6 +127,7 @@
 		<script src="./common.js"></script>
 		<!--<script src="https://js.fundebug.cn/fundebug.1.1.0.min.js"
         apikey="52bc85eea4bc6c35cd9265f880502c96c5790ffd0ffbf0baa53f73aaf9e8fc00"></script>-->
+		
 		<script>
 			
 			var vm = new Vue({
@@ -223,6 +235,7 @@
 			    	});
 					window.location.href = "login.html"
 			    } else {
+					
 					ajaxmod.layuiGet("/datas/menulist.json", "", function(res) {
 						var str = `<option value="">便捷菜单查询</option>`;
 						res.data.forEach(function (e) {
@@ -239,11 +252,8 @@
 										};
 					        			active.changePage(data);
 					        		}
+									
 					        	}(i)))
-								
-								window.onhashchange = function() {
-						            routermod.go();
-						        };
 												
 								searchArr.push(i);
 								str+=`<option value=${i.id}>${i.title}</option>`;
