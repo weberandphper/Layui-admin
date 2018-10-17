@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<!--极速模式-->
+		<meta name="renderer" content="webkit">
 		<title>后台管理系统</title>
 		<!--layui-v2.3.0-->
 		<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
@@ -41,11 +43,10 @@
 				<ul class="layui-nav layui-layout-right kit-nav" id="right-menu">
 					<!--服务器时间-->
 					<li class="layui-nav-item">
-						<!--<div class="digital-clock">00:00:00</div>-->
 						<div class="digital-clock">{{ serverDate }}</div>
 					</li>
 					<!--天气展示-->
-					<li class="layui-nav-item">
+					<li class="layui-nav-item hide">
 						<iframe width="180" scrolling="no" height="18" frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=1&icon=1&wind=1&num=2&site=12"></iframe>
 					</li>
 					<li class="layui-nav-item hide" id="tag">
