@@ -8,6 +8,10 @@ layui.define(function(exports) {
         window.onhashchange = function() {
             self.reload();
         };
+				window.onload = function () {
+					var addr = window.location.hash.replace('#' + "/", '').split('/')[0];
+					routermod.go(addr);
+				}
     }; 
     /**
      * 添加路由,如果路由已经存在则会覆盖
@@ -40,36 +44,14 @@ layui.define(function(exports) {
      * @param addr: 地址值
      */
     Router.prototype.go = function(addr) {
-			
-			
-			
-			console.log(this.hashList)
-			var self = this;
-			var hash = window.location.hash.replace('#' + self.key, '');
-			//var addr = hash.split('/')[0];
-			var cb = getCb(addr, self.hashList);
-			
-			if(cb != false) {
-					var arr = hash.split('/');
-					arr.shift();
-					cb.apply(self, arr);
-			} else {
-					self.index && self.go(self.index);
-			}
-			
-			
-			
-			
-//         var self = this;
-// 				// var addr = "companylist";
-// 				//alert('#' + self.key + addr);
-//         window.location.hash = '#' + self.key + addr;
+        var self = this;
+        window.location.hash = '#' + self.key + addr;
     }; 
     /**
      * 重载页面
      */
     Router.prototype.reload = function() {
-    	  console.log(this.hashList)
+    	  // console.log(this.hashList)
         var self = this;
         var hash = window.location.hash.replace('#' + self.key, '');
         var addr = hash.split('/')[0];

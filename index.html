@@ -105,7 +105,8 @@
 			<div class="layui-footer">
 				<!-- 底部固定区域 -->
 				CopyRight © 2017<a href=""> xxxxxx有限公司 </a>all rights rerserved MIT license
-				<a href="#/companylist">前端路由测试</a><br />
+				<!-- <a href="#/companylist">前端路由测试</a>
+				<span id="span">test</span> -->
 			</div>
 		</div>
 		<!--锁屏-->
@@ -186,10 +187,10 @@
 							title: "机器人库",
 							url: "main.html"
 						} : data;
-//						$(".layui-tab-title").children("li[lay-id]").each(function() {
-//							var e = $(this).attr("lay-id"); -
-//							1 != e && element.tabDelete('kitTab', e);
-//						})
+						//  $(".layui-tab-title").children("li[lay-id]").each(function() {
+						// 	  var e = $(this).attr("lay-id"); -
+						// 	  1 != e && element.tabDelete('kitTab', e);
+						//  })
 						layer.load(2, {
 							shade: [0.2, "black"]
 						});
@@ -224,7 +225,7 @@
 					var type = $(this).data('type');
 					active[type] ? active[type].call(this) : '';
 				});
-
+				
 				var searchArr = [];
 
 				// 验证登录
