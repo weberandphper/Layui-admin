@@ -30,7 +30,7 @@ Layui 2 + Vue 2 + es5 + Router
 - 浏览器不支持检测
 - 数据请求部分已经帮你写好，你要做的只是获取数据和简单校验
 - Layui-Admin基于Layui+vue，采用前后端完成分离的方式运行（JSON WEB TOKEN 认证）
-- 免费、
+- 免费、开源
 
 
 ## 适用人群和项目
